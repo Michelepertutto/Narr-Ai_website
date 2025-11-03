@@ -73,7 +73,7 @@ const App = () => {
             {useVerticalLayout && <Header />}
             <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 overflow-auto ${useVerticalLayout ? 'flex-1' : 'h-[60vh] sm:h-full'}`}>
               <video
-                src="video\Background video of People listening to audiobooks and watching video on the screen.mp4"
+                src="https://youtu.be/mOGwRRjuDeg"
                 poster="imgs\Poster for video of People listening to audiobooks and watching video on the screen.png"
                 className="absolute top-0 left-0 w-full h-full object-cover rounded-xl sm:rounded-2xl"
                 autoPlay
