@@ -2,7 +2,7 @@
 import React from 'react';
 import { HeartIcon } from './icons/HeartIcon';
 
-const Header: React.FC = () => {
+const Header = () => {
   const handleDonateClick = () => {
     window.open('https://buymeacoffee.com/narrai', '_blank', 'noopener,noreferrer');
   };

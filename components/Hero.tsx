@@ -6,7 +6,7 @@ interface HeroProps {
   isMobileLandscape?: boolean;
 }
 
-const Hero: React.FC<HeroProps> = ({ isMobileLandscape = false }) => {
+const Hero = ({ isMobileLandscape = false }: HeroProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState('');
 

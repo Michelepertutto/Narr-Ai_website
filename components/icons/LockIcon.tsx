@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-export const LockIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+export const LockIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 20 20"

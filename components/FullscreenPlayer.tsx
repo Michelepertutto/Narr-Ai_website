@@ -10,7 +10,7 @@ interface FullscreenPlayerProps {
   onClose: () => void;
 }
 
-const FullscreenPlayer: React.FC<FullscreenPlayerProps> = ({ videos, startIndex, onClose }) => {
+const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps) => {
   const [currentIndex, setCurrentIndex] = useState(startIndex);
   const [isLoading, setIsLoading] = useState(true);
   const playerRef = useRef<HTMLDivElement>(null);

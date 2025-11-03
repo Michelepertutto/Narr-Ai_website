@@ -9,7 +9,7 @@ interface VideoCarouselProps {
   isMobileLandscape: boolean;
 }
 
-const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }) => {
+const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }: VideoCarouselProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const autoScrollIntervalRef = useRef<number | null>(null);
   const hasInteractedRef = useRef(false);

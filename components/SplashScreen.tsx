@@ -5,7 +5,7 @@ interface SplashScreenProps {
   onAnimationEnd: () => void;
 }
 
-const SplashScreen: React.FC<SplashScreenProps> = ({ onAnimationEnd }) => {
+const SplashScreen = ({ onAnimationEnd }: SplashScreenProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onAnimationEnd();

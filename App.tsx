@@ -26,7 +26,7 @@ const videos: Video[] = [
 ];
 
 
-const App: React.FC = () => {
+const App = () => {
   const [selectedVideoIndex, setSelectedVideoIndex] = useState<number | null>(null);
   const [showSplash, setShowSplash] = useState(true);
   const [isMobileLandscape, setIsMobileLandscape] = useState(false);
@@ -71,10 +71,10 @@ const App: React.FC = () => {
         <div className={`flex-1 min-h-0 ${useVerticalLayout ? 'flex flex-row items-stretch gap-4 px-5' : 'flex flex-col'}`}>
           <main className={`${useVerticalLayout ? 'w-[65%] flex flex-col' : 'flex-grow-0 sm:flex-grow flex flex-col px-2 sm:px-5'}`}>
             {useVerticalLayout && <Header />}
-            <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 ${useVerticalLayout ? 'flex-1' : 'h-[60vh] sm:h-full'}`}>
+            <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 overflow-auto ${useVerticalLayout ? 'flex-1' : 'h-[60vh] sm:h-full'}`}>
               <video
-                src="videos/Video background.mp4"
-                poster="images/Video-background-poster.png"
+                src="https://adobespark-cdn-assets.adobe.com/resource-store/urn:aaid:sc:US:f69c8893-6861-4a65-a115-2e0aa336d95b/v/1-5c8c/video.mp4"
+                poster="https://images.pexels.com/photos/688660/pexels-photo-688660.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                 className="absolute top-0 left-0 w-full h-full object-cover rounded-xl sm:rounded-2xl"
                 autoPlay
                 loop
@@ -88,7 +88,7 @@ const App: React.FC = () => {
             </div>
           </main>
           <div
-            className={`${useVerticalLayout ? 'w-[35%]' : ''} mt-5`}
+            className={`${useVerticalLayout ? 'w-[35%]' : 'ml-5'} mt-5`}
           >
             <VideoCarousel
               videos={videos}

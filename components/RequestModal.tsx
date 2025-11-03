@@ -6,7 +6,7 @@ interface RequestModalProps {
   onClose: () => void;
 }
 
-const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose }) => {
+const RequestModal = ({ isOpen, onClose }: RequestModalProps) => {
   if (!isOpen) {
     return null;
   }
