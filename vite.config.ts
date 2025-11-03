@@ -5,10 +5,9 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   return {
-    // --- INSERISCI QUESTA RIGA ---
-    // Imposta il percorso corretto per GitHub Pages
+
     base: '/Narr-Ai_website/', 
-    // ---------------------------
+
 
     server: {
       port: 3000,
@@ -25,7 +24,7 @@ export default defineConfig(({ mode }) => {
       }
     },
     build: {
-      outDir: 'docs' // Lascia questa che abbiamo aggiunto prima
+      outDir: 'docs'
     }
   };
 });
