@@ -1,5 +1,3 @@
-
-
 import React, { useRef, useEffect } from 'react';
 import { PlayIcon } from './icons/PlayIcon';
 import type { Video } from '../App';
@@ -8,49 +6,79 @@ interface VideoCarouselProps {
   videos: Omit<Video, 'videoUrl'>[];
   onVideoSelect: (index: number) => void;
   isExpanded: boolean;
+  isMobileLandscape: boolean;
 }
 
-const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, onVideoSelect, isExpanded }) => {
+const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const autoScrollTimerRef = useRef<number | null>(null);
+  const autoScrollIntervalRef = useRef<number | null>(null);
   const hasInteractedRef = useRef(false);
 
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
   const startScrollLeftRef = useRef(0);
 
+  const handleInteraction = () => {
+    if (hasInteractedRef.current) return;
+    hasInteractedRef.current = true;
+    if (autoScrollIntervalRef.current) {
+      clearInterval(autoScrollIntervalRef.current);
+    }
+  };
+
   // Auto-scroll logic
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
     if (!scrollContainer) return;
 
-    autoScrollTimerRef.current = window.setTimeout(() => {
-      if (hasInteractedRef.current || !scrollContainer.children.length) return;
+    const startAutoScroll = () => {
+      if (autoScrollIntervalRef.current) clearInterval(autoScrollIntervalRef.current);
 
-      const firstItem = scrollContainer.children[0] as HTMLElement;
-      const gap = parseFloat(window.getComputedStyle(scrollContainer).gap || '16px');
-      const scrollAmount = firstItem.offsetWidth + gap;
-      scrollContainer.scrollTo({ left: scrollContainer.scrollLeft + scrollAmount, behavior: 'smooth' });
-    }, 2000);
+      autoScrollIntervalRef.current = window.setInterval(() => {
+        if (hasInteractedRef.current || !scrollContainer.children.length) {
+          if (autoScrollIntervalRef.current) clearInterval(autoScrollIntervalRef.current);
+          return;
+        }
+
+        const firstItem = scrollContainer.children[0] as HTMLElement;
+
+        if (isMobileLandscape) {
+          const gap = parseFloat(window.getComputedStyle(scrollContainer).gap || '16px');
+          const scrollAmount = firstItem.offsetHeight + gap;
+          const isAtEnd = scrollContainer.scrollTop + scrollContainer.clientHeight >= scrollContainer.scrollHeight - 1;
+
+          if (isAtEnd) {
+            scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            scrollContainer.scrollTo({ top: scrollContainer.scrollTop + scrollAmount, behavior: 'smooth' });
+          }
+        } else {
+          const gap = parseFloat(window.getComputedStyle(scrollContainer).gap || '16px');
+          const scrollAmount = firstItem.offsetWidth + gap;
+          const isAtEnd = scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 1;
+
+          if (isAtEnd) {
+            scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            scrollContainer.scrollTo({ left: scrollContainer.scrollLeft + scrollAmount, behavior: 'smooth' });
+          }
+        }
+      }, 3000); // scroll every 3 seconds
+    };
+
+    const initialTimeout = setTimeout(startAutoScroll, 2000); // Start after 2 seconds
 
     return () => {
-      if (autoScrollTimerRef.current) {
-        clearTimeout(autoScrollTimerRef.current);
+      clearTimeout(initialTimeout);
+      if (autoScrollIntervalRef.current) {
+        clearInterval(autoScrollIntervalRef.current);
       }
     };
-  }, []);
-
-  const handleInteraction = () => {
-    if (hasInteractedRef.current) return;
-    hasInteractedRef.current = true;
-    if (autoScrollTimerRef.current) {
-      clearTimeout(autoScrollTimerRef.current);
-    }
-  };
+  }, [isMobileLandscape]); // This effect runs only once on mount
 
   const handleDragStart = (pageX: number) => {
     const scrollContainer = scrollContainerRef.current;
-    if (!scrollContainer) return;
+    if (!scrollContainer || isMobileLandscape) return;
 
     handleInteraction();
 
@@ -63,7 +91,7 @@ const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, onVideoSelect, is
 
   const handleDragMove = (pageX: number) => {
     const scrollContainer = scrollContainerRef.current;
-    if (!isDraggingRef.current || !scrollContainer) return;
+    if (!isDraggingRef.current || !scrollContainer || isMobileLandscape) return;
 
     const x = pageX - scrollContainer.offsetLeft;
     const walk = (x - startXRef.current) * 1.5; // Drag sensitivity
@@ -72,7 +100,7 @@ const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, onVideoSelect, is
 
   const handleDragEnd = () => {
     const scrollContainer = scrollContainerRef.current;
-    if (!scrollContainer || !isDraggingRef.current) return;
+    if (!scrollContainer || !isDraggingRef.current || isMobileLandscape) return;
 
     isDraggingRef.current = false;
     scrollContainer.classList.remove('grabbing');
@@ -85,13 +113,15 @@ const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, onVideoSelect, is
     const onMouseUp = () => handleDragEnd();
     const onTouchEnd = () => handleDragEnd();
 
-    // Global listeners for dragging outside the component
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('touchmove', onTouchMove);
+    if (!isMobileLandscape) {
+      // Global listeners for dragging outside the component
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('touchmove', onTouchMove);
 
-    window.addEventListener('mouseup', onMouseUp);
-    window.addEventListener('touchend', onTouchEnd);
-    window.addEventListener('touchcancel', onTouchEnd);
+      window.addEventListener('mouseup', onMouseUp);
+      window.addEventListener('touchend', onTouchEnd);
+      window.addEventListener('touchcancel', onTouchEnd);
+    }
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
@@ -101,7 +131,7 @@ const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, onVideoSelect, is
       window.removeEventListener('touchend', onTouchEnd);
       window.removeEventListener('touchcancel', onTouchEnd);
     };
-  }, []); // run once
+  }, [isMobileLandscape]); // run when orientation changes
 
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -109,27 +139,38 @@ const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, onVideoSelect, is
   };
 
   const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    handleInteraction();
     if (e.touches[0]) {
       handleDragStart(e.touches[0].pageX);
     }
   };
 
+  const itemClasses = isMobileLandscape
+    ? 'w-full h-[calc((100%-2rem)/3)]' // Vertical layout
+    : isExpanded
+    ? 'w-64 h-44 sm:w-80 sm:h-56'
+    : 'w-60 h-36 sm:w-80 sm:h-48';
+  
+  const containerClasses = isMobileLandscape
+    ? 'h-full flex flex-col overflow-y-auto space-y-4 scrollbar-hide snap-y snap-mandatory touch-pan-y'
+    : 'flex overflow-x-auto space-x-4 scrollbar-hide snap-x snap-mandatory cursor-grab touch-pan-x';
+
   return (
     <div
       ref={scrollContainerRef}
-      className="carousel flex overflow-x-auto space-x-4 py-5 scrollbar-hide snap-x snap-mandatory cursor-grab"
+      className={`carousel ${containerClasses}`}
       onMouseDown={onMouseDown}
       onTouchStart={onTouchStart}
+      onMouseEnter={handleInteraction}
     >
       {videos.map((video, index) => {
-        const itemClasses = isExpanded
-          ? 'w-64 h-44 sm:w-80 sm:h-56'
-          : 'w-60 h-36 sm:w-80 sm:h-48';
-
         return (
           <div
             key={video.id}
-            onClick={() => onVideoSelect(index)}
+            onClick={() => {
+              handleInteraction(); // Stop scrolling on click as well
+              onVideoSelect(index);
+            }}
             className={`video-item flex-shrink-0 relative rounded-xl overflow-hidden group snap-start cursor-pointer transition-all duration-300 ease-in-out ${itemClasses}`}
           >
             <img
@@ -153,14 +194,9 @@ const VideoCarousel: React.FC<VideoCarouselProps> = ({ videos, onVideoSelect, is
       <style>{`
         /* Hide scrollbar but keep scrollability */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; touch-action: pan-x; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
         .grabbing { cursor: grabbing; user-select: none; }
-
-        /* Prevents horizontal scrollbar caused by 100vw */
-        html, body {
-          overflow-x: clip;
-        }
       `}</style>
     </div>
   );

@@ -85,19 +85,19 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose }) => {
             ></textarea>
           </div>
           
-          <div className="pt-4 flex items-center gap-3">
+          <div className="pt-4 space-y-4">
+            <button 
+              type="submit" 
+              className="w-full bg-gradient-to-br from-cyan-400 to-blue-500 text-white font-bold py-3 px-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 transform hover:scale-105"
+            >
+              Submit Request
+            </button>
             <button 
               type="button"
               onClick={handleDonateClick}
-              className="w-2/5 bg-gradient-to-br from-emerald-500 to-green-600 text-white font-bold py-3 px-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-green-500/50 transform hover:scale-105"
+              className="w-full text-center text-sm text-gray-400 hover:text-white transition-colors"
             >
-              Donate 20€
-            </button>
-            <button 
-              type="submit" 
-              className="flex-1 bg-gradient-to-br from-cyan-400 to-blue-500 text-white font-bold py-3 px-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 transform hover:scale-105"
-            >
-              Submit Request
+              Please support us with a donation
             </button>
           </div>
         </form>

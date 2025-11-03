@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import VideoCarousel from './components/VideoCarousel';
@@ -29,7 +29,28 @@ const videos: Video[] = [
 const App: React.FC = () => {
   const [selectedVideoIndex, setSelectedVideoIndex] = useState<number | null>(null);
   const [showSplash, setShowSplash] = useState(true);
-  const [isCarouselActive, setIsCarouselActive] = useState(false);
+  const [isMobileLandscape, setIsMobileLandscape] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+
+  useEffect(() => {
+    const landscapeQuery = window.matchMedia("(orientation: landscape) and (max-height: 500px)");
+    const handleOrientationChange = (e: MediaQueryListEvent) => {
+      setIsMobileLandscape(e.matches);
+    };
+
+    landscapeQuery.addEventListener('change', handleOrientationChange);
+    setIsMobileLandscape(landscapeQuery.matches); // Initial check
+
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      landscapeQuery.removeEventListener('change', handleOrientationChange);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleVideoSelect = (index: number) => {
     setSelectedVideoIndex(index);
@@ -38,41 +59,44 @@ const App: React.FC = () => {
   const handleClosePlayer = () => {
     setSelectedVideoIndex(null);
   };
-
-  const isExpanded = isCarouselActive || selectedVideoIndex !== null;
+  
+  const useVerticalLayout = isDesktop || isMobileLandscape;
+  const isExpanded = selectedVideoIndex !== null;
 
   return (
     <>
       {showSplash && <SplashScreen onAnimationEnd={() => setShowSplash(false)} />}
-      <div className="bg-white h-screen w-screen flex flex-col">
-        <Header />
-        <main className="flex-grow-0 sm:flex-grow flex flex-col px-2 sm:px-5 min-h-0">
-          <div className="relative w-full h-[60vh] sm:h-full rounded-xl sm:rounded-2xl shadow-2xl mt-5">
-            <video
-              src="https://adobespark-cdn-assets.adobe.com/resource-store/urn:aaid:sc:US:f69c8893-6861-4a65-a115-2e0aa336d95b/v/1-5c8c/video.mp4"
-              poster="https://images.pexels.com/photos/688660/pexels-photo-688660.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              className="absolute top-0 left-0 w-full h-full object-cover rounded-xl sm:rounded-2xl"
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
-            <div className="absolute inset-0 bg-black/50 rounded-xl sm:rounded-2xl"></div>
-            <div className="relative h-full flex flex-col justify-between items-center text-center">
-              <Hero />
+      <div className="bg-white h-screen w-screen flex flex-col overflow-hidden box-border pb-5">
+        {!useVerticalLayout && <Header />}
+        <div className={`flex-1 min-h-0 ${useVerticalLayout ? 'flex flex-row items-stretch gap-4 px-5' : 'flex flex-col'}`}>
+          <main className={`${useVerticalLayout ? 'w-[65%] flex flex-col' : 'flex-grow-0 sm:flex-grow flex flex-col px-2 sm:px-5'}`}>
+            {useVerticalLayout && <Header />}
+            <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 ${useVerticalLayout ? 'flex-1' : 'h-[60vh] sm:h-full'}`}>
+              <video
+                src="https://adobespark-cdn-assets.adobe.com/resource-store/urn:aaid:sc:US:f69c8893-6861-4a65-a115-2e0aa336d95b/v/1-5c8c/video.mp4"
+                poster="https://images.pexels.com/photos/688660/pexels-photo-688660.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                className="absolute top-0 left-0 w-full h-full object-cover rounded-xl sm:rounded-2xl"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+              <div className="absolute inset-0 bg-black/50 rounded-xl sm:rounded-2xl"></div>
+              <div className="relative h-full flex flex-col justify-between items-center text-center">
+                <Hero isMobileLandscape={isMobileLandscape} />
+              </div>
             </div>
+          </main>
+          <div
+            className={`${useVerticalLayout ? 'w-[35%]' : ''} mt-5`}
+          >
+            <VideoCarousel
+              videos={videos}
+              onVideoSelect={handleVideoSelect}
+              isExpanded={isExpanded}
+              isMobileLandscape={useVerticalLayout}
+            />
           </div>
-        </main>
-        <div
-          className="px-2 sm:px-5"
-          onMouseEnter={() => setIsCarouselActive(true)}
-          onMouseLeave={() => setIsCarouselActive(false)}
-        >
-          <VideoCarousel
-            videos={videos}
-            onVideoSelect={handleVideoSelect}
-            isExpanded={isExpanded}
-          />
         </div>
 
         {selectedVideoIndex !== null && (
