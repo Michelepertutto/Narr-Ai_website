@@ -73,8 +73,8 @@ const App: React.FC = () => {
             {useVerticalLayout && <Header />}
             <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 ${useVerticalLayout ? 'flex-1' : 'h-[60vh] sm:h-full'}`}>
               <video
-                src="https://adobespark-cdn-assets.adobe.com/resource-store/urn:aaid:sc:US:f69c8893-6861-4a65-a115-2e0aa336d95b/v/1-5c8c/video.mp4"
-                poster="https://images.pexels.com/photos/688660/pexels-photo-688660.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                src="videos/Video background.mp4"
+                poster="images/Video-background-poster.png"
                 className="absolute top-0 left-0 w-full h-full object-cover rounded-xl sm:rounded-2xl"
                 autoPlay
                 loop
