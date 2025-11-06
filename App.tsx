@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -15,11 +13,11 @@ export interface Video {
 }
 
 const videos: Video[] = [
-  { id: 1, seed: 'video1', title: 'Dungeon Crawler Carl Old man pee', videoUrl: '/video/Dungeon%20Crawler%20Carl-Old-man-pee.mp4' },
+  { id: 1, seed: 'video1', title: 'Dungeon Crawler Carl Old man pee', videoUrl: '/video/Dungeon-Crawler-Carl-Old-man-pee.mp4' },
   { id: 2, seed: 'video2', title: 'Dungeon Crawl Carl Entrance', videoUrl: '/video/Dungeon-Crawl-Carl-Entrance.mp4' },
   { id: 3, seed: 'video3', title: 'Dungeon Crawl Carl elders', videoUrl: '/video/Dungeon-Crawl-Carl-elders.mp4' },
   { id: 4, seed: 'video4', title: 'Dungeon Crawl Carl power up', videoUrl: '/video/Dungeon-Crawl-Carl-power-up.mp4' },
-  { id: 5, seed: 'video5', title: 'Dungeon Crawl Carl ready to fight', videoUrl: '/video/Dungeon-Crawl-Carl-ready-to-figh.mp4' },
+  { id: 5, seed: 'video5', title: 'Dungeon Crawl Carl ready to fight', videoUrl: '/video/Dungeon-Crawl-Carl-ready-to-fight.mp4' },
   { id: 6, seed: 'video6', title: 'Dungeon Crawl Carl summon', videoUrl: '/video/Dungeon-Crawl-Carl-summon.mp4' },
 ];
 
@@ -32,16 +30,11 @@ const App = () => {
 
   useEffect(() => {
     const landscapeQuery = window.matchMedia("(orientation: landscape) and (max-height: 500px)");
-    const handleOrientationChange = (e: MediaQueryListEvent) => {
-      setIsMobileLandscape(e.matches);
-    };
-
+    const handleOrientationChange = (e: MediaQueryListEvent) => setIsMobileLandscape(e.matches);
     landscapeQuery.addEventListener('change', handleOrientationChange);
     setIsMobileLandscape(landscapeQuery.matches); // Initial check
 
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 768);
-    };
+    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -50,13 +43,8 @@ const App = () => {
     };
   }, []);
 
-  const handleVideoSelect = (index: number) => {
-    setSelectedVideoIndex(index);
-  };
-
-  const handleClosePlayer = () => {
-    setSelectedVideoIndex(null);
-  };
+  const handleVideoSelect = (index: number) => setSelectedVideoIndex(index);
+  const handleClosePlayer = () => setSelectedVideoIndex(null);
   
   const useVerticalLayout = isDesktop || isMobileLandscape;
   const isExpanded = selectedVideoIndex !== null;
@@ -83,7 +71,7 @@ const App = () => {
               {/* Video background */}
               <video
                 src="/video/video-ai-per-audiolibri.mp4"
-                poster="/Imgs/Poster%20video%20background.png"
+                poster="/Imgs/Poster-video-background.png"
                 className="absolute top-0 left-0 w-full h-full object-cover"
                 autoPlay
                 loop

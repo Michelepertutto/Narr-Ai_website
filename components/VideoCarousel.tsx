@@ -44,40 +44,26 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
           return;
         }
 
-        const scrollStep = 1; // Pixel per frame per scroll lento e fluido
+        const scrollStep = 1;
+        const isVertical = isMobileLandscape;
+        const scrollPos = isVertical ? scrollContainer.scrollTop : scrollContainer.scrollLeft;
+        const clientSize = isVertical ? scrollContainer.clientHeight : scrollContainer.clientWidth;
+        const scrollSize = isVertical ? scrollContainer.scrollHeight : scrollContainer.scrollWidth;
+        
+        const isAtEnd = scrollPos + clientSize >= scrollSize - 1;
+        const isAtStart = scrollPos <= 1;
 
-        if (isMobileLandscape) {
-          // Vertical scrolling
-          const isAtEnd = scrollContainer.scrollTop + scrollContainer.clientHeight >= scrollContainer.scrollHeight - 1;
-          const isAtStart = scrollContainer.scrollTop <= 1;
+        if (isAtEnd && scrollDirectionRef.current === 'forward') {
+          scrollDirectionRef.current = 'backward';
+        } else if (isAtStart && scrollDirectionRef.current === 'backward') {
+          scrollDirectionRef.current = 'forward';
+        }
 
-          if (isAtEnd && scrollDirectionRef.current === 'forward') {
-            scrollDirectionRef.current = 'backward';
-          } else if (isAtStart && scrollDirectionRef.current === 'backward') {
-            scrollDirectionRef.current = 'forward';
-          }
-
-          if (scrollDirectionRef.current === 'forward') {
-            scrollContainer.scrollTop += scrollStep;
-          } else {
-            scrollContainer.scrollTop -= scrollStep;
-          }
+        const delta = scrollDirectionRef.current === 'forward' ? scrollStep : -scrollStep;
+        if (isVertical) {
+          scrollContainer.scrollTop += delta;
         } else {
-          // Horizontal scrolling
-          const isAtEnd = scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 1;
-          const isAtStart = scrollContainer.scrollLeft <= 1;
-
-          if (isAtEnd && scrollDirectionRef.current === 'forward') {
-            scrollDirectionRef.current = 'backward';
-          } else if (isAtStart && scrollDirectionRef.current === 'backward') {
-            scrollDirectionRef.current = 'forward';
-          }
-
-          if (scrollDirectionRef.current === 'forward') {
-            scrollContainer.scrollLeft += scrollStep;
-          } else {
-            scrollContainer.scrollLeft -= scrollStep;
-          }
+          scrollContainer.scrollLeft += delta;
         }
       }, 20); // 20ms = ~50fps per animazione fluida
     };
@@ -195,55 +181,53 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
       onTouchStart={onTouchStart}
       onMouseEnter={handleInteraction}
     >
-      {videos.map((video, index) => {
-        return (
-          <div
-            key={video.id}
-            onClick={() => {
-              handleInteraction(); // Stop scrolling on click as well
-              onVideoSelect(index);
-            }}
-            onMouseEnter={() => {
-              setHoveredIndex(index);
-              const videoEl = videoRefs.current[index];
-              if (videoEl) {
-                videoEl.play().catch(() => {});
-              }
-            }}
-            onMouseLeave={() => {
-              setHoveredIndex(null);
-              const videoEl = videoRefs.current[index];
-              if (videoEl) {
-                videoEl.pause();
-                videoEl.currentTime = 0;
-              }
-            }}
-            className={`video-item flex-shrink-0 relative rounded-xl overflow-hidden group snap-start cursor-pointer transition-all duration-300 ease-in-out ${getItemClasses(index)}`}
-          >
-            <video
-              ref={(el) => (videoRefs.current[index] = el)}
-              src={video.videoUrl}
-              poster={`https://picsum.photos/seed/${video.seed}/400/300`}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              draggable={false}
-              onError={(e) => console.error('Video error:', video.videoUrl, e)}
-            />
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <div className="bg-cyan-500/80 rounded-full p-3">
-                <PlayIcon className="h-6 w-6 text-black" />
-              </div>
+      {videos.map((video, index) => (
+        <div
+          key={video.id}
+          onClick={() => {
+            handleInteraction(); // Stop scrolling on click as well
+            onVideoSelect(index);
+          }}
+          onMouseEnter={() => {
+            setHoveredIndex(index);
+            const videoEl = videoRefs.current[index];
+            if (videoEl) {
+              videoEl.play().catch(() => {});
+            }
+          }}
+          onMouseLeave={() => {
+            setHoveredIndex(null);
+            const videoEl = videoRefs.current[index];
+            if (videoEl) {
+              videoEl.pause();
+              videoEl.currentTime = 0;
+            }
+          }}
+          className={`video-item flex-shrink-0 relative rounded-xl overflow-hidden group snap-start cursor-pointer transition-all duration-300 ease-in-out ${getItemClasses(index)}`}
+        >
+          <video
+            ref={(el) => (videoRefs.current[index] = el)}
+            src={video.videoUrl}
+            poster={`https://picsum.photos/seed/${video.seed}/400/300`}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            draggable={false}
+            onError={() => {}}
+          />
+          <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="bg-cyan-500/80 rounded-full p-3">
+              <PlayIcon className="h-6 w-6 text-black" />
             </div>
-            <p className="absolute bottom-2 left-3 text-white text-sm font-semibold">
-              {video.title}
-            </p>
           </div>
-        );
-      })}
+          <p className="absolute bottom-2 left-3 text-white text-sm font-semibold">
+            {video.title}
+          </p>
+        </div>
+      ))}
       <style>{`
         /* Hide scrollbar but keep scrollability */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
