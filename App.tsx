@@ -64,32 +64,22 @@ const App = () => {
   const isExpanded = selectedVideoIndex !== null;
 return (
   <>
-    {showSplash && <SplashScreen onAnimationEnd={() => setShowSplash(false)} />}
-    <div className="bg-white h-screen w-screen flex flex-col overflow-hidden box-border pb-5">
-      {!useVerticalLayout && <Header />}
-      <div className={`flex-1 min-h-0 ${useVerticalLayout ? 'flex flex-row items-stretch gap-4 px-5' : 'flex flex-col'}`}>
-        <main className={`${useVerticalLayout ? 'w-[65%] flex flex-col' : 'flex-grow-0 sm:flex-grow flex flex-col px-2 sm:px-5'}`}>
-          {useVerticalLayout && <Header />}
-          <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 overflow-auto ${useVerticalLayout ? 'flex-1' : 'h-[60vh] sm:h-full'}`}>
-        <video
-         src="/video/video-ai-per-audiolibri.mp4"
-         poster="/Imgs/Poster video background.png"
-         className="absolute top-0 left-0 w-full h-full object-cover rounded-xl sm:rounded-2xl"
-          autoPlay
-          loop
-         muted
-         playsInline
-        />
-            <div className="absolute inset-0 bg-black/50 rounded-xl sm:rounded-2xl"></div>
-            <div className="relative h-full flex flex-col justify-between items-center text-center">
-              <Hero isMobileLandscape={isMobileLandscape} />
             </div>
+          </main>
+          <div
+            className={`${useVerticalLayout ? 'w-[35%]' : 'ml-5'} mt-5`}
+          >
+            <VideoCarousel
+              videos={videos}
+              onVideoSelect={handleVideoSelect}
+              isExpanded={isExpanded}
+              isMobileLandscape={useVerticalLayout}
+            />
           </div>
-        </main>
-        <div
-          className={`${useVerticalLayout ? 'w-[35%]' : 'ml-5'} mt-5`}
-        >
-          <VideoCarousel
+        </div>
+
+        {selectedVideoIndex !== null && (
+          <FullscreenPlayer
             videos={videos}
             onVideoSelect={handleVideoSelect}
             isExpanded={isExpanded}
