@@ -18,8 +18,8 @@ const videos: Video[] = [
     id: 1, 
     seed: 'video1', 
     title: 'Dungeon Crawler Carl Old man pee', 
-    videoUrl: '/video/Dungeon-Crawler-Carl-Old-man-pee.mp4',
-    posterUrl: '/Imgs/preview-dungeon-crawler-carl-pee-scene.png'
+    videoUrl: `${import.meta.env.BASE_URL}video/Dungeon-Crawler-Carl-Old-man-pee.mp4`,
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/preview-dungeon-crawler-carl-pee-scene.png`
   },
 ];
 
@@ -72,8 +72,8 @@ const App = () => {
             <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 overflow-hidden ${useVerticalLayout ? 'flex-1' : 'h-[60vh] sm:h-full'}`}>
               {/* Video background */}
               <video
-                src="/video/video-ai-per-audiolibri.mp4"
-                poster="/Imgs/Poster-video-background.png"
+                src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
+                poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
                 className="absolute top-0 left-0 w-full h-full object-cover"
                 autoPlay
                 loop

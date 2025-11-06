@@ -10,7 +10,7 @@ const Header = () => {
     <header className="mt-5 px-2 sm:px-5">
       <div className="flex justify-between items-center">
         <a href="/" aria-label="Narr-Ai Home" className="no-underline text-black flex items-center gap-2">
-          <img src="/Imgs/Narrai-Pictogram.png" alt="Narr-Ai Logo" className="w-10 h-10" />
+          <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-10 h-10" />
           <h1 className="text-3xl font-bold tracking-tighter">Narr-Ai</h1>
         </a>
         <button
