@@ -223,12 +223,14 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
             <video
               ref={(el) => (videoRefs.current[index] = el)}
               src={video.videoUrl}
+              poster={`https://picsum.photos/seed/${video.seed}/400/300`}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
               muted
               loop
               playsInline
               preload="metadata"
               draggable={false}
+              onError={(e) => console.error('Video error:', video.videoUrl, e)}
             />
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
