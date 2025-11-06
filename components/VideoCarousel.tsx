@@ -208,7 +208,7 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
           <video
             ref={(el) => (videoRefs.current[index] = el)}
             src={video.videoUrl}
-            poster={`https://picsum.photos/seed/${video.seed}/400/300`}
+            poster={video.posterUrl || `https://picsum.photos/seed/${video.seed}/400/300`}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
             muted
             loop

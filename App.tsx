@@ -10,15 +10,17 @@ export interface Video {
   seed: string;
   title: string;
   videoUrl: string;
+  posterUrl?: string;
 }
 
 const videos: Video[] = [
-  { id: 1, seed: 'video1', title: 'Dungeon Crawler Carl Old man pee', videoUrl: '/video/Dungeon-Crawler-Carl-Old-man-pee.mp4' },
-  { id: 2, seed: 'video2', title: 'Dungeon Crawl Carl Entrance', videoUrl: '/video/Dungeon-Crawl-Carl-Entrance.mp4' },
-  { id: 3, seed: 'video3', title: 'Dungeon Crawl Carl elders', videoUrl: '/video/Dungeon-Crawl-Carl-elders.mp4' },
-  { id: 4, seed: 'video4', title: 'Dungeon Crawl Carl power up', videoUrl: '/video/Dungeon-Crawl-Carl-power-up.mp4' },
-  { id: 5, seed: 'video5', title: 'Dungeon Crawl Carl ready to fight', videoUrl: '/video/Dungeon-Crawl-Carl-ready-to-fight.mp4' },
-  { id: 6, seed: 'video6', title: 'Dungeon Crawl Carl summon', videoUrl: '/video/Dungeon-Crawl-Carl-summon.mp4' },
+  { 
+    id: 1, 
+    seed: 'video1', 
+    title: 'Dungeon Crawler Carl Old man pee', 
+    videoUrl: '/video/Dungeon-Crawler-Carl-Old-man-pee.mp4',
+    posterUrl: '/Imgs/preview-dungeon-crawler-carl-pee-scene.png'
+  },
 ];
 
 const App = () => {
