@@ -25,12 +25,12 @@ const videos: Video[] = [
   { id: 8, seed: 'video8', title: 'Ocean Dreams', videoUrl: 'https://videos.pexels.com/video-files/5969502/5969502-hd_1920_1080_25fps.mp4' },
 ];
 
-
 const App = () => {
   const [selectedVideoIndex, setSelectedVideoIndex] = useState<number | null>(null);
   const [showSplash, setShowSplash] = useState(true);
   const [isMobileLandscape, setIsMobileLandscape] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+  const [isSliderHovered, setIsSliderHovered] = useState(false);
 
   useEffect(() => {
     const landscapeQuery = window.matchMedia("(orientation: landscape) and (max-height: 500px)");
@@ -62,12 +62,50 @@ const App = () => {
   
   const useVerticalLayout = isDesktop || isMobileLandscape;
   const isExpanded = selectedVideoIndex !== null;
-return (
-  <>
+
+  // Calcola la larghezza dello slider in base allo stato hover
+  const sliderWidth = useVerticalLayout 
+    ? (isSliderHovered ? 'w-[70%]' : 'w-[15%]')
+    : 'ml-5';
+  
+  // Calcola la larghezza del main in base allo stato hover dello slider
+  const mainWidth = useVerticalLayout
+    ? (isSliderHovered ? 'w-[30%]' : 'w-[85%]')
+    : 'w-[65%]';
+
+  return (
+    <>
+      {showSplash && <SplashScreen onAnimationEnd={() => setShowSplash(false)} />}
+      <div className="bg-white h-screen w-screen flex flex-col overflow-hidden box-border pb-5">
+        {!useVerticalLayout && <Header />}
+        <div className={`flex-1 min-h-0 ${useVerticalLayout ? 'flex flex-row items-stretch gap-4 px-5' : 'flex flex-col'}`}>
+          <main className={`${useVerticalLayout ? `${mainWidth} flex flex-col transition-all duration-300 ease-in-out` : 'flex-grow-0 sm:flex-grow flex flex-col px-2 sm:px-5'}`}>
+            {useVerticalLayout && <Header />}
+            <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 overflow-hidden ${useVerticalLayout ? 'flex-1' : 'h-[60vh] sm:h-full'}`}>
+              {/* Video background */}
+              <video
+                src="/video/video-ai-per-audiolibri.mp4"
+                poster="/Imgs/Poster%20video%20background.png"
+                className="absolute top-0 left-0 w-full h-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+              
+              {/* Velo scuro sopra al video per migliorare la leggibilità del testo */}
+              <div className="absolute inset-0 bg-black/50 rounded-xl sm:rounded-2xl pointer-events-none"></div>
+              
+              {/* Contenitore per i contenuti testuali sopra al video */}
+              <div className="relative h-full flex flex-col justify-between items-center text-center">
+                <Hero isMobileLandscape={isMobileLandscape} />
+              </div>
             </div>
           </main>
           <div
-            className={`${useVerticalLayout ? 'w-[35%]' : 'ml-5'} mt-5`}
+            className={`${sliderWidth} mt-5 transition-all duration-300 ease-in-out`}
+            onMouseEnter={() => setIsSliderHovered(true)}
+            onMouseLeave={() => setIsSliderHovered(false)}
           >
             <VideoCarousel
               videos={videos}
@@ -81,22 +119,12 @@ return (
         {selectedVideoIndex !== null && (
           <FullscreenPlayer
             videos={videos}
-            onVideoSelect={handleVideoSelect}
-            isExpanded={isExpanded}
-            isMobileLandscape={useVerticalLayout}
+            startIndex={selectedVideoIndex}
+            onClose={handleClosePlayer}
           />
-        </div>
+        )}
       </div>
-
-      {selectedVideoIndex !== null && (
-        <FullscreenPlayer
-          videos={videos}
-          startIndex={selectedVideoIndex}
-          onClose={handleClosePlayer}
-        />
-      )}
-    </div>
-  </>
-);
+    </>
+  );
 };
 export default App;
