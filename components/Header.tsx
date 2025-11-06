@@ -10,8 +10,8 @@ const Header = () => {
   return (
     <header className="mt-5 px-2 sm:px-5">
       <div className="flex justify-between items-center">
-        <a href="/" aria-label="TEST Home" className="no-underline text-black flex items-center gap-2">
-          <h1 className="text-3xl font-bold tracking-tighter">TEST</h1>
+        <a href="/" aria-label="Michele Home" className="no-underline text-black flex items-center gap-2">
+          <h1 className="text-3xl font-bold tracking-tighter">Michele</h1>
         </a>
         <button
             onClick={handleDonateClick}
