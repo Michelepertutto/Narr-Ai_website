@@ -104,8 +104,8 @@ const App = () => {
           </main>
           <div
             className={`${sliderWidth} mt-5 transition-all duration-300 ease-in-out`}
-            onMouseEnter={() => setIsSliderHovered(true)}
-            onMouseLeave={() => setIsSliderHovered(false)}
+            onMouseEnter={() => useVerticalLayout && setIsSliderHovered(true)}
+            onMouseLeave={() => useVerticalLayout && setIsSliderHovered(false)}
           >
             <VideoCarousel
               videos={videos}
