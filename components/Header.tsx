@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { HeartIcon } from './icons/HeartIcon';
+import ComingNextModal from './ComingNextModal';
 
 const Header = () => {
+  const [isComingNextOpen, setIsComingNextOpen] = useState(false);
+
   const handleDonateClick = () => {
     window.open('https://buymeacoffee.com/narrai', '_blank', 'noopener,noreferrer');
   };
@@ -13,20 +16,29 @@ const Header = () => {
           <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-10 h-10" />
           <h1 className="text-3xl font-bold tracking-tighter">Narr-Ai</h1>
         </a>
-        <button
-            onClick={handleDonateClick}
-            className="relative p-0.5 inline-flex items-center justify-center font-bold overflow-hidden group rounded-xl transform hover:scale-105 transition-transform duration-300 shadow-lg"
+        <div className="flex gap-3">
+          <button
+            onClick={() => setIsComingNextOpen(true)}
+            className="relative px-6 py-3 font-bold text-white overflow-hidden group rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
           >
-            <span 
-              className="absolute w-full h-full bg-gradient-to-br from-pink-500 via-purple-500 to-cyan-500 animate-spin"
-              style={{ animationDuration: '4s' }}
-            ></span>
-            <span className="relative w-full text-base px-6 py-3 transition-all ease-in duration-200 bg-white text-black rounded-[10px] flex items-center justify-center gap-2">
-                <HeartIcon className="w-5 h-5" />
-                <span>Make a donation</span>
+            <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 transition-all duration-300 group-hover:scale-110"></span>
+            <span className="relative flex items-center gap-2">
+              <span>Coming Next</span>
             </span>
           </button>
+          <button
+            onClick={handleDonateClick}
+            className="relative px-6 py-3 font-bold overflow-hidden group rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+          >
+            <span className="absolute inset-0 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 animate-gradient-x"></span>
+            <span className="relative flex items-center gap-2 text-white">
+              <HeartIcon className="w-5 h-5 animate-pulse" />
+              <span>Make a donation</span>
+            </span>
+          </button>
+        </div>
       </div>
+      <ComingNextModal isOpen={isComingNextOpen} onClose={() => setIsComingNextOpen(false)} />
     </header>
   );
 };

@@ -7,6 +7,16 @@
     <title>Narr-Ai</title>
     <!-- Tailwind CDN: OK for small projects, warning can be ignored -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @keyframes gradient-x {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+      }
+      .animate-gradient-x {
+        background-size: 200% 200%;
+        animation: gradient-x 3s ease infinite;
+      }
+    </style>
   <script type="importmap">
 {
   "imports": {

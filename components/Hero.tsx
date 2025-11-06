@@ -19,10 +19,12 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
     <>
       <div className={`px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12 ${isMobileLandscape ? 'pt-4 sm:pt-4' : ''}`}>
         <h1 className={`${isMobileLandscape ? 'text-2xl' : 'text-3xl sm:text-5xl lg-text-6xl'} font-bold leading-tight text-white tracking-tighter [text-shadow:2px_2px_4px_rgba(0,0,0,0.7)]`}>
-          Coherent Videos for Audiobooks.
+          Request Coherent Videos for Audiobooks.
         </h1>
-        <p className={`${isMobileLandscape ? 'text-sm mt-2' : 'mt-3 sm:mt-6 text-base sm:text-lg'} max-w-2xl mx-auto text-gray-200 font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)]`}>
-          Sell more audiobooks by showing videos that match the story.
+        <p className={`${isMobileLandscape ? 'text-xs mt-2' : 'mt-3 sm:mt-6 text-sm sm:text-base'} max-w-3xl mx-auto text-gray-200 font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)] leading-relaxed`}>
+          Experience your favorite stories like never before.<br className="hidden sm:block" />
+          Explore iconic scenes from celebrated audiobooks, brought to life through powerful artificial intelligence tools. Start with our video tributes and get pulled back into the world you love.<br className="hidden sm:block" />
+          <span className="block mt-2">This project is an independent artistic initiative. If you appreciate our work, you can support it with a contribution. All donations are used exclusively to cover the AI computation and generation costs necessary to create new works.</span>
         </p>
       </div>
       
@@ -51,7 +53,7 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
         </div>
       </div>
 
-      <RequestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <RequestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={email} />
     </>
   );
 };
