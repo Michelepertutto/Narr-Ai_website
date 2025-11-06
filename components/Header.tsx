@@ -10,9 +10,8 @@ const Header = () => {
   return (
     <header className="mt-5 px-2 sm:px-5">
       <div className="flex justify-between items-center">
-        <a href="/" aria-label="Narr-Ai Home" className="no-underline text-black flex items-center gap-2">
-          <img src="/Imgs/Narrai%20Pictogram.png" alt="Narr-Ai Logo" className="h-8 w-8" />
-          <h1 className="text-3xl font-bold tracking-tighter">Narr-Ai</h1>
+        <a href="/" aria-label="TEST Home" className="no-underline text-black flex items-center gap-2">
+          <h1 className="text-3xl font-bold tracking-tighter">TEST</h1>
         </a>
         <button
             onClick={handleDonateClick}
