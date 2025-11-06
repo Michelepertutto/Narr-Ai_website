@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { PlayIcon } from './icons/PlayIcon';
 import type { Video } from '../App';
 
 interface VideoCarouselProps {
-  videos: Omit<Video, 'videoUrl'>[];
+  videos: Video[];
   onVideoSelect: (index: number) => void;
   isExpanded: boolean;
   isMobileLandscape: boolean;
@@ -17,6 +17,10 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
   const startScrollLeftRef = useRef(0);
+  
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const scrollDirectionRef = useRef<'forward' | 'backward'>('forward');
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const handleInteraction = () => {
     if (hasInteractedRef.current) return;
@@ -26,7 +30,7 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
     }
   };
 
-  // Auto-scroll logic
+  // Auto-scroll logic - smooth continuous scrolling with direction reversal
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
     if (!scrollContainer) return;
@@ -40,30 +44,42 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
           return;
         }
 
-        const firstItem = scrollContainer.children[0] as HTMLElement;
+        const scrollStep = 1; // Pixel per frame per scroll lento e fluido
 
         if (isMobileLandscape) {
-          const gap = parseFloat(window.getComputedStyle(scrollContainer).gap || '16px');
-          const scrollAmount = firstItem.offsetHeight + gap;
+          // Vertical scrolling
           const isAtEnd = scrollContainer.scrollTop + scrollContainer.clientHeight >= scrollContainer.scrollHeight - 1;
+          const isAtStart = scrollContainer.scrollTop <= 1;
 
-          if (isAtEnd) {
-            scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+          if (isAtEnd && scrollDirectionRef.current === 'forward') {
+            scrollDirectionRef.current = 'backward';
+          } else if (isAtStart && scrollDirectionRef.current === 'backward') {
+            scrollDirectionRef.current = 'forward';
+          }
+
+          if (scrollDirectionRef.current === 'forward') {
+            scrollContainer.scrollTop += scrollStep;
           } else {
-            scrollContainer.scrollTo({ top: scrollContainer.scrollTop + scrollAmount, behavior: 'smooth' });
+            scrollContainer.scrollTop -= scrollStep;
           }
         } else {
-          const gap = parseFloat(window.getComputedStyle(scrollContainer).gap || '16px');
-          const scrollAmount = firstItem.offsetWidth + gap;
+          // Horizontal scrolling
           const isAtEnd = scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 1;
+          const isAtStart = scrollContainer.scrollLeft <= 1;
 
-          if (isAtEnd) {
-            scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
+          if (isAtEnd && scrollDirectionRef.current === 'forward') {
+            scrollDirectionRef.current = 'backward';
+          } else if (isAtStart && scrollDirectionRef.current === 'backward') {
+            scrollDirectionRef.current = 'forward';
+          }
+
+          if (scrollDirectionRef.current === 'forward') {
+            scrollContainer.scrollLeft += scrollStep;
           } else {
-            scrollContainer.scrollTo({ left: scrollContainer.scrollLeft + scrollAmount, behavior: 'smooth' });
+            scrollContainer.scrollLeft -= scrollStep;
           }
         }
-      }, 3000); // scroll every 3 seconds
+      }, 20); // 20ms = ~50fps per animazione fluida
     };
 
     const initialTimeout = setTimeout(startAutoScroll, 2000); // Start after 2 seconds
@@ -145,11 +161,27 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
     }
   };
 
-  const itemClasses = isMobileLandscape
-    ? 'w-full h-[calc((100%-2rem)/3)]' // Vertical layout
-    : isExpanded
-    ? 'w-64 h-44 sm:w-80 sm:h-56'
-    : 'w-60 h-36 sm:w-80 sm:h-48';
+  const getItemClasses = (index: number) => {
+    const isHovered = hoveredIndex === index;
+    
+    if (isMobileLandscape) {
+      // Vertical layout - mantiene larghezza piena, altezza aumenta in hover per 16:9
+      return isHovered 
+        ? 'w-full aspect-video' // 16:9 aspect ratio in hover
+        : 'w-full h-[calc((100%-2rem)/3)]';
+    } else {
+      // Horizontal layout
+      if (isExpanded) {
+        return isHovered
+          ? 'w-96 h-[216px]' // 16:9 ratio (384px x 216px)
+          : 'w-64 h-44 sm:w-80 sm:h-56';
+      } else {
+        return isHovered
+          ? 'w-80 h-[180px]' // 16:9 ratio (320px x 180px)
+          : 'w-60 h-36 sm:w-80 sm:h-48';
+      }
+    }
+  };
   
   const containerClasses = isMobileLandscape
     ? 'h-full flex flex-col overflow-y-auto space-y-4 scrollbar-hide snap-y snap-mandatory touch-pan-y'
@@ -171,13 +203,32 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
               handleInteraction(); // Stop scrolling on click as well
               onVideoSelect(index);
             }}
-            className={`video-item flex-shrink-0 relative rounded-xl overflow-hidden group snap-start cursor-pointer transition-all duration-300 ease-in-out ${itemClasses}`}
+            onMouseEnter={() => {
+              setHoveredIndex(index);
+              const videoEl = videoRefs.current[index];
+              if (videoEl) {
+                videoEl.play().catch(() => {});
+              }
+            }}
+            onMouseLeave={() => {
+              setHoveredIndex(null);
+              const videoEl = videoRefs.current[index];
+              if (videoEl) {
+                videoEl.pause();
+                videoEl.currentTime = 0;
+              }
+            }}
+            className={`video-item flex-shrink-0 relative rounded-xl overflow-hidden group snap-start cursor-pointer transition-all duration-300 ease-in-out ${getItemClasses(index)}`}
           >
-            <img
-              src={`https://picsum.photos/seed/${video.seed}/400/300`}
-              alt={video.title}
+            <video
+              ref={(el) => (videoRefs.current[index] = el)}
+              src={video.videoUrl}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              draggable="false"
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              draggable={false}
             />
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">

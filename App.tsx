@@ -15,14 +15,12 @@ export interface Video {
 }
 
 const videos: Video[] = [
-  { id: 1, seed: 'video1', title: 'The Great Tale', videoUrl: 'https://videos.pexels.com/video-files/3209828/3209828-hd_1920_1080_25fps.mp4' },
-  { id: 2, seed: 'video2', title: 'Whispers of Dawn', videoUrl: 'https://videos.pexels.com/video-files/853870/853870-hd_1920_1080_30fps.mp4' },
-  { id: 3, seed: 'video3', title: 'Chronicles of the Void', videoUrl: 'https://videos.pexels.com/video-files/4434246/4434246-hd_1920_1080_25fps.mp4' },
-  { id: 4, seed: 'video4', title: 'Echoes in Time', videoUrl: 'https://videos.pexels.com/video-files/7578516/7578516-hd_1920_1080_25fps.mp4' },
-  { id: 5, seed: 'video5', title: "A Bard's Journey", videoUrl: 'https://videos.pexels.com/video-files/857195/857195-hd_1920_1080_30fps.mp4' },
-  { id: 6, seed: 'video6', title: "Mountain's Secret", videoUrl: 'https://videos.pexels.com/video-files/854919/854919-hd_1920_1080_25fps.mp4' },
-  { id: 7, seed: 'video7', title: 'The Last Stand', videoUrl: 'https://videos.pexels.com/video-files/2099392/2099392-hd_1920_1080_25fps.mp4' },
-  { id: 8, seed: 'video8', title: 'Ocean Dreams', videoUrl: 'https://videos.pexels.com/video-files/5969502/5969502-hd_1920_1080_25fps.mp4' },
+  { id: 1, seed: 'video1', title: 'Dungeon Crawler Carl Old man pee', videoUrl: '/video/Dungeon%20Crawler%20Carl-Old-man-pee.mp4' },
+  { id: 2, seed: 'video2', title: 'Dungeon Crawl Carl Entrance', videoUrl: '/video/Dungeon-Crawl-Carl-Entrance.mp4' },
+  { id: 3, seed: 'video3', title: 'Dungeon Crawl Carl elders', videoUrl: '/video/Dungeon-Crawl-Carl-elders.mp4' },
+  { id: 4, seed: 'video4', title: 'Dungeon Crawl Carl power up', videoUrl: '/video/Dungeon-Crawl-Carl-power-up.mp4' },
+  { id: 5, seed: 'video5', title: 'Dungeon Crawl Carl ready to fight', videoUrl: '/video/Dungeon-Crawl-Carl-ready-to-figh.mp4' },
+  { id: 6, seed: 'video6', title: 'Dungeon Crawl Carl summon', videoUrl: '/video/Dungeon-Crawl-Carl-summon.mp4' },
 ];
 
 const App = () => {
