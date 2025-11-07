@@ -214,7 +214,7 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
             playsInline
             preload="metadata"
             draggable={false}
-            controls
+            muted
             onError={() => {}}
           />
           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
