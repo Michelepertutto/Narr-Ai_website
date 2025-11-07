@@ -22,9 +22,9 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
           Request Coherent Videos for Audiobooks.
         </h1>
         <p className={`${isMobileLandscape ? 'text-xs mt-2' : 'mt-3 sm:mt-6 text-sm sm:text-base'} max-w-3xl mx-auto text-gray-200 font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)] leading-relaxed`}>
-          Experience your favorite stories like never before.<br className="hidden sm:block" />
-          Explore iconic scenes from celebrated audiobooks, brought to life through powerful artificial intelligence tools. Start with our video tributes and get pulled back into the world you love.<br className="hidden sm:block" />
-          <span className="block mt-2">This project is an independent artistic initiative. If you appreciate our work, you can support it with a contribution. All donations are used exclusively to cover the AI computation and generation costs necessary to create new works.</span>
+          Experience your favorite stories like never before with Narr-Ai.<br className="hidden sm:block" />
+          We bring to life iconic scene from audioboooks through powerful artificial intelligence tools and human intervention.<br className="hidden sm:block" />
+          <span className="block mt-2">This project is an independent artistic initiative. If you appreciate our work, you can support us with a donation.</span>
         </p>
       </div>
       

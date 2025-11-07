@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { HeartIcon } from './icons/HeartIcon';
 import ComingNextModal from './ComingNextModal';
+import FramesGallery from './FramesGallery';
 
 const Header = () => {
   const [isComingNextOpen, setIsComingNextOpen] = useState(false);
+  const [isFramesOpen, setIsFramesOpen] = useState(false);
 
   const handleDonateClick = () => {
     window.open('https://buymeacoffee.com/narrai', '_blank', 'noopener,noreferrer');
@@ -18,27 +20,34 @@ const Header = () => {
         </a>
         <div className="flex gap-3">
           <button
-            onClick={() => setIsComingNextOpen(true)}
-            className="relative px-6 py-3 font-bold text-white overflow-hidden group rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+            onClick={() => setIsFramesOpen(true)}
+            className="relative px-6 py-3 font-bold text-black bg-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-[#17d4ff] animate-border-glow"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 transition-all duration-300 group-hover:scale-110"></span>
-            <span className="relative flex items-center gap-2">
+            <span className="flex items-center gap-2">
+              <span>Frames</span>
+            </span>
+          </button>
+          <button
+            onClick={() => setIsComingNextOpen(true)}
+            className="relative px-6 py-3 font-bold text-black bg-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-[#17d4ff] animate-border-glow"
+          >
+            <span className="flex items-center gap-2">
               <span>Coming Next</span>
             </span>
           </button>
           <button
             onClick={handleDonateClick}
-            className="relative px-6 py-3 font-bold overflow-hidden group rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="relative px-6 py-3 font-bold text-black bg-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-[#17d4ff] animate-border-glow"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 animate-gradient-x"></span>
-            <span className="relative flex items-center gap-2 text-white">
-              <HeartIcon className="w-5 h-5 animate-pulse" />
+            <span className="flex items-center gap-2">
+              <HeartIcon className="w-5 h-5" />
               <span>Make a donation</span>
             </span>
           </button>
         </div>
       </div>
       <ComingNextModal isOpen={isComingNextOpen} onClose={() => setIsComingNextOpen(false)} />
+      <FramesGallery isOpen={isFramesOpen} onClose={() => setIsFramesOpen(false)} />
     </header>
   );
 };

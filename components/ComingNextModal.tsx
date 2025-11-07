@@ -25,54 +25,57 @@ const ComingNextModal = ({ isOpen, onClose }: ComingNextModalProps) => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="coming-next-title"
-      className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
+      className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-80 flex items-center justify-center z-[9999] p-4 overflow-y-auto"
       onClick={onClose}
+      style={{ margin: 0 }}
     >
       <div 
-        className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl shadow-2xl p-8 max-w-3xl w-full relative max-h-[80vh] overflow-y-auto"
+        className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-3xl w-full relative my-auto"
         onClick={(e) => e.stopPropagation()}
+        style={{ maxHeight: 'calc(100vh - 2rem)' }}
       >
         <button 
           onClick={onClose} 
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700/50"
+          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700/50 z-10"
           aria-label="Close modal"
         >
           <CloseIcon />
         </button>
-        
-        <h3 id="coming-next-title" className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-          Coming Next
-        </h3>
-        
-        <p className="text-gray-300 text-center mb-8">
-          Upcoming video tributes to your favorite audiobook scenes
-        </p>
-
-        <div className="space-y-4">
-          {upcomingVideos.map((video, index) => (
-            <div 
-              key={index}
-              className="bg-gray-800/50 rounded-lg p-5 border border-gray-700 hover:border-cyan-500 transition-all duration-300 transform hover:scale-105"
-            >
-              <div className="flex justify-between items-start mb-2">
-                <h4 className="text-lg font-semibold text-white">{video.title}</h4>
-                <span className={`text-xs px-3 py-1 rounded-full font-semibold ${
-                  video.status === 'In Production' ? 'bg-green-500/20 text-green-400' :
-                  video.status === 'Planned' ? 'bg-blue-500/20 text-blue-400' :
-                  'bg-purple-500/20 text-purple-400'
-                }`}>
-                  {video.status}
-                </span>
-              </div>
-              <p className="text-gray-400 text-sm">{video.date}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-8 p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
-          <p className="text-sm text-cyan-300 text-center">
-            💡 Want to see a specific scene? Submit a request and support us with a donation!
+        <div className="overflow-y-auto pr-2" style={{ maxHeight: 'calc(100vh - 4rem)' }}>
+          <h3 id="coming-next-title" className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Coming Next
+          </h3>
+          
+          <p className="text-gray-300 text-center mb-8">
+            Upcoming video tributes to your favorite audiobook scenes
           </p>
+
+          <div className="space-y-4">
+            {upcomingVideos.map((video, index) => (
+              <div 
+                key={index}
+                className="bg-gray-800/50 rounded-lg p-5 border border-gray-700 hover:border-cyan-500 transition-all duration-300 transform hover:scale-105"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h4 className="text-lg font-semibold text-white">{video.title}</h4>
+                  <span className={`text-xs px-3 py-1 rounded-full font-semibold ${
+                    video.status === 'In Production' ? 'bg-green-500/20 text-green-400' :
+                    video.status === 'Planned' ? 'bg-blue-500/20 text-blue-400' :
+                    'bg-purple-500/20 text-purple-400'
+                  }`}>
+                    {video.status}
+                  </span>
+                </div>
+                <p className="text-gray-400 text-sm">{video.date}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
+            <p className="text-sm text-cyan-300 text-center">
+              💡 Want to see a specific scene? Submit a request and support us with a donation!
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -95,7 +95,8 @@ const App = () => {
             </div>
           </main>
           <div
-            className={`${sliderWidth} mt-5 transition-all duration-700 delay-500 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`}
+            className={`${sliderWidth} mt-5 transition-all duration-300 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`}
+            style={{ transitionDelay: isLoaded ? '0ms' : '500ms' }}
             onMouseEnter={() => useVerticalLayout && setIsSliderHovered(true)}
             onMouseLeave={() => useVerticalLayout && setIsSliderHovered(false)}
           >
