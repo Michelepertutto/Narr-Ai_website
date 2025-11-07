@@ -25,7 +25,7 @@ const ComingNextModal = ({ isOpen, onClose }: ComingNextModalProps) => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="coming-next-title"
-      className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[10000] p-5 overflow-y-auto"
+      className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[50000] p-5 overflow-y-auto"
       onClick={onClose}
     >
       <div 

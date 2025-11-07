@@ -25,28 +25,28 @@ const videos: Video[] = [
     seed: 'video2', 
     title: 'Bobiverse - Bob dies and wakes up as AI', 
     videoUrl: `${import.meta.env.BASE_URL}video/Bobiverse_Bob-dies-and-wakes-up-as-AI.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_Bobiverse.png`
   },
   { 
     id: 3, 
     seed: 'video3', 
     title: 'La Sicaria - Scena 1 Prince Karek', 
     videoUrl: `${import.meta.env.BASE_URL}video/La-Sicaria_Scena-1-Prince-karek.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-La-sicaria-Prince-Karek.png`
   },
   { 
     id: 4, 
     seed: 'video4', 
     title: 'La Sicaria - The arrival of the assassin', 
     videoUrl: `${import.meta.env.BASE_URL}video/La_sicaria_The-arrival-of-the-assassin.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_La-sicaria.png`
   },
   { 
     id: 5, 
     seed: 'video5', 
     title: 'Warrior', 
     videoUrl: `${import.meta.env.BASE_URL}video/Warrior.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_Warrior.png`
   },
 ];
 

@@ -67,7 +67,7 @@ const FramesGallery = ({ isOpen, onClose }: FramesGalleryProps) => {
 
   return (
     <div 
-      className="fixed inset-0 bg-black z-[10000] flex flex-col p-5"
+      className="fixed inset-0 bg-black z-[50000] flex flex-col p-5"
       onClick={onClose}
     >
       {/* Header */}

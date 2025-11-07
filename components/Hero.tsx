@@ -21,7 +21,7 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
         <h1 className={`${isMobileLandscape ? 'text-2xl' : 'text-3xl sm:text-5xl lg-text-6xl'} font-bold leading-tight text-white tracking-tighter [text-shadow:2px_2px_4px_rgba(0,0,0,0.7)]`}>
           Request Coherent Videos for Audiobooks.
         </h1>
-        <p className={`${isMobileLandscape ? 'text-xs mt-2' : 'mt-3 sm:mt-6 text-sm sm:text-base'} max-w-3xl mx-auto text-gray-200 font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)] leading-relaxed`}>
+        <p className={`${isMobileLandscape ? 'text-xs mt-2' : 'mt-3 sm:mt-6 text-sm sm:text-base'} w-full sm:max-w-[40%] mx-auto text-gray-200 font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)] leading-relaxed`}>
           Experience your favorite stories like never before with Narr-Ai.<br className="hidden sm:block" />
           We bring to life iconic scene from audioboooks through powerful artificial intelligence tools and human intervention.<br className="hidden sm:block" />
           <span className="block mt-2">This project is an independent artistic initiative. If you appreciate our work, you can support us with a donation.</span>
