@@ -18,12 +18,17 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
   return (
     <>
       <div className={`px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12 ${isMobileLandscape ? 'pt-4 sm:pt-4' : ''}`}>
-        <h1 className={`${isMobileLandscape ? 'text-2xl' : 'text-3xl sm:text-5xl lg-text-6xl'} font-bold leading-tight text-white tracking-tighter [text-shadow:2px_2px_4px_rgba(0,0,0,0.7)]`}>
-          Request Coherent Videos for Audiobooks.
+        <h1 className={`${isMobileLandscape ? 'text-2xl' : 'text-3xl sm:text-5xl lg-text-6xl'} font-bold leading-tight text-white tracking-[0.625rem] [text-shadow:2px_2px_4px_rgba(0,0,0,0.7)]`}>
+          Bring your audiobooks to life.
         </h1>
-        <p className={`${isMobileLandscape ? 'text-xs mt-2' : 'mt-3 sm:mt-6 text-sm sm:text-base'} w-full sm:max-w-[40%] mx-auto text-gray-200 font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)] leading-relaxed text-balance`}>
-          Experience your favorite stories like never before with Narr-Ai. We bring to life iconic scene from audioboooks through powerful artificial intelligence tools and human intervention. This project is an independent artistic initiative. If you appreciate our work, you can support us with a donation.
-        </p>
+        <div className={`${isMobileLandscape ? 'text-xs mt-2' : 'mt-3 sm:mt-6 text-sm sm:text-base'} w-full sm:max-w-[40%] mx-auto text-gray-200 font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)] leading-relaxed space-y-2`}>
+          <p className="text-balance">Transform iconic audiobook scenes into stunning visual experiences.</p>
+          <ul className="list-none space-y-1 text-left">
+            <li>• AI technology meets artistic vision</li>
+            <li>• Handcrafted scene recreations</li>
+            <li>• Community-driven project</li>
+          </ul>
+        </div>
       </div>
       
       <div className={`w-full max-w-4xl px-4 sm:px-6 lg:px-8 pb-8 sm:pb-10 ${isMobileLandscape ? 'pb-4 sm:pb-4' : ''}`}>
@@ -41,11 +46,11 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
             <button
               onClick={() => setIsModalOpen(true)}
               disabled={!isValidEmail(email)}
-              className="text-base px-8 py-3 bg-[#17d5ff] hover:bg-[#15bde6] text-black font-bold rounded-r-xl transition-all duration-300 shadow-lg hover:shadow-[#17d5ff]/50 transform hover:scale-105 flex-shrink-0 disabled:cursor-not-allowed"
+              className="text-base px-8 py-3 bg-[#17d5ff] hover:bg-[#15bde6] text-black font-bold rounded-r-xl transition-all duration-300 shadow-lg hover:shadow-[#17d5ff]/50 transform hover:scale-105 flex-shrink-0 disabled:cursor-not-allowed disabled:opacity-50"
               aria-haspopup="dialog"
               aria-expanded={isModalOpen}
             >
-              Request Videos
+              Get Started
             </button>
           </div>
         </div>

@@ -3,6 +3,8 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import VideoCarousel from './components/VideoCarousel';
 import FullscreenPlayer from './components/FullscreenPlayer';
+import ComingNextModal from './components/ComingNextModal';
+import FramesGallery from './components/FramesGallery';
 
 export interface Video {
   id: number;
@@ -56,6 +58,8 @@ const App = () => {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isComingNextOpen, setIsComingNextOpen] = useState(false);
+  const [isFramesOpen, setIsFramesOpen] = useState(false);
 
   useEffect(() => {
     const landscapeQuery = window.matchMedia("(orientation: landscape) and (max-height: 500px)");
@@ -94,12 +98,12 @@ const App = () => {
     <>
       <div className="bg-white h-screen w-screen flex flex-col overflow-hidden box-border pb-5">
         <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-          {!useVerticalLayout && <Header />}
+          {!useVerticalLayout && <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />}
         </div>
         <div className={`flex-1 min-h-0 ${useVerticalLayout ? 'flex flex-row items-stretch gap-4 px-5' : 'flex flex-col'}`}>
           <main className={`${useVerticalLayout ? `${mainWidth} flex flex-col transition-all duration-300 ease-in-out` : 'flex-grow-0 sm:flex-grow flex flex-col px-2 sm:px-5'}`}>
             <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-              {useVerticalLayout && <Header />}
+              {useVerticalLayout && <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />}
             </div>
             <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 overflow-hidden ${useVerticalLayout ? 'flex-1' : 'h-[60vh] sm:h-full'}`}>
               {/* Video background */}
@@ -145,6 +149,10 @@ const App = () => {
           />
         )}
       </div>
+      
+      {/* Modals rendered at root level to ensure proper z-index */}
+      <ComingNextModal isOpen={isComingNextOpen} onClose={() => setIsComingNextOpen(false)} />
+      <FramesGallery isOpen={isFramesOpen} onClose={() => setIsFramesOpen(false)} />
     </>
   );
 };

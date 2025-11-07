@@ -1,0 +1,24 @@
+{
+  "name": "Narr-Ai - Audiobook Videos",
+  "short_name": "Narr-Ai",
+  "description": "Transform iconic audiobook scenes into stunning visual experiences",
+  "start_url": "https://narr-ai.online/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#17d4ff",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/Imgs/Narrai-Pictogram.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/Imgs/Narrai-Pictogram.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
