@@ -82,12 +82,12 @@ const App = () => {
 
   // Calcola la larghezza dello slider in base allo stato hover
   const sliderWidth = useVerticalLayout 
-    ? (isSliderHovered ? 'w-[70%]' : 'w-[15%]')
+    ? (isSliderHovered ? 'w-[50%]' : 'w-[15%]')
     : 'ml-5';
   
   // Calcola la larghezza del main in base allo stato hover dello slider
   const mainWidth = useVerticalLayout
-    ? (isSliderHovered ? 'w-[30%]' : 'w-[85%]')
+    ? (isSliderHovered ? 'w-[50%]' : 'w-[85%]')
     : 'w-[65%]';
 
   return (

@@ -12,7 +12,7 @@ const Header = () => {
   };
   
   return (
-    <header className="mt-5 px-2 sm:px-5">
+    <header className="relative z-50 mt-5 px-2 sm:px-5">
       <div className="flex justify-between items-center">
         <a href="/" aria-label="Narr-Ai Home" className="no-underline text-black flex items-center gap-2">
           <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-10 h-10" />
