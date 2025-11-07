@@ -23,7 +23,11 @@ const getAudiobooks = (): AudiobookGallery[] => {
       author: 'Matt Dinniman',
       frames: [
         `${baseUrl}Imgs/preview-dungeon-crawler-carl-pee-scene.png`,
-        // Aggiungi altri frame qui
+        `${baseUrl}Imgs/Dungeon-Crawl%20Carl-Demons-arise.jpeg`,
+        `${baseUrl}Imgs/Dungeon-Crawl%20Carl-Donut-attack.jpeg`,
+        `${baseUrl}Imgs/Dungeon-Crawl%20Carl-Donut.jpeg`,
+        `${baseUrl}Imgs/Dungeon-Crawl%20Carl-Enemy.jpeg`,
+        `${baseUrl}Imgs/Dungeon-Crawl%20Carl-fire-station.jpeg`,
       ]
     },
     // Aggiungi altri audiobook qui

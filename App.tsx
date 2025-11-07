@@ -20,6 +20,13 @@ const videos: Video[] = [
     videoUrl: `${import.meta.env.BASE_URL}video/Dungeon-Crawler-Carl-Old-man-pee.mp4`,
     posterUrl: `${import.meta.env.BASE_URL}Imgs/preview-dungeon-crawler-carl-pee-scene.png`
   },
+  { 
+    id: 2, 
+    seed: 'video2', 
+    title: 'AI per Audiolibri', 
+    videoUrl: `${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`,
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`
+  },
 ];
 
 const App = () => {

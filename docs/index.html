@@ -16,6 +16,19 @@
         background-size: 200% 200%;
         animation: gradient-x 3s ease infinite;
       }
+      @keyframes border-glow {
+        0%, 100% { 
+          border-color: #17d4ff;
+          box-shadow: 0 0 5px rgba(23, 212, 255, 0.3);
+        }
+        50% { 
+          border-color: rgba(23, 212, 255, 0.5);
+          box-shadow: 0 0 15px rgba(23, 212, 255, 0.6);
+        }
+      }
+      .animate-border-glow {
+        animation: border-glow 2s ease-in-out infinite;
+      }
     </style>
 
   <script type="importmap">
@@ -27,7 +40,7 @@
   }
 }
 </script>
-  <script type="module" crossorigin src="/Narr-Ai_website/assets/index-BHLscoDA.js"></script>
+  <script type="module" crossorigin src="/Narr-Ai_website/assets/index-D9rSpvfg.js"></script>
 </head>
   <body class="bg-white">
     <div id="root"></div>
