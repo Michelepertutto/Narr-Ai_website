@@ -25,14 +25,12 @@ const ComingNextModal = ({ isOpen, onClose }: ComingNextModalProps) => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="coming-next-title"
-      className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-80 flex items-center justify-center z-[9999] p-4 overflow-y-auto"
+      className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[10000] p-5 overflow-y-auto"
       onClick={onClose}
-      style={{ margin: 0 }}
     >
       <div 
-        className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-3xl w-full relative my-auto"
+        className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full h-full relative flex flex-col"
         onClick={(e) => e.stopPropagation()}
-        style={{ maxHeight: 'calc(100vh - 2rem)' }}
       >
         <button 
           onClick={onClose} 
@@ -41,7 +39,7 @@ const ComingNextModal = ({ isOpen, onClose }: ComingNextModalProps) => {
         >
           <CloseIcon />
         </button>
-        <div className="overflow-y-auto pr-2" style={{ maxHeight: 'calc(100vh - 4rem)' }}>
+        <div className="overflow-y-auto pr-2 flex-1">
           <h3 id="coming-next-title" className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
             Coming Next
           </h3>

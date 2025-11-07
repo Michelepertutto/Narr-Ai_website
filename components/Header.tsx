@@ -21,7 +21,7 @@ const Header = () => {
         <div className="flex gap-3">
           <button
             onClick={() => setIsFramesOpen(true)}
-            className="relative px-6 py-3 font-bold text-black bg-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-[#17d4ff] animate-border-glow"
+            className="relative px-6 py-3 font-bold text-black bg-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-transparent hover:border-[#17d4ff] hover:animate-border-glow"
           >
             <span className="flex items-center gap-2">
               <span>Frames</span>
@@ -29,15 +29,15 @@ const Header = () => {
           </button>
           <button
             onClick={() => setIsComingNextOpen(true)}
-            className="relative px-6 py-3 font-bold text-black bg-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-[#17d4ff] animate-border-glow"
+            className="relative px-6 py-3 font-bold text-black bg-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-transparent hover:border-[#17d4ff] hover:animate-border-glow"
           >
             <span className="flex items-center gap-2">
-              <span>Coming Next</span>
+              <span>Up Next</span>
             </span>
           </button>
           <button
             onClick={handleDonateClick}
-            className="relative px-6 py-3 font-bold text-black bg-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-[#17d4ff] animate-border-glow"
+            className="relative px-6 py-3 font-bold text-black bg-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-transparent hover:border-[#17d4ff] hover:animate-border-glow"
           >
             <span className="flex items-center gap-2">
               <HeartIcon className="w-5 h-5" />

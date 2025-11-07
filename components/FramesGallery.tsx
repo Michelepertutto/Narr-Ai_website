@@ -23,11 +23,11 @@ const getAudiobooks = (): AudiobookGallery[] => {
       author: 'Matt Dinniman',
       frames: [
         `${baseUrl}Imgs/preview-dungeon-crawler-carl-pee-scene.png`,
-        `${baseUrl}Imgs/Dungeon-Crawl%20Carl-Demons-arise.jpeg`,
-        `${baseUrl}Imgs/Dungeon-Crawl%20Carl-Donut-attack.jpeg`,
-        `${baseUrl}Imgs/Dungeon-Crawl%20Carl-Donut.jpeg`,
-        `${baseUrl}Imgs/Dungeon-Crawl%20Carl-Enemy.jpeg`,
-        `${baseUrl}Imgs/Dungeon-Crawl%20Carl-fire-station.jpeg`,
+        `${baseUrl}Imgs/Dungeon-Crawl Carl-Demons arise.jpeg`,
+        `${baseUrl}Imgs/Dungeon-Crawl Carl-Donut attack.jpeg`,
+        `${baseUrl}Imgs/Dungeon-Crawl Carl-Donut.jpeg`,
+        `${baseUrl}Imgs/Dungeon-Crawl Carl-Enemy.jpeg`,
+        `${baseUrl}Imgs/Dungeon-Crawl Carl-fire station.jpeg`,
       ]
     },
     // Aggiungi altri audiobook qui
@@ -67,7 +67,7 @@ const FramesGallery = ({ isOpen, onClose }: FramesGalleryProps) => {
 
   return (
     <div 
-      className="fixed inset-0 bg-black z-[9999] flex flex-col"
+      className="fixed inset-0 bg-black z-[10000] flex flex-col p-5"
       onClick={onClose}
     >
       {/* Header */}
