@@ -122,7 +122,7 @@ const App = () => {
   return (
     <>
       <div className="bg-white h-screen w-screen flex flex-col overflow-hidden box-border pb-10">
-        <div className={`pt-[25px] px-10 transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+        <div className={`pt-[15px] px-10 transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
           {!useVerticalLayout && <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />}
         </div>
         <div className={`flex-1 min-h-0 ${useVerticalLayout ? 'flex flex-row items-stretch gap-4 px-10' : 'flex flex-col'}`}>
@@ -131,10 +131,10 @@ const App = () => {
             <div className="fixed inset-0 bg-black/40 z-[100] pointer-events-none transition-opacity duration-300" />
           )}
           <main className={`${useVerticalLayout ? `${mainWidth} flex flex-col transition-all duration-300 ease-in-out relative z-[50]` : 'flex-grow-0 sm:flex-grow flex flex-col px-10'}`}>
-            <div className={`pt-[25px] transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+            <div className={`pt-[15px] transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
               {useVerticalLayout && <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />}
             </div>
-            <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 overflow-hidden ${useVerticalLayout ? 'flex-1' : 'h-[calc(100vh-180px)] min-h-[500px] sm:h-full'}`}>
+            <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-3 overflow-hidden ${useVerticalLayout ? 'flex-1' : 'h-[calc(100vh-180px)] min-h-[500px] sm:h-full'}`}>
               {/* Video background */}
               <video
                 src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
@@ -156,10 +156,10 @@ const App = () => {
             </div>
           </main>
           <div
-            className={`${sliderWidth} mt-5 transition-all duration-300 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'} ${useVerticalLayout ? 'relative z-[200]' : ''}`}
+            className={`${sliderWidth} transition-all duration-300 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'} ${useVerticalLayout ? 'relative z-[200]' : ''}`}
             style={{ 
               transitionDelay: isLoaded ? '0ms' : '500ms',
-              marginTop: useVerticalLayout ? '20px' : '20px'
+              marginTop: useVerticalLayout ? '15px' : '20px'
             }}
             onMouseEnter={() => useVerticalLayout && setIsSliderHovered(true)}
             onMouseLeave={() => useVerticalLayout && setIsSliderHovered(false)}

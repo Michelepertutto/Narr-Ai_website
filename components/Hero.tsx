@@ -27,8 +27,8 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
               lineHeight: isMobileLandscape ? '40px' : '40px',
               letterSpacing: '0',
               ...(window.innerWidth >= 768 && {
-                fontSize: '72px',
-                lineHeight: '72px',
+                fontSize: '56px',
+                lineHeight: '60px',
                 letterSpacing: '0'
               })
             }}
