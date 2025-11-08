@@ -29,7 +29,7 @@ const ComingNextModal = ({ isOpen, onClose }: ComingNextModalProps) => {
       onClick={onClose}
     >
       <div 
-        className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full h-full relative flex flex-col"
+        className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 w-full max-w-4xl h-auto max-h-[90vh] relative flex flex-col mx-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <button 

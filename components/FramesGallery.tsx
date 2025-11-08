@@ -22,15 +22,38 @@ const getAudiobooks = (): AudiobookGallery[] => {
       title: 'Dungeon Crawler Carl',
       author: 'Matt Dinniman',
       frames: [
-        `${baseUrl}Imgs/preview-dungeon-crawler-carl-pee-scene.png`,
-        `${baseUrl}Imgs/Dungeon-Crawl Carl-Demons arise.jpeg`,
-        `${baseUrl}Imgs/Dungeon-Crawl Carl-Donut attack.jpeg`,
-        `${baseUrl}Imgs/Dungeon-Crawl Carl-Donut.jpeg`,
-        `${baseUrl}Imgs/Dungeon-Crawl Carl-Enemy.jpeg`,
-        `${baseUrl}Imgs/Dungeon-Crawl Carl-fire station.jpeg`,
+        `${baseUrl}Imgs/Frames/Dungeon-Crawl Carl-Demons-arise.jpeg`,
+        `${baseUrl}Imgs/Frames/Dungeon-Crawl-Carl-Donut-attack.jpeg`,
+        `${baseUrl}Imgs/Frames/Dungeon-Crawl-Carl-Donut.jpeg`,
+        `${baseUrl}Imgs/Frames/Dungeon-Crawl-Carl-Enemy.jpeg`,
+        `${baseUrl}Imgs/Frames/Dungeon-Crawl-Carl-fire-station.jpeg`,
+        `${baseUrl}Imgs/Frames/Dungeon-Crawler-Carl-Frame (14).jpeg`,
+        `${baseUrl}Imgs/Frames/Dungeon-Crawler-Carl-Frame (19).jpeg`,
+        `${baseUrl}Imgs/Frames/Dungeon-Crawler-Carl-Frame (21).jpeg`,
+        `${baseUrl}Imgs/Frames/Dungeon-Crawler-Carl-Frame (22).jpeg`,
       ]
     },
-    // Aggiungi altri audiobook qui
+    {
+      id: 'bobiverse',
+      title: 'Bobiverse - We Are Legion',
+      author: 'Dennis E. Taylor',
+      frames: [
+        `${baseUrl}Imgs/Frames/Bobiverse-Noi-siamo-infinito-frame (1).jpeg`,
+        `${baseUrl}Imgs/Frames/Bobiverse-Noi-siamo-infinito-frame (2).jpeg`,
+        `${baseUrl}Imgs/Frames/Bobiverse-Noi-siamo-infinito-frame (2).png`,
+        `${baseUrl}Imgs/Frames/Bobiverse-Noi-siamo-infinito-frame (3).jpeg`,
+      ]
+    },
+    {
+      id: 'la-sicaria',
+      title: 'La Sicaria',
+      author: 'Jonathan Maberry',
+      frames: [
+        `${baseUrl}Imgs/Frames/La-sicaria_frame (3).jpeg`,
+        `${baseUrl}Imgs/Frames/La-sicaria_frame (4).jpeg`,
+        `${baseUrl}Imgs/Frames/La-sicaria_frame (6).jpeg`,
+      ]
+    },
   ];
 };
 
