@@ -12,36 +12,50 @@ export interface Video {
   title: string;
   videoUrl: string;
   posterUrl?: string;
+  episodes?: Video[]; // For series with multiple episodes
+  episodeNumber?: number; // Episode number within a series
 }
 
 const videos: Video[] = [
   { 
     id: 1, 
     seed: 'video1', 
-    title: 'Dungeon Crawler Carl - Old man pee', 
+    title: 'Dungeon Crawler Carl', 
     videoUrl: `${import.meta.env.BASE_URL}video/Dungeon-Crawler-Carl-Old-man-pee.mp4`,
     posterUrl: `${import.meta.env.BASE_URL}Imgs/preview-dungeon-crawler-carl-pee-scene.png`
   },
   { 
     id: 2, 
     seed: 'video2', 
-    title: 'Bobiverse - Bob dies and wakes up as AI', 
+    title: 'We are legion (We are Bob)', 
     videoUrl: `${import.meta.env.BASE_URL}video/Bobiverse_Bob-dies-and-wakes-up-as-AI.mp4`,
     posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_Bobiverse.png`
   },
   { 
     id: 3, 
     seed: 'video3', 
-    title: 'La Sicaria - Scena 1 Prince Karek', 
+    title: 'La Sicaria', 
     videoUrl: `${import.meta.env.BASE_URL}video/La-Sicaria_Scena-1-Prince-karek.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-La-sicaria-Prince-Karek.png`
-  },
-  { 
-    id: 4, 
-    seed: 'video4', 
-    title: 'La Sicaria - The arrival of the assassin', 
-    videoUrl: `${import.meta.env.BASE_URL}video/La_sicaria_The-arrival-of-the-assassin.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_La-sicaria.png`
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-La-sicaria-Prince-Karek.png`,
+    episodeNumber: 1,
+    episodes: [
+      {
+        id: 3,
+        seed: 'video3',
+        title: 'La Sicaria - Episode 1',
+        videoUrl: `${import.meta.env.BASE_URL}video/La-Sicaria_Scena-1-Prince-karek.mp4`,
+        posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-La-sicaria-Prince-Karek.png`,
+        episodeNumber: 1
+      },
+      {
+        id: 4,
+        seed: 'video4',
+        title: 'La Sicaria - Episode 2',
+        videoUrl: `${import.meta.env.BASE_URL}video/La_sicaria_The-arrival-of-the-assassin.mp4`,
+        posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_La-sicaria.png`,
+        episodeNumber: 2
+      }
+    ]
   },
   { 
     id: 5, 
@@ -97,12 +111,12 @@ const App = () => {
 
   // Calcola la larghezza dello slider in base allo stato hover
   const sliderWidth = useVerticalLayout 
-    ? (isSliderHovered ? 'w-[50%]' : 'w-[15%]')
+    ? (isSliderHovered ? 'w-[60%]' : 'w-[40%]')
     : 'w-full px-10';
   
   // Calcola la larghezza del main in base allo stato hover dello slider
   const mainWidth = useVerticalLayout
-    ? (isSliderHovered ? 'w-[50%]' : 'w-[85%]')
+    ? (isSliderHovered ? 'w-[40%]' : 'w-[60%]')
     : 'w-full';
 
   return (
@@ -112,7 +126,11 @@ const App = () => {
           {!useVerticalLayout && <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />}
         </div>
         <div className={`flex-1 min-h-0 ${useVerticalLayout ? 'flex flex-row items-stretch gap-4 px-10' : 'flex flex-col'}`}>
-          <main className={`${useVerticalLayout ? `${mainWidth} flex flex-col transition-all duration-300 ease-in-out` : 'flex-grow-0 sm:flex-grow flex flex-col px-10'}`}>
+          {/* Dark overlay when slider is hovered */}
+          {useVerticalLayout && isSliderHovered && (
+            <div className="fixed inset-0 bg-black/40 z-[100] pointer-events-none transition-opacity duration-300" />
+          )}
+          <main className={`${useVerticalLayout ? `${mainWidth} flex flex-col transition-all duration-300 ease-in-out relative z-[50]` : 'flex-grow-0 sm:flex-grow flex flex-col px-10'}`}>
             <div className={`pt-[25px] transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
               {useVerticalLayout && <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />}
             </div>
@@ -138,8 +156,11 @@ const App = () => {
             </div>
           </main>
           <div
-            className={`${sliderWidth} mt-5 transition-all duration-300 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`}
-            style={{ transitionDelay: isLoaded ? '0ms' : '500ms' }}
+            className={`${sliderWidth} mt-5 transition-all duration-300 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'} ${useVerticalLayout ? 'relative z-[200]' : ''}`}
+            style={{ 
+              transitionDelay: isLoaded ? '0ms' : '500ms',
+              marginTop: useVerticalLayout ? '20px' : '20px'
+            }}
             onMouseEnter={() => useVerticalLayout && setIsSliderHovered(true)}
             onMouseLeave={() => useVerticalLayout && setIsSliderHovered(false)}
           >

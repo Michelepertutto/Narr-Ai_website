@@ -25,11 +25,11 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
             style={{
               fontSize: isMobileLandscape ? '40px' : '40px',
               lineHeight: isMobileLandscape ? '40px' : '40px',
-              letterSpacing: isMobileLandscape ? '-2px' : '-2px',
+              letterSpacing: '0',
               ...(window.innerWidth >= 768 && {
                 fontSize: '72px',
                 lineHeight: '72px',
-                letterSpacing: '-20px'
+                letterSpacing: '0'
               })
             }}
           >
@@ -44,7 +44,7 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
               lineHeight: window.innerWidth >= 768 ? '18px' : '24px'
             }}
           >
-            <p className="text-balance">Visually reimagine iconic scenes from your favorite audiobooks. We fuse the precision of AI technology with a meticulous artistic vision to create handcrafted scenes, all powered by a project driven by our community.</p>
+            <p className="text-balance">Have an audiobook scene you're dying to see? Send us a request! We'll add it to our queue, and it's typically ready in 1-3 days.</p>
           </div>
           
           {/* Email and Button */}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { HeartIcon } from './icons/HeartIcon';
 
 interface HeaderProps {
@@ -40,7 +41,8 @@ const Header = ({ onFramesClick, onComingNextClick }: HeaderProps) => {
   };
   
   return (
-    <header className="relative z-50 mt-3 px-2 sm:px-5 max-h-[90px]">
+    <>
+    <header className="relative z-[10000] mt-3 px-2 sm:px-5 max-h-[90px]">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
           <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
@@ -108,16 +110,17 @@ const Header = ({ onFramesClick, onComingNextClick }: HeaderProps) => {
         </div>
       </div>
 
-      {/* Mobile menu - visible only when open */}
-      {isMobileMenuOpen && (
-        <>
-          {/* Backdrop */}
-          <div 
-            className="md:hidden fixed inset-0 bg-black/50 z-[9998]"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-          {/* Menu */}
-          <div className="md:hidden fixed top-[60px] left-2 right-2 bg-white rounded-lg shadow-lg border-2 border-[#17d4ff] overflow-hidden z-[9999]">
+    </header>
+    {/* Mobile menu - rendered at root level using Portal */}
+    {isMobileMenuOpen && createPortal(
+      <>
+        {/* Backdrop */}
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-[9998]"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+        {/* Menu */}
+        <div className="md:hidden fixed top-[60px] left-2 right-2 bg-white rounded-lg shadow-lg border-2 border-[#17d4ff] overflow-hidden z-[9999]">
           <div className="flex flex-col">
             <button
               onClick={() => { onFramesClick(); setIsMobileMenuOpen(false); }}
@@ -154,9 +157,10 @@ const Header = ({ onFramesClick, onComingNextClick }: HeaderProps) => {
             )}
           </div>
         </div>
-        </>
-      )}
-    </header>
+      </>,
+      document.body
+    )}
+    </>
   );
 };
 

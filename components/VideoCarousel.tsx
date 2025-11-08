@@ -226,6 +226,15 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
           <p className="absolute bottom-2 left-3 text-white text-sm font-semibold">
             {video.title}
           </p>
+          {/* Series indicator - show episode count badge */}
+          {video.episodes && video.episodes.length > 1 && (
+            <div className="absolute bottom-2 right-2 bg-black/70 backdrop-blur-sm rounded-md px-2 py-1 flex items-center gap-1">
+              <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              <span className="text-white text-xs font-bold">{video.episodes.length}</span>
+            </div>
+          )}
         </div>
       ))}
       <style>{`
