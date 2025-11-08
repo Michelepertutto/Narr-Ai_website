@@ -18,7 +18,7 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
   return (
     <>
       <div className={`px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12 ${isMobileLandscape ? 'pt-4 sm:pt-4' : ''}`}>
-        <h1 className={`${isMobileLandscape ? 'text-2xl' : 'text-3xl sm:text-5xl lg:text-6xl'} font-bold leading-tight text-white [text-shadow:2px_2px_4px_rgba(0,0,0,0.7)] w-[90%] md:w-[75%] lg:w-[50%] mx-auto`}>
+        <h1 className={`${isMobileLandscape ? 'text-2xl' : 'text-3xl sm:text-5xl lg:text-6xl'} font-bold leading-tight text-white [text-shadow:2px_2px_4px_rgba(0,0,0,0.7)] w-[95%] md:w-[80%] lg:w-[55%] mx-auto`}>
           Bring your audiobooks to life.
         </h1>
         <div className={`${isMobileLandscape ? 'text-xs mt-2' : 'mt-3 sm:mt-6 text-sm sm:text-base'} text-gray-200 font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)] leading-relaxed w-[90%] md:w-[75%] lg:w-[50%] mx-auto`}>
