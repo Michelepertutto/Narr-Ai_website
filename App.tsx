@@ -55,7 +55,8 @@ const videos: Video[] = [
 const App = () => {
   const [selectedVideoIndex, setSelectedVideoIndex] = useState<number | null>(null);
   const [isMobileLandscape, setIsMobileLandscape] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+  const [isPortrait, setIsPortrait] = useState(window.matchMedia("(orientation: portrait)").matches);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isComingNextOpen, setIsComingNextOpen] = useState(false);
@@ -67,13 +68,22 @@ const App = () => {
     landscapeQuery.addEventListener('change', handleOrientationChange);
     setIsMobileLandscape(landscapeQuery.matches);
 
-    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+    const portraitQuery = window.matchMedia("(orientation: portrait)");
+    const handlePortraitChange = (e: MediaQueryListEvent) => setIsPortrait(e.matches);
+    portraitQuery.addEventListener('change', handlePortraitChange);
+    setIsPortrait(portraitQuery.matches);
+
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+      setIsPortrait(window.matchMedia("(orientation: portrait)").matches);
+    };
     window.addEventListener('resize', handleResize);
 
     setTimeout(() => setIsLoaded(true), 100);
 
     return () => {
       landscapeQuery.removeEventListener('change', handleOrientationChange);
+      portraitQuery.removeEventListener('change', handlePortraitChange);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
@@ -81,13 +91,14 @@ const App = () => {
   const handleVideoSelect = (index: number) => setSelectedVideoIndex(index);
   const handleClosePlayer = () => setSelectedVideoIndex(null);
   
-  const useVerticalLayout = isDesktop || isMobileLandscape;
+  // Use desktop layout only if screen is large AND in landscape, otherwise use mobile layout
+  const useVerticalLayout = isDesktop && !isPortrait;
   const isExpanded = selectedVideoIndex !== null;
 
   // Calcola la larghezza dello slider in base allo stato hover
   const sliderWidth = useVerticalLayout 
     ? (isSliderHovered ? 'w-[50%]' : 'w-[15%]')
-    : 'ml-5';
+    : 'w-full px-10';
   
   // Calcola la larghezza del main in base allo stato hover dello slider
   const mainWidth = useVerticalLayout
@@ -96,13 +107,13 @@ const App = () => {
 
   return (
     <>
-      <div className="bg-white h-screen w-screen flex flex-col overflow-hidden box-border pb-5">
-        <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+      <div className="bg-white h-screen w-screen flex flex-col overflow-hidden box-border pb-10">
+        <div className={`pt-[25px] px-10 transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
           {!useVerticalLayout && <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />}
         </div>
-        <div className={`flex-1 min-h-0 ${useVerticalLayout ? 'flex flex-row items-stretch gap-4 px-5' : 'flex flex-col'}`}>
-          <main className={`${useVerticalLayout ? `${mainWidth} flex flex-col transition-all duration-300 ease-in-out` : 'flex-grow-0 sm:flex-grow flex flex-col px-2 sm:px-5'}`}>
-            <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+        <div className={`flex-1 min-h-0 ${useVerticalLayout ? 'flex flex-row items-stretch gap-4 px-10' : 'flex flex-col'}`}>
+          <main className={`${useVerticalLayout ? `${mainWidth} flex flex-col transition-all duration-300 ease-in-out` : 'flex-grow-0 sm:flex-grow flex flex-col px-10'}`}>
+            <div className={`pt-[25px] transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
               {useVerticalLayout && <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />}
             </div>
             <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 overflow-hidden ${useVerticalLayout ? 'flex-1' : 'h-[calc(100vh-180px)] min-h-[500px] sm:h-full'}`}>
@@ -121,7 +132,7 @@ const App = () => {
               <div className="absolute inset-0 bg-black/50 rounded-xl sm:rounded-2xl pointer-events-none"></div>
               
               {/* Contenitore per i contenuti testuali sopra al video */}
-              <div className="relative h-full flex flex-col justify-between items-center text-center">
+              <div className="relative h-full flex items-center justify-center">
                 <Hero isMobileLandscape={isMobileLandscape} />
               </div>
             </div>
