@@ -18,7 +18,7 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
   return (
     <>
       <div className={`px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12 ${isMobileLandscape ? 'pt-4 sm:pt-4' : ''}`}>
-        <h1 className={`${isMobileLandscape ? 'text-2xl' : 'text-3xl sm:text-5xl lg:text-6xl'} font-bold leading-tight text-white [text-shadow:2px_2px_4px_rgba(0,0,0,0.7)] w-[90%] md:w-[75%] lg:w-[50%] mx-auto`}>
+        <h1 className={`${isMobileLandscape ? 'text-3xl' : 'text-4xl sm:text-6xl lg:text-7xl'} font-bold leading-tight text-white [text-shadow:2px_2px_4px_rgba(0,0,0,0.7)] w-[90%] md:w-[75%] lg:w-[50%] mx-auto`}>
           Bring your audiobooks to life.
         </h1>
         <div className={`${isMobileLandscape ? 'text-xs mt-2' : 'mt-3 sm:mt-6 text-sm sm:text-base'} text-gray-200 font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)] leading-relaxed w-[90%] md:w-[75%] lg:w-[50%] mx-auto`}>
@@ -34,14 +34,14 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email to start"
-              className="flex-1 text-base px-5 py-3 bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-gray-300 font-medium rounded-l-xl transition-all duration-300 shadow-lg focus:ring-2 focus:ring-[#17d5ff] focus:outline-none"
+              className="flex-1 text-lg px-6 py-4 bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-gray-300 font-medium rounded-l-xl transition-all duration-300 shadow-lg focus:ring-2 focus:ring-[#17d5ff] focus:outline-none"
               aria-label="Email address"
               required
             />
             <button
               onClick={() => setIsModalOpen(true)}
               disabled={!isValidEmail(email)}
-              className="text-base px-8 py-3 bg-[#17d5ff] hover:bg-[#15bde6] text-black font-bold rounded-r-xl transition-all duration-300 shadow-lg hover:shadow-[#17d5ff]/50 transform hover:scale-105 flex-shrink-0 disabled:cursor-not-allowed disabled:opacity-50"
+              className="text-lg px-10 py-4 bg-[#17d5ff] hover:bg-[#15bde6] text-black font-bold rounded-r-xl transition-all duration-300 shadow-lg hover:shadow-[#17d5ff]/50 transform hover:scale-105 flex-shrink-0 disabled:cursor-not-allowed disabled:opacity-50"
               aria-haspopup="dialog"
               aria-expanded={isModalOpen}
             >
