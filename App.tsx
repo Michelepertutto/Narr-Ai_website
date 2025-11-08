@@ -92,7 +92,7 @@ const App = () => {
   // Calcola la larghezza del main in base allo stato hover dello slider
   const mainWidth = useVerticalLayout
     ? (isSliderHovered ? 'w-[50%]' : 'w-[85%]')
-    : 'w-[65%]';
+    : 'w-full';
 
   return (
     <>
@@ -105,7 +105,7 @@ const App = () => {
             <div className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
               {useVerticalLayout && <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />}
             </div>
-            <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 overflow-hidden ${useVerticalLayout ? 'flex-1' : 'h-[60vh] sm:h-full'}`}>
+            <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-5 overflow-hidden ${useVerticalLayout ? 'flex-1' : 'h-[calc(100vh-180px)] min-h-[500px] sm:h-full'}`}>
               {/* Video background */}
               <video
                 src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
