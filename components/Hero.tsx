@@ -19,15 +19,10 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
     <>
       <div className={`px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12 ${isMobileLandscape ? 'pt-4 sm:pt-4' : ''}`}>
         <h1 className={`${isMobileLandscape ? 'text-2xl' : 'text-3xl sm:text-5xl lg:text-6xl'} font-bold leading-tight text-white [text-shadow:2px_2px_4px_rgba(0,0,0,0.7)] w-[90%] md:w-[75%] lg:w-[50%] mx-auto`}>
-          Visually reimagine iconic scenes from your favorite audiobooks. We fuse the precision of AI technology with a meticulous artistic vision to create handcrafted scenes, all powered by a project driven by our community.
+          Bring your audiobooks to life.
         </h1>
         <div className={`${isMobileLandscape ? 'text-xs mt-2' : 'mt-3 sm:mt-6 text-sm sm:text-base'} text-gray-200 font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)] leading-relaxed w-[90%] md:w-[75%] lg:w-[50%] mx-auto`}>
-          <p className="text-balance">Transform iconic audiobook scenes into stunning visual experiences.</p>
-          <ul className="list-none space-y-1 text-left">
-            <li>• AI technology meets artistic vision</li>
-            <li>• Handcrafted scene recreations</li>
-            <li>• Community-driven project</li>
-          </ul>
+          <p className="text-balance">Visually reimagine iconic scenes from your favorite audiobooks. We fuse the precision of AI technology with a meticulous artistic vision to create handcrafted scenes, all powered by a project driven by our community.</p>
         </div>
       </div>
       
