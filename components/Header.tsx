@@ -110,7 +110,14 @@ const Header = ({ onFramesClick, onComingNextClick }: HeaderProps) => {
 
       {/* Mobile menu - visible only when open */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed top-[60px] left-2 right-2 bg-white rounded-lg shadow-lg border-2 border-[#17d4ff] overflow-hidden z-[1000]">
+        <>
+          {/* Backdrop */}
+          <div 
+            className="md:hidden fixed inset-0 bg-black/50 z-[9998]"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          {/* Menu */}
+          <div className="md:hidden fixed top-[60px] left-2 right-2 bg-white rounded-lg shadow-lg border-2 border-[#17d4ff] overflow-hidden z-[9999]">
           <div className="flex flex-col">
             <button
               onClick={() => { onFramesClick(); setIsMobileMenuOpen(false); }}
@@ -147,6 +154,7 @@ const Header = ({ onFramesClick, onComingNextClick }: HeaderProps) => {
             )}
           </div>
         </div>
+        </>
       )}
     </header>
   );
