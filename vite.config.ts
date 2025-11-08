@@ -5,8 +5,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   return {
-    // Use base path only in production (GitHub Pages), not in dev
-    base: mode === 'production' ? '/Narr-Ai_website/' : '/',
+    // Base path set to '/' for custom domain
+    base: '/',
 
     server: {
       port: 3000,
