@@ -226,6 +226,24 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
           <p className="absolute bottom-2 left-3 text-white text-sm font-semibold">
             {video.title}
           </p>
+          {/* Download button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              const link = document.createElement('a');
+              link.href = video.videoUrl;
+              link.download = `${video.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.mp4`;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }}
+            className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm rounded-full p-2 hover:bg-black/90 transition-colors z-10"
+            title="Download video"
+          >
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+          </button>
           {/* Series indicator - show episode count badge */}
           {video.episodes && video.episodes.length > 1 && (
             <div className="absolute bottom-2 right-2 bg-black/70 backdrop-blur-sm rounded-md px-2 py-1 flex items-center gap-1">

@@ -171,6 +171,30 @@ const App = () => {
               <div className="relative h-full flex items-center justify-center">
                 <Hero isMobileLandscape={isMobileLandscape} />
               </div>
+              
+              {/* Footer inside hero video container */}
+              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-sm text-gray-300 z-10">
+                <a 
+                  href="https://buymeacoffee.com/narrai" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  Love what we do? Support our work here.
+                </a>
+                <button 
+                  className="flex items-center gap-2 hover:text-white transition-colors"
+                  onClick={() => {}}
+                >
+                  <span>Download the app</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </main>
           <div

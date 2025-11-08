@@ -40,8 +40,8 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
           <div 
             className="text-gray-200 font-medium w-full mx-auto text-center mt-6"
             style={{
-              fontSize: window.innerWidth >= 768 ? '18px' : '16px',
-              lineHeight: window.innerWidth >= 768 ? '18px' : '24px'
+              fontSize: window.innerWidth >= 768 ? '17px' : '15px',
+              lineHeight: window.innerWidth >= 768 ? '26px' : '23px'
             }}
           >
             <p className="text-balance">Have an audiobook scene you're dying to see? Send us a request! We'll add it to our queue, and it's typically ready in 1-3 days.</p>
@@ -55,7 +55,7 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="flex-1 px-3 sm:px-6 py-2 sm:py-4 bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-gray-300 font-medium rounded-l-xl transition-all duration-300 shadow-lg focus:ring-2 focus:ring-[#17d5ff] focus:outline-none"
+                className="flex-1 px-3 sm:px-6 py-2 sm:py-4 bg-black/40 backdrop-blur-sm border border-white/30 text-white placeholder-gray-400 font-medium rounded-l-xl transition-all duration-300 shadow-lg focus:ring-2 focus:ring-[#17d5ff] focus:outline-none"
                 style={{
                   fontSize: '16px',
                   lineHeight: window.innerWidth >= 768 ? '17px' : '18px'
