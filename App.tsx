@@ -102,7 +102,25 @@ const App = () => {
     };
   }, []);
 
-  const handleVideoSelect = (index: number) => setSelectedVideoIndex(index);
+  // Flatten videos for fullscreen player (expand series into individual videos)
+  const flattenedVideos = videos.flatMap(video => 
+    video.episodes && video.episodes.length > 0 ? video.episodes : [video]
+  );
+
+  const handleVideoSelect = (index: number) => {
+    // Map carousel index to flattened index
+    const selectedVideo = videos[index];
+    if (selectedVideo.episodes && selectedVideo.episodes.length > 0) {
+      // If it's a series, find the index of the first episode in flattened array
+      const flatIndex = flattenedVideos.findIndex(v => v.id === selectedVideo.episodes![0].id);
+      setSelectedVideoIndex(flatIndex);
+    } else {
+      // Find the index in flattened array
+      const flatIndex = flattenedVideos.findIndex(v => v.id === selectedVideo.id);
+      setSelectedVideoIndex(flatIndex);
+    }
+  };
+  
   const handleClosePlayer = () => setSelectedVideoIndex(null);
   
   // Use desktop layout only if screen is large AND in landscape, otherwise use mobile layout
@@ -175,7 +193,7 @@ const App = () => {
 
         {selectedVideoIndex !== null && (
           <FullscreenPlayer
-            videos={videos}
+            videos={flattenedVideos}
             startIndex={selectedVideoIndex}
             onClose={handleClosePlayer}
           />

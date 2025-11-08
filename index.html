@@ -9,8 +9,23 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/Imgs/Narrai-Pictogram.png" />
     <title>Narr-Ai</title>
+    <!-- Google Fonts - Noto Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Tailwind CDN: OK for small projects, warning can be ignored -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Noto Sans', 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
     <style>
       @keyframes gradient-x {
         0%, 100% { background-position: 0% 50%; }
@@ -44,7 +59,7 @@
 }
 </script>
 </head>
-  <body class="bg-white">
+  <body class="bg-white font-sans">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
     <script>
