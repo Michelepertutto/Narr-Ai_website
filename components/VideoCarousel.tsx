@@ -151,10 +151,10 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
     const isHovered = hoveredIndex === index;
     
     if (isMobileLandscape) {
-      // Vertical layout - full width cards
-      return 'w-full h-full';
+      // Vertical layout - larger cards for horizontal tablet/mobile
+      return 'w-full min-h-[240px]';
     } else {
-      // Horizontal layout - mobile/tablet
+      // Horizontal layout - mobile portrait
       return 'w-[160px] h-[180px]';
     }
   };

@@ -136,17 +136,18 @@ const App = () => {
     }
   };
   
-  // Use horizontal layout for desktop landscape, vertical layout for portrait/mobile
-  const useHorizontalLayout = isDesktop && !isPortrait;
+  // Use horizontal layout for desktop/tablet landscape, vertical layout for portrait/mobile
+  const useHorizontalLayout = !isPortrait;
   const isExpanded = selectedVideoIndex !== null;
+  const isDesktopView = isDesktop && !isPortrait;
 
   return (
     <>
-      {/* HORIZONTAL LAYOUT (Desktop Landscape) */}
+      {/* HORIZONTAL LAYOUT (Desktop/Tablet Landscape) */}
       {useHorizontalLayout ? (
         <div className="bg-white h-screen w-screen flex flex-row overflow-hidden">
           {/* Left Column: Header + Hero + Footer */}
-          <div className="flex-1 flex flex-col" style={{ padding: '10px 0 20px 20px' }}>
+          <div className="flex flex-col" style={{ width: isDesktopView ? 'calc(100% - 280px)' : '65%', padding: '10px 0 20px 20px' }}>
             {/* Sticky Header */}
             <div className="sticky top-0 z-[10000] bg-white" style={{ paddingBottom: '10px' }}>
               <Header 
@@ -157,7 +158,7 @@ const App = () => {
             </div>
             
             {/* Hero Section */}
-            <div className="relative flex-1 rounded-xl shadow-2xl overflow-hidden" style={{ marginRight: '20px' }}>
+            <div className="relative flex-1 rounded-3xl shadow-2xl overflow-hidden" style={{ marginRight: '20px' }}>
               <video
                 src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
                 poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
@@ -167,38 +168,34 @@ const App = () => {
                 muted
                 playsInline
               />
-              <div className="absolute inset-0 bg-black/50 rounded-xl pointer-events-none"></div>
+              <div className="absolute inset-0 bg-black/50 rounded-3xl pointer-events-none"></div>
               <div className="relative h-full flex items-center justify-center">
                 <Hero isMobileLandscape={false} />
               </div>
             </div>
             
             {/* Footer */}
-            <div className="flex justify-between items-center text-sm" style={{ paddingTop: '20px', marginRight: '20px' }}>
-              <a href="#" className="text-gray-600 hover:text-[#17d4ff] transition-colors">
+            <div className="flex items-center gap-8 text-sm" style={{ paddingTop: '20px', marginRight: '20px' }}>
+              <a href="#" className="text-gray-600 hover:text-[#17d4ff] transition-colors whitespace-nowrap">
                 Privacy Policy
               </a>
-              <p className="text-gray-600 text-center">
+              <p className="text-gray-600">
                 Love what we do? Then please support us <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
               </p>
-              <button className="cta-button px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2">
-                <span>Watch</span>
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </button>
             </div>
           </div>
           
-          {/* Right Column: Slider (Full Height) */}
-          <div className="h-screen flex flex-col" style={{ padding: '20px 20px 20px 0' }}>
-            <VideoCarousel
-              videos={videos}
-              onVideoSelect={handleVideoSelect}
-              isExpanded={isExpanded}
-              isMobileLandscape={true}
-            />
-          </div>
+          {/* Right Column: Slider (Full Height) - Only on Desktop */}
+          {isDesktopView && (
+            <div className="h-screen flex flex-col" style={{ width: '280px', padding: '80px 20px 20px 0' }}>
+              <VideoCarousel
+                videos={videos}
+                onVideoSelect={handleVideoSelect}
+                isExpanded={isExpanded}
+                isMobileLandscape={true}
+              />
+            </div>
+          )}
         </div>
       ) : (
         /* VERTICAL LAYOUT (Portrait/Mobile) */
