@@ -152,10 +152,10 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
     
     if (isMobileLandscape) {
       // Vertical layout - larger cards for horizontal tablet/mobile
-      return 'w-full min-h-[240px]';
+      return `w-full min-h-[240px] transition-transform duration-300 ${isHovered ? 'scale-105' : 'scale-100'}`;
     } else {
       // Horizontal layout - mobile portrait
-      return 'w-[160px] h-[180px]';
+      return `w-[160px] h-[180px] transition-transform duration-300 ${isHovered ? 'scale-105' : 'scale-100'}`;
     }
   };
   

@@ -78,6 +78,7 @@ const App = () => {
   const [isCtaExpanded, setIsCtaExpanded] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentSliderIndex, setCurrentSliderIndex] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const landscapeQuery = window.matchMedia("(orientation: landscape) and (max-height: 500px)");
@@ -141,6 +142,13 @@ const App = () => {
   const isExpanded = selectedVideoIndex !== null;
   const isDesktopView = isDesktop && !isPortrait;
 
+  // Filter videos by search query
+  const filteredVideos = searchQuery.trim() === '' 
+    ? videos 
+    : videos.filter(video => 
+        video.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
   return (
     <>
       {/* HORIZONTAL LAYOUT (Desktop/Tablet Landscape) */}
@@ -156,7 +164,7 @@ const App = () => {
               </div>
               
               {/* Center: Collab + Coming Next (aligned to hero right edge) */}
-              <div className="flex gap-6" style={{ marginRight: isDesktopView ? '280px' : '0' }}>
+              <div className="flex gap-6" style={{ marginRight: isDesktopView ? '300px' : '0' }}>
                 <button onClick={() => setIsCollabOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
                   Collab
                 </button>
@@ -172,7 +180,13 @@ const App = () => {
                     <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                    <input type="text" placeholder="Search" className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-600" />
+                    <input 
+                      type="text" 
+                      placeholder="Search" 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-600" 
+                    />
                   </div>
                   <button onClick={handleFullscreenToggle} className="w-10 h-10 bg-gray-300 rounded-xl flex items-center justify-center flex-shrink-0">
                     <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -202,15 +216,25 @@ const App = () => {
                 <div className="relative h-full flex items-center justify-center">
                   <Hero isMobileLandscape={false} />
                 </div>
+                
+                {/* Watch Button - Bottom Right */}
+                <button 
+                  className="absolute px-6 py-2 bg-gray-700/80 hover:bg-gray-600/80 text-white rounded-lg transition-colors flex items-center gap-2 backdrop-blur-sm"
+                  style={{ bottom: '25px', right: '25px', zIndex: 20 }}
+                >
+                  <span className="text-sm font-medium">Watch</span>
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
               </div>
               
-              {/* Footer - Centered to Hero */}
-              <div className="flex justify-center items-center text-sm" style={{ paddingTop: '15px' }}>
-                <a href="#" className="text-gray-600 hover:text-[#17d4ff] transition-colors mr-2">
+              {/* Footer - Privacy left, Love centered */}
+              <div className="flex justify-between items-center text-sm" style={{ paddingTop: '15px' }}>
+                <a href="#" className="text-gray-600 hover:text-[#17d4ff] transition-colors">
                   Privacy Policy
                 </a>
-                <span className="text-gray-600">·</span>
-                <p className="text-gray-600 ml-2">
+                <p className="text-gray-600">
                   Love what we do? Then please support us <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
                 </p>
               </div>
@@ -220,7 +244,7 @@ const App = () => {
             {isDesktopView && (
               <div className="flex flex-col" style={{ width: '280px', flexShrink: 0, height: 'calc(100% + 20px)' }}>
                 <VideoCarousel
-                  videos={videos}
+                  videos={filteredVideos}
                   onVideoSelect={handleVideoSelect}
                   isExpanded={isExpanded}
                   isMobileLandscape={true}
@@ -267,6 +291,8 @@ const App = () => {
               <input 
                 type="text" 
                 placeholder="Search" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-600"
               />
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -286,7 +312,7 @@ const App = () => {
           {/* Slider */}
           <div className="w-full" style={{ marginBottom: '10px', paddingLeft: '20px', height: '200px' }}>
             <VideoCarousel
-              videos={videos}
+              videos={filteredVideos}
               onVideoSelect={handleVideoSelect}
               isExpanded={isExpanded}
               isMobileLandscape={false}
@@ -296,7 +322,7 @@ const App = () => {
           
           {/* Progress Bar */}
           <div style={{ margin: '0 20px 20px 20px' }}>
-            <SliderProgressBar currentIndex={currentSliderIndex} totalItems={videos.length} />
+            <SliderProgressBar currentIndex={currentSliderIndex} totalItems={filteredVideos.length} />
           </div>
           
           {/* Footer */}

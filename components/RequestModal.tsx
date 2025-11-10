@@ -57,7 +57,7 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
       onClick={onClose}
     >
       <div 
-        className="bg-[#182131] text-gray-300 rounded-2xl shadow-2xl p-8 max-w-md w-full relative"
+        className="bg-[#182131] text-gray-300 rounded-2xl shadow-2xl p-8 max-w-2xl w-full relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button 
@@ -67,8 +67,6 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
         >
           <CloseIcon />
         </button>
-        
-        <h3 id="modal-title" className="text-2xl font-bold mb-6 text-white text-center">Request Coherent Videos for Audiobooks</h3>
         
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Hidden email field */}
@@ -126,7 +124,7 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
             <button 
               type="submit"
               disabled={status === 'submitting'}
-              className="w-full bg-gradient-to-br from-cyan-400 to-blue-500 text-white font-bold py-3 px-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#17d5ff] hover:bg-[#15bde6] text-black font-semibold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-[#17d5ff]/50 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {status === 'submitting' ? 'Sending...' : 'Submit Request'}
             </button>
