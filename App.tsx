@@ -102,6 +102,7 @@ const App = () => {
   const [isSliderFullscreen, setIsSliderFullscreen] = useState(false);
   const [currentSliderIndex, setCurrentSliderIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isHorizontalMenuOpen, setIsHorizontalMenuOpen] = useState(false);
 
   useEffect(() => {
     const landscapeQuery = window.matchMedia("(orientation: landscape) and (max-height: 500px)");
@@ -177,24 +178,39 @@ const App = () => {
       {useHorizontalLayout ? (
         <div className="bg-white h-screen w-screen flex flex-col overflow-hidden">
           {/* Header: Logo + Collab + Coming Next (above hero) */}
-          <div className="relative z-[10000] bg-white" style={{ padding: '10px 20px' }}>
-            <div className="flex items-center gap-6">
+          <div className="relative z-[10000] bg-white header-padding">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
                 <h1 className="logo text-2xl tracking-tighter text-black">Narr-Ai</h1>
               </div>
-              <button onClick={() => setIsCollabOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
-                Collab
-              </button>
-              <button onClick={() => setIsComingNextOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
-                Coming Next
-              </button>
+              {/* Show buttons only on desktop (>= 900px) - aligned right */}
+              {isDesktop ? (
+                <div className="flex items-center gap-6">
+                  <button onClick={() => setIsCollabOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
+                    Collab
+                  </button>
+                  <button onClick={() => setIsComingNextOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
+                    Coming Next
+                  </button>
+                </div>
+              ) : (
+                /* Hamburger menu for screens < 900px in horizontal layout */
+                <button 
+                  onClick={() => setIsHorizontalMenuOpen(!isHorizontalMenuOpen)}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex flex-col gap-1.5"
+                  aria-label="Toggle menu"
+                >
+                  <div className="w-6 h-0.5 bg-[#17d4ff] rounded"></div>
+                  <div className="w-6 h-0.5 bg-[#17d4ff] rounded"></div>
+                </button>
+              )}
             </div>
           </div>
           
           {/* Search + Fullscreen (above slider) - Absolute positioned */}
           {isDesktopView && (
-            <div className="absolute top-[10px] right-[20px] z-[10001] flex items-center gap-3" style={{ width: '280px' }}>
+            <div className="absolute top-[10px] right-[20px] z-[10001] flex items-center gap-3 search-container">
               <div className="flex-1 flex items-center gap-2 bg-gray-300 rounded-xl px-3 py-2">
                 <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -222,10 +238,10 @@ const App = () => {
           )}
           
           {/* Main Content: Hero + Slider */}
-          <div className="flex-1 flex flex-row overflow-hidden" style={{ padding: '0 20px 20px 20px' }}>
+          <div className="flex-1 flex flex-row overflow-hidden main-content-padding">
             {/* Hero Section */}
-            <div className="flex-1 flex flex-col" style={{ marginRight: isDesktopView ? '20px' : '0' }}>
-              <div className="relative flex-1 rounded-3xl shadow-2xl overflow-hidden">
+            <div className="flex-1 flex flex-col hero-margin-right">
+              <div className={`relative flex-1 rounded-3xl shadow-2xl overflow-hidden ${!isDesktop ? 'hero-max-height' : ''}`}>
                 <video
                   src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
                   poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
@@ -241,12 +257,12 @@ const App = () => {
                 </div>
               </div>
               {/* Footer - Privacy left, Love centered */}
-              <div className="relative flex items-center justify-center text-sm" style={{ paddingTop: '15px' }}>
+              <div className="relative flex items-center justify-center text-sm footer-padding-top">
                 <a href="#" className="absolute left-0 text-gray-600 hover:text-[#17d4ff] transition-colors">
                   Privacy Policy
                 </a>
                 <p className="text-gray-600 text-center">
-                  Love what we do? Then please support us <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
+                  If everyone reading this gave just $5, we'd be funded for the entire year. Be the one who helps. Chip in <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
                 </p>
               </div>
             </div>
@@ -281,7 +297,7 @@ const App = () => {
         /* VERTICAL LAYOUT (Portrait/Mobile) */
         <div className="bg-white min-h-screen w-screen flex flex-col">
           {/* Header */}
-          <div className="flex items-center" style={{ padding: '15px 20px' }}>
+          <div className="flex items-center portrait-header-padding">
             <Header 
               onCollabClick={() => setIsCollabOpen(true)} 
               onComingNextClick={() => setIsComingNextOpen(true)}
@@ -290,7 +306,7 @@ const App = () => {
           </div>
           
           {/* Hero */}
-          <div className="relative rounded-3xl shadow-2xl overflow-hidden" style={{ margin: '0 20px 20px 20px', minHeight: '580px' }}>
+          <div className="relative rounded-3xl shadow-2xl overflow-hidden portrait-hero-container">
             <video
               src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
               poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
@@ -307,7 +323,7 @@ const App = () => {
           </div>
           
           {/* Search Bar + Fullscreen */}
-          <div className="flex items-center gap-3" style={{ margin: '0 20px 20px 20px' }}>
+          <div className="flex items-center gap-3 portrait-search-margin">
             <div className="flex-1 flex items-center gap-3 bg-gray-300 rounded-xl px-4 py-3">
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -340,7 +356,7 @@ const App = () => {
           </div>
           
           {/* Slider */}
-          <div className="w-full" style={{ marginBottom: '10px', paddingLeft: '20px', height: '200px' }}>
+          <div className="w-full portrait-slider-container">
             <VideoCarousel
               videos={filteredVideos}
               onVideoSelect={handleVideoSelect}
@@ -350,17 +366,17 @@ const App = () => {
           </div>
           
           {/* Progress Bar */}
-          <div style={{ margin: '0 20px 20px 20px' }}>
+          <div className="portrait-progress-margin">
             <SliderProgressBar currentIndex={currentSliderIndex} totalItems={filteredVideos.length} />
           </div>
           
           {/* Footer */}
-          <div className="flex flex-col items-center gap-2 text-sm text-gray-600" style={{ padding: '20px', marginTop: 'auto' }}>
+          <div className="flex flex-col items-center gap-2 text-sm text-gray-600 portrait-footer-padding">
             <a href="#" className="hover:text-[#17d4ff] transition-colors">
               Privacy Policy
             </a>
             <p className="text-center">
-              Love what we do? Then please support us <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
+              If everyone reading this gave just $5, we'd be funded for the entire year. Be the one who helps. Chip in <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
             </p>
           </div>
         </div>
@@ -377,13 +393,111 @@ const App = () => {
       {/* Modals rendered at root level to ensure proper z-index */}
       <ComingNextModal isOpen={isComingNextOpen} onClose={() => setIsComingNextOpen(false)} />
       {isCollabOpen && (
-        <div className="fixed inset-0 bg-black/50 z-[10001] flex items-center justify-center" onClick={() => setIsCollabOpen(false)}>
-          <div className="bg-white rounded-lg p-8 max-w-md" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-2xl font-bold mb-4">Collab</h2>
-            <p>Collaboration features coming soon!</p>
-            <button onClick={() => setIsCollabOpen(false)} className="mt-4 px-4 py-2 bg-[#17d4ff] text-black rounded-lg">Close</button>
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[10001] p-4 sm:p-6" 
+          onClick={() => setIsCollabOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10 w-full max-w-2xl relative animate-fadeIn" 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setIsCollabOpen(false)} 
+              className="absolute top-6 right-6 text-gray-400 hover:text-gray-700 transition-colors p-2 rounded-full hover:bg-gray-100"
+              aria-label="Close modal"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            <h2 className="text-3xl sm:text-4xl font-bold mb-3 text-gray-900">Collaborate With Us</h2>
+            
+            <p className="text-gray-600 mb-8 text-base leading-relaxed">
+              We're always looking for talented creators, voice actors, and audiobook enthusiasts to collaborate with.
+            </p>
+            
+            <div className="space-y-6">
+              <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">📹 Content Creators</h3>
+                <p className="text-gray-600 text-sm">
+                  Help us bring more audiobook scenes to life with your creative vision and video production skills.
+                </p>
+              </div>
+              
+              <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">🎙️ Voice Actors</h3>
+                <p className="text-gray-600 text-sm">
+                  Lend your voice to iconic characters and help create immersive audiobook experiences.
+                </p>
+              </div>
+              
+              <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">📚 Publishers & Authors</h3>
+                <p className="text-gray-600 text-sm">
+                  Partner with us to create promotional video content for your audiobooks.
+                </p>
+              </div>
+            </div>
+            
+            <div className="mt-8 p-5 bg-[#17d4ff]/10 border border-[#17d4ff]/30 rounded-xl">
+              <p className="text-sm text-gray-700 text-center leading-relaxed mb-4">
+                Interested in collaborating? Get in touch!
+              </p>
+              <a 
+                href="mailto:contact@narr-ai.online" 
+                className="block w-full text-center px-6 py-3 bg-[#17d4ff] hover:bg-[#15bde6] text-black font-semibold rounded-xl transition-colors"
+              >
+                Contact Us
+              </a>
+            </div>
           </div>
         </div>
+      )}
+      
+      {/* Horizontal Layout Mobile Menu (< 900px) */}
+      {isHorizontalMenuOpen && useHorizontalLayout && (
+        <>
+          {/* ... (rest of the code remains the same) */}
+          <div 
+            className="fixed inset-0 bg-black/50 z-[9998]"
+            onClick={() => setIsHorizontalMenuOpen(false)}
+          />
+          {/* Menu */}
+          <div className="fixed top-[70px] left-4 right-4 bg-black rounded-3xl shadow-2xl overflow-hidden z-[9999]" style={{ padding: '30px' }}>
+            {/* Close button */}
+            <button
+              onClick={() => setIsHorizontalMenuOpen(false)}
+              className="absolute top-4 right-4 p-2 hover:bg-gray-800 rounded-lg transition-colors"
+              aria-label="Close menu"
+            >
+              <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="flex flex-col gap-6 mb-8">
+              <button
+                onClick={() => { setIsComingNextOpen(true); setIsHorizontalMenuOpen(false); }}
+                className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-2"
+              >
+                <span className="text-xl">Coming Next</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+              <button
+                onClick={() => { setIsCollabOpen(true); setIsHorizontalMenuOpen(false); }}
+                className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-2"
+              >
+                <span className="text-xl">Collab</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </>
   );

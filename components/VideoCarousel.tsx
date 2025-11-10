@@ -188,8 +188,8 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
   };
   
   const containerClasses = isMobileLandscape
-    ? 'h-full flex flex-col overflow-y-auto scrollbar-hide snap-y snap-mandatory touch-pan-y transition-transform duration-300 hover:scale-105'
-    : 'h-full flex overflow-x-auto scrollbar-hide snap-x snap-mandatory cursor-grab touch-pan-x transition-transform duration-300 hover:scale-105';
+    ? 'h-full flex flex-col overflow-y-auto scrollbar-hide snap-y snap-mandatory touch-pan-y'
+    : 'h-full flex overflow-x-auto scrollbar-hide snap-x snap-mandatory cursor-grab touch-pan-x';
 
   const gapStyle = { gap: '15px' };
 

@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import RequestModal from './RequestModal';
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 interface HeroProps {
   isMobileLandscape?: boolean;
   onWatchClick?: () => void;
@@ -8,14 +13,13 @@ interface HeroProps {
 
 const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [email, setEmail] = useState('');
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
       setIsInstallable(true);
     };
     window.addEventListener('beforeinstallprompt', handler);
@@ -36,52 +40,28 @@ const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
     setIsInstallable(false);
   };
 
-  const isValidEmail = (email: string): boolean => {
-    // A simple regex for email validation
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
-
   return (
     <>
-      <div className="absolute inset-0 flex">
-        {/* Left Section: Title, Text, Buttons */}
-        <div className="flex-1 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
-          <div className="w-full max-w-4xl">
+      <div className="absolute inset-0 flex flex-col">
+        {/* Main Content: Title, Text, Buttons */}
+        <div className="flex-1 flex flex-col justify-center items-center">
+          <div className="w-full max-w-4xl hero-container">
             {/* Title */}
-            <h1 
-              className="hero-title text-white w-full mx-auto text-center"
-              style={{
-                fontSize: 'clamp(32px, 8vw, 72px)',
-                lineHeight: 'clamp(36px, 8.5vw, 80px)',
-                letterSpacing: '0',
-                fontWeight: '600'
-              }}
-            >
+            <h1 className="hero-title text-white w-full mx-auto text-center">
               AI Videos for Audiobooks
             </h1>
             
             {/* Subtitle */}
-            <div 
-              className="text-white w-full mx-auto text-center px-2"
-              style={{
-                fontSize: 'clamp(13px, 3.5vw, 18px)',
-                lineHeight: 'clamp(18px, 4.5vw, 28px)',
-                marginTop: 'clamp(12px, 2vh, 24px)'
-              }}
-            >
+            <div className="hero-subtitle text-white w-full mx-auto text-center">
               <p>Have an audiobook you're dying to see? Send us a request!</p>
               <p>We'll add it to our queue and your video will be uploaded in 1 to 3 days.</p>
             </div>
             
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full mx-auto px-2" style={{ marginTop: 'clamp(20px, 4vh, 40px)' }}>
+            <div className="hero-cta-container flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full mx-auto">
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="cta-button px-6 sm:px-8 py-2.5 sm:py-3 bg-[#17d5ff] hover:bg-[#15bde6] text-black rounded-lg transition-all duration-300 shadow-lg hover:shadow-[#17d5ff]/50 transform hover:scale-105 flex items-center gap-2 w-full sm:w-auto justify-center"
-                style={{
-                  fontSize: 'clamp(14px, 3.5vw, 17px)',
-                  fontWeight: '600'
-                }}
+                className="hero-cta-primary cta-button"
               >
                 <span>Start for free</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,11 +70,7 @@ const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
               </button>
               <button
                 onClick={handleInstallClick}
-                className="cta-button text-white hover:text-[#17d5ff] transition-colors flex items-center gap-2 justify-center"
-                style={{
-                  fontSize: 'clamp(13px, 3vw, 16px)',
-                  fontWeight: '600'
-                }}
+                className="hero-cta-secondary cta-button"
               >
                 <span>{isInstallable ? 'Install App' : 'Download App'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,13 +81,13 @@ const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
           </div>
         </div>
 
-        {/* Right Section: Watch Button */}
-        <div className="absolute bottom-0 right-0 flex items-end justify-end" style={{ margin: '25px' }}>
+        {/* Watch Button - Positioned at bottom right, centered on small screens */}
+        <div className="hero-watch-container w-full flex justify-center sm:justify-end items-end">
           <button 
             onClick={onWatchClick}
-            className="px-6 py-2 bg-gray-700/80 hover:bg-gray-600/80 text-white rounded-lg transition-colors flex items-center gap-2 backdrop-blur-sm"
+            className="hero-watch-button"
           >
-            <span className="text-sm font-medium">Watch</span>
+            <span>Watch</span>
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
             </svg>
@@ -119,7 +95,7 @@ const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
         </div>
       </div>
 
-      <RequestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={email} />
+      <RequestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email="" />
     </>
   );
 };
