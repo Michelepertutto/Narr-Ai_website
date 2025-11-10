@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 import { CloseIcon } from './icons/CloseIcon';
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_URL = 'https://mufyetrgczbtfxlnjmnv.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11ZnlldHJnY3pidGZ4bG5qbW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDg2NzMsImV4cCI6MjA3ODM4NDY3M30.msrxDqgRA16nr6pgmouTf4qP5ei7iXeoTP3TUvaoxKM';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 interface RequestModalProps {
   isOpen: boolean;
@@ -9,6 +15,7 @@ interface RequestModalProps {
 
 const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   if (!isOpen) {
     return null;
@@ -21,29 +28,74 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('submitting');
+    setUploadProgress(0);
 
     const form = e.currentTarget;
     const formData = new FormData(form);
+    
+    const link = formData.get('link') as string;
+    const message = formData.get('message') as string;
+    const file = formData.get('file') as File;
 
     try {
-      const response = await fetch('https://formspree.io/f/xqagrgnr', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
+      let fileUrl = null;
+      
+      if (file && file.size > 0) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert('File size must be less than 10MB');
+          setStatus('error');
+          return;
         }
-      });
+        
+        setUploadProgress(30);
+        const fileName = `${Date.now()}_${file.name}`;
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('audiobook-requests')
+          .upload(fileName, file);
 
-      if (response.ok) {
-        setStatus('success');
-        setTimeout(() => {
-          setStatus('idle');
-          onClose();
-        }, 3000);
-      } else {
-        setStatus('error');
+        if (uploadError) {
+          console.error('Upload error:', uploadError);
+          setStatus('error');
+          return;
+        }
+        
+        setUploadProgress(60);
+        
+        const { data: urlData } = supabase.storage
+          .from('audiobook-requests')
+          .getPublicUrl(fileName);
+        
+        fileUrl = urlData.publicUrl;
       }
+      
+      setUploadProgress(80);
+      
+      const { error: dbError } = await supabase
+        .from('requests')
+        .insert({
+          audiobook_link: link || null,
+          file_url: fileUrl,
+          story_part: message,
+          email: email || null,
+          created_at: new Date().toISOString()
+        });
+
+      if (dbError) {
+        console.error('Database error:', dbError);
+        setStatus('error');
+        return;
+      }
+      
+      setUploadProgress(100);
+      setStatus('success');
+      setTimeout(() => {
+        setStatus('idle');
+        setUploadProgress(0);
+        onClose();
+      }, 3000);
     } catch (error) {
+      console.error('Error:', error);
       setStatus('error');
     }
   };
@@ -121,12 +173,21 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
           </div>
           
           <div className="pt-4 space-y-4">
+            {status === 'submitting' && uploadProgress > 0 && (
+              <div className="w-full bg-gray-700 rounded-full h-2 mb-4">
+                <div 
+                  className="bg-[#17d5ff] h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}
+                ></div>
+              </div>
+            )}
+            
             <button 
               type="submit"
               disabled={status === 'submitting'}
               className="w-full bg-[#17d5ff] hover:bg-[#15bde6] text-black font-semibold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-[#17d5ff]/50 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {status === 'submitting' ? 'Sending...' : 'Submit Request'}
+              {status === 'submitting' ? `Uploading... ${uploadProgress}%` : 'Submit Request'}
             </button>
             
             {status === 'success' && (
