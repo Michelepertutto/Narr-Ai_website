@@ -140,6 +140,9 @@ const App = () => {
   const useHorizontalLayout = !isPortrait;
   const isExpanded = selectedVideoIndex !== null;
   const isDesktopView = isDesktop && !isPortrait;
+  
+  // Debug
+  console.log('Desktop View:', { isDesktop, isPortrait, isDesktopView, width: window.innerWidth });
 
   return (
     <>
@@ -187,7 +190,7 @@ const App = () => {
           
           {/* Right Column: Slider (Full Height) - Only on Desktop */}
           {isDesktopView && (
-            <div className="h-screen flex flex-col" style={{ width: '280px', padding: '80px 20px 20px 0' }}>
+            <div className="h-screen flex flex-col bg-white" style={{ width: '280px', padding: '80px 20px 20px 0', flexShrink: 0 }}>
               <VideoCarousel
                 videos={videos}
                 onVideoSelect={handleVideoSelect}
