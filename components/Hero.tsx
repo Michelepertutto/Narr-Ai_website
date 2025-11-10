@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RequestModal from './RequestModal';
 
 interface HeroProps {
@@ -9,6 +9,32 @@ interface HeroProps {
 const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState('');
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) {
+      alert('App is already installed or installation is not available on this device.');
+      return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    }
+    setDeferredPrompt(null);
+    setIsInstallable(false);
+  };
 
   const isValidEmail = (email: string): boolean => {
     // A simple regex for email validation
@@ -63,13 +89,14 @@ const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
                 </svg>
               </button>
               <button
+                onClick={handleInstallClick}
                 className="cta-button text-white hover:text-[#17d5ff] transition-colors flex items-center gap-2 justify-center"
                 style={{
                   fontSize: 'clamp(13px, 3vw, 16px)',
                   fontWeight: '600'
                 }}
               >
-                <span>Download App</span>
+                <span>{isInstallable ? 'Install App' : 'Download App'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>

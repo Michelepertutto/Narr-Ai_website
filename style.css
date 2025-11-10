@@ -1,0 +1,43 @@
+/* Global Styles */
+body {
+  font-family: 'Georama', sans-serif;
+  font-weight: 400;
+}
+
+/* Font Weight Classes */
+.logo {
+  font-weight: 900; /* Black */
+}
+
+.hero-title,
+.menu-item,
+.cta-button {
+  font-weight: 600; /* SemiBold */
+}
+
+p, body {
+  font-weight: 400; /* Regular */
+}
+
+/* Animations */
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 3s ease infinite;
+}
+@keyframes border-glow {
+  0%, 100% { 
+    border-color: #17d4ff;
+    box-shadow: 0 0 5px rgba(23, 212, 255, 0.3);
+  }
+  50% { 
+    border-color: rgba(23, 212, 255, 0.5);
+    box-shadow: 0 0 15px rgba(23, 212, 255, 0.6);
+  }
+}
+.animate-border-glow {
+  animation: border-glow 2s ease-in-out infinite;
+}

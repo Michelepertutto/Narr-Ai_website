@@ -13,53 +13,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Georama:wght@400;600;900&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/style.css">
     <!-- Tailwind CDN: OK for small projects, warning can be ignored -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      /* Global Styles */
-      body {
-        font-family: 'Georama', sans-serif;
-        font-weight: 400;
-      }
-
-      /* Font Weight Classes */
-      .logo {
-        font-weight: 900; /* Black */
-      }
-
-      .hero-title,
-      .menu-item,
-      .cta-button {
-        font-weight: 600; /* SemiBold */
-      }
-
-      p, body {
-        font-weight: 400; /* Regular */
-      }
-
-      /* Animations */
-      @keyframes gradient-x {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-      }
-      .animate-gradient-x {
-        background-size: 200% 200%;
-        animation: gradient-x 3s ease infinite;
-      }
-      @keyframes border-glow {
-        0%, 100% { 
-          border-color: #17d4ff;
-          box-shadow: 0 0 5px rgba(23, 212, 255, 0.3);
-        }
-        50% { 
-          border-color: rgba(23, 212, 255, 0.5);
-          box-shadow: 0 0 15px rgba(23, 212, 255, 0.6);
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Georama', 'sans-serif'],
+            }
+          }
         }
       }
-      .animate-border-glow {
-        animation: border-glow 2s ease-in-out infinite;
-      }
-    </style>
+    </script>
   <script type="importmap">
 {
   "imports": {

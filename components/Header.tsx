@@ -10,7 +10,33 @@ interface HeaderProps {
 const Header = ({ onCollabClick, onComingNextClick, onFullscreenClick }: HeaderProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) {
+      alert('App is already installed or installation is not available on this device.');
+      return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    }
+    setDeferredPrompt(null);
+    setIsInstallable(false);
+  };
+
   return (
     <>
     <header className="relative z-[10000] w-full">
@@ -140,8 +166,11 @@ const Header = ({ onCollabClick, onComingNextClick, onFullscreenClick }: HeaderP
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
-            <button className="cta-button text-white hover:text-[#17d5ff] transition-colors flex items-center gap-2">
-              <span>Download App</span>
+            <button 
+              onClick={handleInstallClick}
+              className="cta-button text-white hover:text-[#17d5ff] transition-colors flex items-center gap-2"
+            >
+              <span>{isInstallable ? 'Install App' : 'Download App'}</span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
