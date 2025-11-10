@@ -4,7 +4,6 @@ import Hero from './components/Hero';
 import VideoCarousel, { SliderProgressBar } from './components/VideoCarousel';
 import FullscreenPlayer from './components/FullscreenPlayer';
 import ComingNextModal from './components/ComingNextModal';
-import FramesGallery from './components/FramesGallery';
 
 export interface Video {
   id: number;
@@ -150,15 +149,13 @@ const App = () => {
         <div className="bg-white h-screen w-screen flex flex-col overflow-hidden">
           {/* Full-Width Header */}
           <div className="relative z-[10000] bg-white" style={{ padding: '10px 20px' }}>
-            <div className="flex justify-between items-center">
-              {/* Logo Left */}
-              <div className="flex items-center gap-2">
-                <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
-                <h1 className="logo text-2xl tracking-tighter text-black">Narr-Ai</h1>
-              </div>
-              
-              {/* Center: Collab + Coming Next (aligned to hero right edge) */}
-              <div className="flex gap-6" style={{ marginRight: isDesktopView ? '300px' : '0' }}>
+            <div className="flex items-center">
+              {/* Left: Logo + Collab + Coming Next */}
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
+                  <h1 className="logo text-2xl tracking-tighter text-black">Narr-Ai</h1>
+                </div>
                 <button onClick={() => setIsCollabOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
                   Collab
                 </button>
@@ -323,7 +320,6 @@ const App = () => {
               onVideoSelect={handleVideoSelect}
               isExpanded={isExpanded}
               isMobileLandscape={false}
-              onSlideChange={(index) => setCurrentSliderIndex(index)}
             />
           </div>
           
