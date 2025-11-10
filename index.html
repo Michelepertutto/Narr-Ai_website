@@ -12,11 +12,25 @@
     <!-- Tailwind CDN: OK for small projects, warning can be ignored -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      /* Variable Font - Georama */
+      /* Georama Font Family */
       @font-face {
         font-family: 'Georama';
-        src: url('/font/Georama-VariableFont_wdth,wght.ttf') format('truetype-variations');
-        font-weight: 100 900;
+        src: url('/font/Georama-Regular.ttf') format('truetype');
+        font-weight: 400;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Georama';
+        src: url('/font/Georama-SemiBold.ttf') format('truetype');
+        font-weight: 600;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Georama';
+        src: url('/font/Georama-Black.ttf') format('truetype');
+        font-weight: 900;
         font-display: swap;
       }
 
@@ -28,15 +42,17 @@
 
       /* Font Weight Classes */
       .logo {
-        font-weight: 900;
+        font-weight: 900; /* Black */
       }
 
-      .hero-title {
-        font-weight: 600;
+      .hero-title,
+      .menu-item,
+      .cta-button {
+        font-weight: 600; /* SemiBold */
       }
 
       p, body {
-        font-weight: 400;
+        font-weight: 400; /* Regular */
       }
 
       /* Animations */

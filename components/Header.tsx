@@ -68,13 +68,13 @@ const Header = ({ onFramesClick, onComingNextClick }: HeaderProps) => {
         <div className="hidden md:flex gap-4">
           <button
             onClick={onFramesClick}
-            className="relative px-4 py-2 text-sm font-semibold text-black hover:text-[#17d4ff] transition-colors"
+            className="menu-item relative px-4 py-2 text-sm text-black hover:text-[#17d4ff] transition-colors"
           >
             Frames
           </button>
           <button
             onClick={onComingNextClick}
-            className="relative px-4 py-2 text-sm font-semibold text-black hover:text-[#17d4ff] transition-colors"
+            className="menu-item relative px-4 py-2 text-sm text-black hover:text-[#17d4ff] transition-colors"
           >
             Up Next
           </button>
@@ -95,13 +95,13 @@ const Header = ({ onFramesClick, onComingNextClick }: HeaderProps) => {
           <div className="flex flex-col">
             <button
               onClick={() => { onFramesClick(); setIsMobileMenuOpen(false); }}
-              className="px-4 py-3 text-left text-black hover:bg-gray-100 border-b border-gray-200"
+              className="menu-item px-4 py-3 text-left text-black hover:bg-gray-100 border-b border-gray-200"
             >
               Frames
             </button>
             <button
               onClick={() => { onComingNextClick(); setIsMobileMenuOpen(false); }}
-              className="px-4 py-3 text-left text-black hover:bg-gray-100"
+              className="menu-item px-4 py-3 text-left text-black hover:bg-gray-100"
             >
               Up Next
             </button>

@@ -134,14 +134,14 @@ const App = () => {
       {useHorizontalLayout ? (
         <div className="bg-white h-screen w-screen flex flex-row overflow-hidden">
           {/* Left Column: Header + Hero + CTA */}
-          <div className="flex-1 flex flex-col" style={{ margin: '15px 0 30px 30px' }}>
+          <div className="flex-1 flex flex-col" style={{ margin: '15px 20px 30px 30px' }}>
             {/* Sticky Header */}
             <div className="sticky top-0 z-[10000]" style={{ marginBottom: '15px' }}>
               <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />
             </div>
             
             {/* Hero Section */}
-            <div className="relative flex-1 rounded-xl shadow-2xl overflow-hidden" style={{ marginBottom: '30px' }}>
+            <div className="relative flex-1 rounded-xl shadow-2xl overflow-hidden" style={{ marginBottom: '30px', marginRight: '20px' }}>
               <video
                 src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
                 poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
@@ -159,16 +159,16 @@ const App = () => {
             
             {/* CTA Secondary Links */}
             <div className="flex justify-center items-center gap-8 text-sm text-gray-600">
-              <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="hover:text-[#17d4ff] transition-colors">
+              <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="cta-button hover:text-[#17d4ff] transition-colors">
                 Support
               </a>
-              <button className="flex items-center gap-2 hover:text-[#17d4ff] transition-colors">
+              <button className="cta-button flex items-center gap-2 hover:text-[#17d4ff] transition-colors">
                 <span>Download app</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
               </button>
-              <a href="#" className="hover:text-[#17d4ff] transition-colors">
+              <a href="#" className="cta-button hover:text-[#17d4ff] transition-colors">
                 Privacy Policy
               </a>
             </div>
@@ -246,16 +246,16 @@ const App = () => {
                   </svg>
                 </button>
                 <div className="flex justify-center items-center gap-6 text-xs text-gray-600">
-                  <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="hover:text-[#17d4ff] transition-colors">
+                  <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="cta-button hover:text-[#17d4ff] transition-colors">
                     Support
                   </a>
-                  <button className="flex items-center gap-1 hover:text-[#17d4ff] transition-colors">
+                  <button className="cta-button flex items-center gap-1 hover:text-[#17d4ff] transition-colors">
                     <span>Download app</span>
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
                   </button>
-                  <a href="#" className="hover:text-[#17d4ff] transition-colors">
+                  <a href="#" className="cta-button hover:text-[#17d4ff] transition-colors">
                     Privacy
                   </a>
                 </div>

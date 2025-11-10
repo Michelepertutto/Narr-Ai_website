@@ -62,7 +62,7 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
               <button
                 onClick={() => setIsModalOpen(true)}
                 disabled={!isValidEmail(email)}
-                className="px-4 sm:px-10 py-2 sm:py-3 bg-[#17d5ff] hover:bg-[#15bde6] text-black font-bold rounded-r-xl transition-all duration-300 shadow-lg hover:shadow-[#17d5ff]/50 transform hover:scale-105 flex-shrink-0 disabled:cursor-not-allowed disabled:opacity-50"
+                className="cta-button px-4 sm:px-10 py-2 sm:py-3 bg-[#17d5ff] hover:bg-[#15bde6] text-black font-bold rounded-r-xl transition-all duration-300 shadow-lg hover:shadow-[#17d5ff]/50 transform hover:scale-105 flex-shrink-0 disabled:cursor-not-allowed disabled:opacity-50"
                 style={{
                   fontSize: 'clamp(14px, 1.5vw, 16px)',
                   lineHeight: '1.2'
