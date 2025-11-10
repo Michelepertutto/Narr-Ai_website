@@ -75,8 +75,11 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
           </div>
         </div>
         
-        {/* Watch Button - Bottom Right (Mobile) */}
-        <button className="absolute bottom-4 right-4 px-6 py-2 bg-gray-700/80 hover:bg-gray-600/80 text-white rounded-lg transition-colors flex items-center gap-2 backdrop-blur-sm">
+        {/* Watch Button - Bottom Right */}
+        <button 
+          className="absolute px-6 py-2 bg-gray-700/80 hover:bg-gray-600/80 text-white rounded-lg transition-colors flex items-center gap-2 backdrop-blur-sm"
+          style={{ bottom: '25px', right: '25px' }}
+        >
           <span className="text-sm font-medium">Watch</span>
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z" />
