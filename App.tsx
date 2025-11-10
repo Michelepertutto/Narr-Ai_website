@@ -75,6 +75,7 @@ const App = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isComingNextOpen, setIsComingNextOpen] = useState(false);
   const [isFramesOpen, setIsFramesOpen] = useState(false);
+  const [isCtaExpanded, setIsCtaExpanded] = useState(false);
 
   useEffect(() => {
     const landscapeQuery = window.matchMedia("(orientation: landscape) and (max-height: 500px)");
@@ -123,37 +124,24 @@ const App = () => {
   
   const handleClosePlayer = () => setSelectedVideoIndex(null);
   
-  // Use desktop layout only if screen is large AND in landscape, otherwise use mobile layout
-  const useVerticalLayout = isDesktop && !isPortrait;
+  // Use horizontal layout for desktop landscape, vertical layout for portrait/mobile
+  const useHorizontalLayout = isDesktop && !isPortrait;
   const isExpanded = selectedVideoIndex !== null;
-
-  // Calcola la larghezza dello slider in base allo stato hover
-  const sliderWidth = useVerticalLayout 
-    ? (isSliderHovered ? 'w-[60%]' : 'w-[40%]')
-    : 'w-full px-10';
-  
-  // Calcola la larghezza del main in base allo stato hover dello slider
-  const mainWidth = useVerticalLayout
-    ? (isSliderHovered ? 'w-[40%]' : 'w-[60%]')
-    : 'w-full';
 
   return (
     <>
-      <div className="bg-white h-screen w-screen flex flex-col overflow-hidden box-border pb-10">
-        <div className={`pt-[15px] px-10 transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-          {!useVerticalLayout && <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />}
-        </div>
-        <div className={`flex-1 min-h-0 ${useVerticalLayout ? 'flex flex-row items-stretch gap-4 px-10' : 'flex flex-col'}`}>
-          {/* Dark overlay when slider is hovered */}
-          {useVerticalLayout && isSliderHovered && (
-            <div className="fixed inset-0 bg-black/40 z-[100] pointer-events-none transition-opacity duration-300" />
-          )}
-          <main className={`${useVerticalLayout ? `${mainWidth} flex flex-col transition-all duration-300 ease-in-out relative z-[50]` : 'flex-grow-0 sm:flex-grow flex flex-col px-10'}`}>
-            <div className={`pt-[15px] transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-              {useVerticalLayout && <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />}
+      {/* HORIZONTAL LAYOUT (Desktop Landscape) */}
+      {useHorizontalLayout ? (
+        <div className="bg-white h-screen w-screen flex flex-row overflow-hidden">
+          {/* Left Column: Header + Hero + CTA */}
+          <div className="flex-1 flex flex-col" style={{ margin: '15px 0 30px 30px' }}>
+            {/* Sticky Header */}
+            <div className="sticky top-0 z-[10000]" style={{ marginBottom: '15px' }}>
+              <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />
             </div>
-            <div className={`relative w-full rounded-xl sm:rounded-2xl shadow-2xl mt-3 overflow-hidden ${useVerticalLayout ? 'flex-1' : 'h-[calc(100vh-180px)] min-h-[500px] sm:h-full'}`}>
-              {/* Video background */}
+            
+            {/* Hero Section */}
+            <div className="relative flex-1 rounded-xl shadow-2xl overflow-hidden" style={{ marginBottom: '30px' }}>
               <video
                 src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
                 poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
@@ -163,66 +151,127 @@ const App = () => {
                 muted
                 playsInline
               />
-              
-              {/* Velo scuro sopra al video per migliorare la leggibilità del testo */}
-              <div className="absolute inset-0 bg-black/50 rounded-xl sm:rounded-2xl pointer-events-none"></div>
-              
-              {/* Contenitore per i contenuti testuali sopra al video */}
+              <div className="absolute inset-0 bg-black/50 rounded-xl pointer-events-none"></div>
               <div className="relative h-full flex items-center justify-center">
-                <Hero isMobileLandscape={isMobileLandscape} />
-              </div>
-              
-              {/* Footer inside hero video container */}
-              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-sm text-gray-300 z-10">
-                <a 
-                  href="https://buymeacoffee.com/narrai" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  Love what we do? Support our work here.
-                </a>
-                <button 
-                  className="flex items-center gap-2 hover:text-white transition-colors"
-                  onClick={() => {}}
-                >
-                  <span>Download the app</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                  </svg>
-                </button>
+                <Hero isMobileLandscape={false} />
               </div>
             </div>
-          </main>
-          <div
-            className={`${sliderWidth} transition-all duration-300 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'} ${useVerticalLayout ? 'relative z-[200]' : ''}`}
-            style={{ 
-              transitionDelay: isLoaded ? '0ms' : '500ms',
-              marginTop: useVerticalLayout ? '15px' : '20px'
-            }}
-            onMouseEnter={() => useVerticalLayout && setIsSliderHovered(true)}
-            onMouseLeave={() => useVerticalLayout && setIsSliderHovered(false)}
-          >
+            
+            {/* CTA Secondary Links */}
+            <div className="flex justify-center items-center gap-8 text-sm text-gray-600">
+              <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="hover:text-[#17d4ff] transition-colors">
+                Support
+              </a>
+              <button className="flex items-center gap-2 hover:text-[#17d4ff] transition-colors">
+                <span>Download app</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </button>
+              <a href="#" className="hover:text-[#17d4ff] transition-colors">
+                Privacy Policy
+              </a>
+            </div>
+          </div>
+          
+          {/* Right Column: Slider (Full Height) */}
+          <div className="h-screen flex flex-col" style={{ paddingTop: '40px', paddingBottom: '40px', marginRight: '0' }}>
             <VideoCarousel
               videos={videos}
               onVideoSelect={handleVideoSelect}
               isExpanded={isExpanded}
-              isMobileLandscape={useVerticalLayout}
+              isMobileLandscape={true}
             />
           </div>
         </div>
+      ) : (
+        /* VERTICAL LAYOUT (Portrait/Mobile) */
+        <div className="bg-white h-[100dvh] w-screen flex flex-col overflow-hidden">
+          {/* Header - 10dvh */}
+          <div className="h-[10dvh] flex items-center" style={{ margin: '5px 30px' }}>
+            <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />
+          </div>
+          
+          {/* Hero - 50dvh */}
+          <div className="h-[50dvh] relative rounded-xl shadow-2xl overflow-hidden" style={{ margin: '0 30px 15px 30px' }}>
+            <video
+              src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
+              poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
+              className="absolute top-0 left-0 w-full h-full object-cover"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+            <div className="absolute inset-0 bg-black/50 rounded-xl pointer-events-none"></div>
+            <div className="relative h-full flex items-center justify-center">
+              <Hero isMobileLandscape={false} />
+            </div>
+          </div>
+          
+          {/* Slider - 30dvh */}
+          <div className="h-[30dvh] w-full" style={{ paddingLeft: '30px', paddingRight: '30px' }}>
+            <VideoCarousel
+              videos={videos}
+              onVideoSelect={handleVideoSelect}
+              isExpanded={isExpanded}
+              isMobileLandscape={false}
+            />
+          </div>
+          
+          {/* CTA Footer - 10dvh (Collapsible) */}
+          <div className="h-[10dvh] flex flex-col" style={{ margin: '0 30px' }}>
+            {/* Collapsed state - just the toggle button */}
+            {!isCtaExpanded && (
+              <button
+                onClick={() => setIsCtaExpanded(true)}
+                className="flex items-center justify-center gap-2 py-3 text-gray-600 hover:text-[#17d4ff] transition-colors"
+              >
+                <span className="text-sm font-medium">More options</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            )}
+            
+            {/* Expanded state - show links */}
+            {isCtaExpanded && (
+              <div className="flex flex-col gap-2 py-2">
+                <button
+                  onClick={() => setIsCtaExpanded(false)}
+                  className="self-center text-gray-600 hover:text-[#17d4ff] transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
+                <div className="flex justify-center items-center gap-6 text-xs text-gray-600">
+                  <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="hover:text-[#17d4ff] transition-colors">
+                    Support
+                  </a>
+                  <button className="flex items-center gap-1 hover:text-[#17d4ff] transition-colors">
+                    <span>Download app</span>
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                  </button>
+                  <a href="#" className="hover:text-[#17d4ff] transition-colors">
+                    Privacy
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
-        {selectedVideoIndex !== null && (
-          <FullscreenPlayer
-            videos={flattenedVideos}
-            startIndex={selectedVideoIndex}
-            onClose={handleClosePlayer}
-          />
-        )}
-      </div>
+      {selectedVideoIndex !== null && (
+        <FullscreenPlayer
+          videos={flattenedVideos}
+          startIndex={selectedVideoIndex}
+          onClose={handleClosePlayer}
+        />
+      )}
       
       {/* Modals rendered at root level to ensure proper z-index */}
       <ComingNextModal isOpen={isComingNextOpen} onClose={() => setIsComingNextOpen(false)} />

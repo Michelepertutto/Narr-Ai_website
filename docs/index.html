@@ -9,24 +9,37 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/Imgs/Narrai-Pictogram.png" />
     <title>Narr-Ai</title>
-    <!-- Google Fonts - Averia Libre -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Averia+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
     <!-- Tailwind CDN: OK for small projects, warning can be ignored -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Averia Libre', 'sans-serif'],
-            },
-          },
-        },
-      }
-    </script>
     <style>
+      /* Variable Font - Georama */
+      @font-face {
+        font-family: 'Georama';
+        src: url('/font/Georama-VariableFont_wdth,wght.ttf') format('truetype-variations');
+        font-weight: 100 900;
+        font-display: swap;
+      }
+
+      /* Global Styles */
+      body {
+        font-family: 'Georama', sans-serif;
+        font-weight: 400;
+      }
+
+      /* Font Weight Classes */
+      .logo {
+        font-weight: 900;
+      }
+
+      .hero-title {
+        font-weight: 600;
+      }
+
+      p, body {
+        font-weight: 400;
+      }
+
+      /* Animations */
       @keyframes gradient-x {
         0%, 100% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
@@ -59,7 +72,7 @@
   }
 }
 </script>
-  <script type="module" crossorigin src="/assets/index-ZyGHwHwe.js"></script>
+  <script type="module" crossorigin src="/assets/index-B_BRNyM5.js"></script>
 </head>
   <body class="bg-white font-sans">
     <div id="root"></div>

@@ -42,11 +42,11 @@ const Header = ({ onFramesClick, onComingNextClick }: HeaderProps) => {
   
   return (
     <>
-    <header className="relative z-[10000] mt-3 px-2 sm:px-5 max-h-[90px]">
+    <header className="relative z-[10000] w-full">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
           <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
-          <h1 className="text-2xl font-bold tracking-tighter text-black">Narr-Ai</h1>
+          <h1 className="logo text-2xl tracking-tighter text-black">Narr-Ai</h1>
         </div>
         
         {/* Hamburger button - visible only on mobile */}
