@@ -177,25 +177,15 @@ const App = () => {
       {/* HORIZONTAL LAYOUT (Desktop/Tablet Landscape) */}
       {useHorizontalLayout ? (
         <div className="bg-white h-screen w-screen flex flex-col overflow-hidden">
-          {/* Header: Logo + Collab + Coming Next (above hero) */}
+          {/* Header: Logo only */}
           <div className="relative z-[10000] bg-white header-padding">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
                 <h1 className="logo text-2xl tracking-tighter text-black">Narr-Ai</h1>
               </div>
-              {/* Show buttons only on desktop (>= 900px) - aligned right */}
-              {isDesktop ? (
-                <div className="flex items-center gap-6">
-                  <button onClick={() => setIsCollabOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
-                    Collab
-                  </button>
-                  <button onClick={() => setIsComingNextOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
-                    Coming Next
-                  </button>
-                </div>
-              ) : (
-                /* Hamburger menu for screens < 900px in horizontal layout */
+              {/* Hamburger menu for screens < 900px in horizontal layout */}
+              {!isDesktop && (
                 <button 
                   onClick={() => setIsHorizontalMenuOpen(!isHorizontalMenuOpen)}
                   className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex flex-col gap-1.5"
@@ -241,6 +231,17 @@ const App = () => {
           <div className="flex-1 flex flex-row overflow-hidden main-content-padding">
             {/* Hero Section */}
             <div className="flex-1 flex flex-col hero-margin-right">
+              {/* Collab + Coming Next buttons above hero - desktop only */}
+              {isDesktop && (
+                <div className="flex items-center gap-6 justify-end mb-3">
+                  <button onClick={() => setIsCollabOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
+                    Collab
+                  </button>
+                  <button onClick={() => setIsComingNextOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
+                    Coming Next
+                  </button>
+                </div>
+              )}
               <div className={`relative flex-1 rounded-3xl shadow-2xl overflow-hidden ${!isDesktop ? 'hero-max-height' : ''}`}>
                 <video
                   src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
