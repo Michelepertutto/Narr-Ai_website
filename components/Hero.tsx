@@ -1,12 +1,12 @@
-
 import React, { useState } from 'react';
 import RequestModal from './RequestModal';
 
 interface HeroProps {
   isMobileLandscape?: boolean;
+  onWatchClick?: () => void;
 }
 
-const Hero = ({ isMobileLandscape = false }: HeroProps) => {
+const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState('');
 
@@ -81,6 +81,7 @@ const Hero = ({ isMobileLandscape = false }: HeroProps) => {
         {/* Right Section: Watch Button */}
         <div className="absolute bottom-0 right-0 flex items-end justify-end" style={{ margin: '25px' }}>
           <button 
+            onClick={onWatchClick}
             className="px-6 py-2 bg-gray-700/80 hover:bg-gray-600/80 text-white rounded-lg transition-colors flex items-center gap-2 backdrop-blur-sm"
           >
             <span className="text-sm font-medium">Watch</span>

@@ -19,6 +19,7 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
   const startScrollLeftRef = useRef(0);
   
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [likedVideos, setLikedVideos] = useState<Set<number>>(new Set());
   const scrollDirectionRef = useRef<'forward' | 'backward'>('forward');
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
@@ -28,6 +29,35 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
     if (autoScrollIntervalRef.current) {
       clearInterval(autoScrollIntervalRef.current);
     }
+  };
+
+  // Load liked videos from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem('narr-ai-liked-videos');
+    if (stored) {
+      try {
+        const likedIds = JSON.parse(stored);
+        setLikedVideos(new Set(likedIds));
+      } catch (e) {
+        console.error('Error loading liked videos:', e);
+      }
+    }
+  }, []);
+
+  // Handle like toggle
+  const handleLike = (videoId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLikedVideos(prev => {
+      const newLiked = new Set(prev);
+      if (newLiked.has(videoId)) {
+        newLiked.delete(videoId);
+      } else {
+        newLiked.add(videoId);
+      }
+      // Save to localStorage
+      localStorage.setItem('narr-ai-liked-videos', JSON.stringify(Array.from(newLiked)));
+      return newLiked;
+    });
   };
 
   // Auto-scroll logic - smooth continuous scrolling with direction reversal
@@ -209,8 +239,9 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                // Link to Audible or audiobook source
-                window.open('https://www.audible.com', '_blank', 'noopener,noreferrer');
+                // Link to Audible with specific book URL or generic Audible.it
+                const audibleLink = video.audibleUrl || 'https://www.audible.it';
+                window.open(audibleLink, '_blank', 'noopener,noreferrer');
               }}
               className="w-8 h-8 bg-gray-600/80 hover:bg-gray-500 rounded-lg flex items-center justify-center transition-colors"
               title="View on Audible"
@@ -239,12 +270,32 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
             </button>
           </div>
 
-          {/* Bottom Right Counter */}
-          <div className="absolute bottom-3 right-3 flex items-center gap-1 z-10">
-            <span className="text-white text-xs font-medium">2</span>
-            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-            </svg>
+          {/* Bottom Right Counters: Views and Likes */}
+          <div className="absolute bottom-3 right-3 flex flex-col items-end gap-1 z-10">
+            {/* Views */}
+            <div className="flex items-center gap-1">
+              <span className="text-white text-xs font-medium">{video.views || 0}</span>
+              <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </div>
+            {/* Likes */}
+            <button
+              onClick={(e) => handleLike(video.id, e)}
+              className="flex items-center gap-1 transition-transform hover:scale-110"
+            >
+              <span className="text-white text-xs font-medium">{(video.likes || 0) + (likedVideos.has(video.id) ? 1 : 0)}</span>
+              <svg 
+                className={`w-4 h-4 transition-colors ${
+                  likedVideos.has(video.id) ? 'text-red-500 fill-current' : 'text-white'
+                }`} 
+                fill={likedVideos.has(video.id) ? 'currentColor' : 'none'}
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </button>
           </div>
         </div>
       ))}

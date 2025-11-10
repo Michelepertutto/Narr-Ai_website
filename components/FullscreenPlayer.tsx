@@ -146,7 +146,10 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
           className={`w-full h-full object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           autoPlay
           controls
+          onCanPlay={() => setIsLoading(false)}
           onLoadedData={() => setIsLoading(false)}
+          onWaiting={() => setIsLoading(true)}
+          onPlaying={() => setIsLoading(false)}
           onEnded={goToNext}
         >
           Your browser does not support the video tag.

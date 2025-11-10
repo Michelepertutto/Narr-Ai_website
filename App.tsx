@@ -11,24 +11,42 @@ export interface Video {
   title: string;
   videoUrl: string;
   posterUrl?: string;
+  audibleUrl?: string; // Link to Audible audiobook
+  views?: number; // View count
+  likes?: number; // Like count
   episodes?: Video[]; // For series with multiple episodes
   episodeNumber?: number; // Episode number within a series
 }
 
 const videos: Video[] = [
   { 
+    id: 0, 
+    seed: 'hero-background', 
+    title: 'AI videos for Audiobooks', 
+    videoUrl: `${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`,
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`,
+    views: 1250,
+    likes: 89
+  },
+  { 
     id: 1, 
     seed: 'video1', 
     title: 'Dungeon Crawler Carl', 
     videoUrl: `${import.meta.env.BASE_URL}video/Dungeon-Crawler-Carl-Old-man-pee.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/preview-dungeon-crawler-carl-pee-scene.png`
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/preview-dungeon-crawler-carl-pee-scene.png`,
+    audibleUrl: 'https://www.audible.it/pd/Dungeon-Crawler-Carl-Audiolibri/B0FVXCDZGK',
+    views: 2340,
+    likes: 156
   },
   { 
     id: 2, 
     seed: 'video2', 
     title: 'We are legion (We are Bob)', 
     videoUrl: `${import.meta.env.BASE_URL}video/Bobiverse_Bob-dies-and-wakes-up-as-AI.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_Bobiverse.png`
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_Bobiverse.png`,
+    audibleUrl: 'https://www.audible.it/pd/We-Are-Legion-We-Are-Bob-Audiolibri/B079BBMXKX',
+    views: 1890,
+    likes: 142
   },
   { 
     id: 3, 
@@ -130,6 +148,11 @@ const App = () => {
     setIsSliderFullscreen(!isSliderFullscreen);
   };
   
+  const handleWatchClick = () => {
+    // Open the hero background video (id: 0) in fullscreen
+    setSelectedVideoIndex(0);
+  };
+  
   // Use horizontal layout for desktop/tablet landscape, vertical layout for portrait/mobile
   const useHorizontalLayout = !isPortrait;
   const isExpanded = selectedVideoIndex !== null;
@@ -147,53 +170,50 @@ const App = () => {
       {/* HORIZONTAL LAYOUT (Desktop/Tablet Landscape) */}
       {useHorizontalLayout ? (
         <div className="bg-white h-screen w-screen flex flex-col overflow-hidden">
-          {/* Full-Width Header */}
+          {/* Header: Logo + Collab + Coming Next (above hero) */}
           <div className="relative z-[10000] bg-white" style={{ padding: '10px 20px' }}>
-            <div className="flex items-center">
-              {/* Left: Logo + Collab + Coming Next */}
-              <div className="flex items-center gap-6">
-                <div className="flex items-center gap-2">
-                  <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
-                  <h1 className="logo text-2xl tracking-tighter text-black">Narr-Ai</h1>
-                </div>
-                <button onClick={() => setIsCollabOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
-                  Collab
-                </button>
-                <button onClick={() => setIsComingNextOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
-                  Coming Next
-                </button>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
+                <h1 className="logo text-2xl tracking-tighter text-black">Narr-Ai</h1>
               </div>
-              
-              {/* Right: Search + Fullscreen (above slider) */}
-              {isDesktopView && (
-                <div className="flex items-center gap-3" style={{ width: '280px' }}>
-                  <div className="flex-1 flex items-center gap-2 bg-gray-300 rounded-xl px-3 py-2">
-                    <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <input 
-                      type="text" 
-                      placeholder="Search" 
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-600" 
-                    />
-                  </div>
-                  <button onClick={handleFullscreenToggle} className="w-10 h-10 bg-gray-300 rounded-xl flex items-center justify-center flex-shrink-0">
-                    {isSliderFullscreen ? (
-                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    ) : (
-                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-              )}
+              <button onClick={() => setIsCollabOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
+                Collab
+              </button>
+              <button onClick={() => setIsComingNextOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
+                Coming Next
+              </button>
             </div>
           </div>
+          
+          {/* Search + Fullscreen (above slider) - Absolute positioned */}
+          {isDesktopView && (
+            <div className="absolute top-[10px] right-[20px] z-[10001] flex items-center gap-3" style={{ width: '280px' }}>
+              <div className="flex-1 flex items-center gap-2 bg-gray-300 rounded-xl px-3 py-2">
+                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input 
+                  type="text" 
+                  placeholder="Search" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-600" 
+                />
+              </div>
+              <button onClick={handleFullscreenToggle} className="w-10 h-10 bg-gray-300 rounded-xl flex items-center justify-center flex-shrink-0">
+                {isSliderFullscreen ? (
+                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                  </svg>
+                )}
+              </button>
+            </div>
+          )}
           
           {/* Main Content: Hero + Slider */}
           <div className="flex-1 flex flex-row overflow-hidden" style={{ padding: '0 20px 20px 20px' }}>
@@ -211,17 +231,17 @@ const App = () => {
                 />
                 <div className="absolute inset-0 bg-black/50 rounded-3xl pointer-events-none"></div>
                 <div className="relative h-full flex items-center justify-center">
-                  <Hero isMobileLandscape={false} />
+                  <Hero isMobileLandscape={false} onWatchClick={handleWatchClick} />
                 </div>
               </div>
-              {/* Footer - Privacy left, Love right */}
-              <div className="flex justify-between items-center text-sm" style={{ paddingTop: '15px' }}>
-                <a href="#" className="text-gray-600 hover:text-[#17d4ff] transition-colors whitespace-nowrap">
-                  Privacy Policy
-                </a>
-                <p className="text-gray-600 text-right">
+              {/* Footer - Privacy left, Love centered */}
+              <div className="flex flex-col items-center text-sm" style={{ paddingTop: '15px', gap: '8px' }}>
+                <p className="text-gray-600 text-center">
                   Love what we do? Then please support us <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
                 </p>
+                <a href="#" className="text-gray-600 hover:text-[#17d4ff] transition-colors">
+                  Privacy Policy
+                </a>
               </div>
             </div>
             
@@ -276,7 +296,7 @@ const App = () => {
             />
             <div className="absolute inset-0 bg-black/50 rounded-3xl pointer-events-none"></div>
             <div className="relative h-full flex items-center justify-center">
-              <Hero isMobileLandscape={false} />
+              <Hero isMobileLandscape={false} onWatchClick={handleWatchClick} />
             </div>
           </div>
           
