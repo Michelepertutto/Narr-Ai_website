@@ -76,7 +76,7 @@ const App = () => {
   const [isComingNextOpen, setIsComingNextOpen] = useState(false);
   const [isCollabOpen, setIsCollabOpen] = useState(false);
   const [isCtaExpanded, setIsCtaExpanded] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isSliderFullscreen, setIsSliderFullscreen] = useState(false);
   const [currentSliderIndex, setCurrentSliderIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -128,13 +128,7 @@ const App = () => {
   const handleClosePlayer = () => setSelectedVideoIndex(null);
   
   const handleFullscreenToggle = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen();
-      setIsFullscreen(false);
-    }
+    setIsSliderFullscreen(!isSliderFullscreen);
   };
   
   // Use horizontal layout for desktop/tablet landscape, vertical layout for portrait/mobile
@@ -189,9 +183,15 @@ const App = () => {
                     />
                   </div>
                   <button onClick={handleFullscreenToggle} className="w-10 h-10 bg-gray-300 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                    </svg>
+                    {isSliderFullscreen ? (
+                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                      </svg>
+                    )}
                   </button>
                 </div>
               )}
@@ -216,33 +216,34 @@ const App = () => {
                 <div className="relative h-full flex items-center justify-center">
                   <Hero isMobileLandscape={false} />
                 </div>
-                
-                {/* Watch Button - Bottom Right */}
-                <button 
-                  className="absolute px-6 py-2 bg-gray-700/80 hover:bg-gray-600/80 text-white rounded-lg transition-colors flex items-center gap-2 backdrop-blur-sm"
-                  style={{ bottom: '25px', right: '25px', zIndex: 20 }}
-                >
-                  <span className="text-sm font-medium">Watch</span>
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </button>
               </div>
-              
-              {/* Footer - Privacy left, Love centered */}
+              {/* Footer - Privacy left, Love right */}
               <div className="flex justify-between items-center text-sm" style={{ paddingTop: '15px' }}>
-                <a href="#" className="text-gray-600 hover:text-[#17d4ff] transition-colors">
+                <a href="#" className="text-gray-600 hover:text-[#17d4ff] transition-colors whitespace-nowrap">
                   Privacy Policy
                 </a>
-                <p className="text-gray-600">
+                <p className="text-gray-600 text-right">
                   Love what we do? Then please support us <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
                 </p>
               </div>
             </div>
             
             {/* Right: Slider - Extends below screen */}
-            {isDesktopView && (
-              <div className="flex flex-col" style={{ width: '280px', flexShrink: 0, height: 'calc(100% + 20px)' }}>
+            {useHorizontalLayout && (
+              <div 
+                className="flex flex-col transition-all duration-300" 
+                style={{ 
+                  width: isSliderFullscreen ? '100vw' : '280px', 
+                  flexShrink: 0, 
+                  height: 'calc(100% + 20px)',
+                  position: isSliderFullscreen ? 'fixed' : 'relative',
+                  top: isSliderFullscreen ? 0 : 'auto',
+                  right: isSliderFullscreen ? 0 : 'auto',
+                  zIndex: isSliderFullscreen ? 10000 : 'auto',
+                  backgroundColor: isSliderFullscreen ? 'white' : 'transparent',
+                  padding: isSliderFullscreen ? '20px' : '0'
+                }}
+              >
                 <VideoCarousel
                   videos={filteredVideos}
                   onVideoSelect={handleVideoSelect}
@@ -303,9 +304,15 @@ const App = () => {
               onClick={handleFullscreenToggle}
               className="w-12 h-12 bg-gray-300 rounded-xl flex items-center justify-center"
             >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-              </svg>
+              {isSliderFullscreen ? (
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                </svg>
+              )}
             </button>
           </div>
           
