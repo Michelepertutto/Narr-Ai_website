@@ -69,7 +69,7 @@ const videos: Video[] = [
 const App = () => {
   const [selectedVideoIndex, setSelectedVideoIndex] = useState<number | null>(null);
   const [isMobileLandscape, setIsMobileLandscape] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 900);
   const [isPortrait, setIsPortrait] = useState(window.matchMedia("(orientation: portrait)").matches);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -91,7 +91,7 @@ const App = () => {
     setIsPortrait(portraitQuery.matches);
 
     const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024);
+      setIsDesktop(window.innerWidth >= 900);
       setIsPortrait(window.matchMedia("(orientation: portrait)").matches);
     };
     window.addEventListener('resize', handleResize);
