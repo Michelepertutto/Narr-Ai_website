@@ -1,87 +1,86 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { HeartIcon } from './icons/HeartIcon';
 
 interface HeaderProps {
-  onFramesClick: () => void;
+  onCollabClick: () => void;
   onComingNextClick: () => void;
+  onFullscreenClick: () => void;
 }
 
-const Header = ({ onFramesClick, onComingNextClick }: HeaderProps) => {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [showInstall, setShowInstall] = useState(false);
+const Header = ({ onCollabClick, onComingNextClick, onFullscreenClick }: HeaderProps) => {
+  const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setShowInstall(true);
-    };
-
-    window.addEventListener('beforeinstallprompt', handler);
-
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
-
-  const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
-      setShowInstall(false);
-    }
-    setDeferredPrompt(null);
-  };
-
-  const handleDonateClick = () => {
-    window.open('https://buymeacoffee.com/narrai', '_blank', 'noopener,noreferrer');
-  };
   
   return (
     <>
     <header className="relative z-[10000] w-full">
       <div className="flex justify-between items-center">
-        <div className="flex items-center gap-2">
+        {/* Left: Logo */}
+        <div className="flex lg:hidden w-full justify-between items-center">
+          <div className="flex items-center gap-2">
+            <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-6 h-6" />
+            <h1 className="logo text-xl tracking-tighter text-black">Narr-Ai</h1>
+          </div>
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex flex-col gap-1.5"
+            aria-label="Toggle menu"
+          >
+            <div className="w-6 h-0.5 bg-[#17d4ff] rounded"></div>
+            <div className="w-6 h-0.5 bg-[#17d4ff] rounded"></div>
+          </button>
+        </div>
+        {/* Left: Logo */}
+        <div className="hidden lg:flex items-center gap-2">
           <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
-          <h1 className="logo text-2xl tracking-tighter text-black">Narr-Ai</h1>
+          <h1 className="logo text-2xl tracking-tighter text-black">Narr Ai</h1>
         </div>
         
-        {/* Hamburger button - visible only on mobile */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden p-2 text-black bg-white rounded-lg border-2 border-transparent hover:border-[#17d4ff]"
-          aria-label="Toggle menu"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {isMobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
-
-        {/* Desktop menu - hidden on mobile */}
-        <div className="hidden md:flex gap-4">
+        {/* Center: Navigation - hidden on mobile */}
+        <div className="hidden md:flex gap-8">
           <button
-            onClick={onFramesClick}
-            className="menu-item relative px-4 py-2 text-sm text-black hover:text-[#17d4ff] transition-colors"
+            onClick={onCollabClick}
+            className="menu-item text-base text-black hover:text-[#17d4ff] transition-colors"
           >
-            Frames
+            Collab
           </button>
           <button
             onClick={onComingNextClick}
-            className="menu-item relative px-4 py-2 text-sm text-black hover:text-[#17d4ff] transition-colors"
+            className="menu-item text-base text-black hover:text-[#17d4ff] transition-colors"
           >
-            Up Next
+            Coming Next
           </button>
         </div>
-      </div>
 
+        {/* Right: Search + Fullscreen - hidden on mobile */}
+        <div className="hidden md:flex items-center gap-3">
+          <div className="relative">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search"
+              className="w-52 px-4 py-2 bg-gray-400/30 text-white placeholder-white/70 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#17d4ff]"
+              style={{ fontSize: '14px' }}
+            />
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <button
+            onClick={onFullscreenClick}
+            className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+            aria-label="Fullscreen"
+          >
+            <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
+          </button>
+        </div>
+        
+      </div>
     </header>
+    
     {/* Mobile menu - rendered at root level using Portal */}
     {isMobileMenuOpen && createPortal(
       <>
@@ -91,19 +90,61 @@ const Header = ({ onFramesClick, onComingNextClick }: HeaderProps) => {
           onClick={() => setIsMobileMenuOpen(false)}
         />
         {/* Menu */}
-        <div className="md:hidden fixed top-[60px] left-2 right-2 bg-white rounded-lg shadow-lg border-2 border-[#17d4ff] overflow-hidden z-[9999]">
-          <div className="flex flex-col">
-            <button
-              onClick={() => { onFramesClick(); setIsMobileMenuOpen(false); }}
-              className="menu-item px-4 py-3 text-left text-black hover:bg-gray-100 border-b border-gray-200"
-            >
-              Frames
-            </button>
+        <div className="md:hidden fixed top-[70px] left-4 right-4 bg-black rounded-3xl shadow-2xl overflow-hidden z-[9999]" style={{ padding: '30px' }}>
+          {/* Close button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="absolute top-4 right-4 p-2 hover:bg-gray-800 rounded-lg transition-colors"
+            aria-label="Close menu"
+          >
+            <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <div className="flex flex-col gap-6 mb-8">
             <button
               onClick={() => { onComingNextClick(); setIsMobileMenuOpen(false); }}
-              className="menu-item px-4 py-3 text-left text-black hover:bg-gray-100"
+              className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-2"
             >
-              Up Next
+              <span className="text-xl">Coming Next</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+            <button
+              onClick={() => { onCollabClick(); setIsMobileMenuOpen(false); }}
+              className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-2"
+            >
+              <span className="text-xl">Collab</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+            <button
+              onClick={() => { setIsMobileMenuOpen(false); }}
+              className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-2"
+            >
+              <span className="text-xl">Donations</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Bottom CTAs */}
+          <div className="flex items-center justify-between gap-4 pt-4">
+            <button className="cta-button px-6 py-3 bg-[#17d5ff] hover:bg-[#15bde6] text-black rounded-lg transition-all flex items-center gap-2">
+              <span className="font-semibold">Start for free</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+            <button className="cta-button text-white hover:text-[#17d5ff] transition-colors flex items-center gap-2">
+              <span>Download App</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
             </button>
           </div>
         </div>

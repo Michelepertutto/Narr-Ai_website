@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import VideoCarousel from './components/VideoCarousel';
+import VideoCarousel, { SliderProgressBar } from './components/VideoCarousel';
 import FullscreenPlayer from './components/FullscreenPlayer';
 import ComingNextModal from './components/ComingNextModal';
 import FramesGallery from './components/FramesGallery';
@@ -74,8 +74,10 @@ const App = () => {
   const [isSliderHovered, setIsSliderHovered] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isComingNextOpen, setIsComingNextOpen] = useState(false);
-  const [isFramesOpen, setIsFramesOpen] = useState(false);
+  const [isCollabOpen, setIsCollabOpen] = useState(false);
   const [isCtaExpanded, setIsCtaExpanded] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [currentSliderIndex, setCurrentSliderIndex] = useState(0);
 
   useEffect(() => {
     const landscapeQuery = window.matchMedia("(orientation: landscape) and (max-height: 500px)");
@@ -124,6 +126,16 @@ const App = () => {
   
   const handleClosePlayer = () => setSelectedVideoIndex(null);
   
+  const handleFullscreenToggle = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen();
+      setIsFullscreen(false);
+    }
+  };
+  
   // Use horizontal layout for desktop landscape, vertical layout for portrait/mobile
   const useHorizontalLayout = isDesktop && !isPortrait;
   const isExpanded = selectedVideoIndex !== null;
@@ -133,15 +145,19 @@ const App = () => {
       {/* HORIZONTAL LAYOUT (Desktop Landscape) */}
       {useHorizontalLayout ? (
         <div className="bg-white h-screen w-screen flex flex-row overflow-hidden">
-          {/* Left Column: Header + Hero + CTA */}
-          <div className="flex-1 flex flex-col" style={{ margin: '15px 20px 30px 30px' }}>
+          {/* Left Column: Header + Hero + Footer */}
+          <div className="flex-1 flex flex-col" style={{ padding: '10px 0 20px 20px' }}>
             {/* Sticky Header */}
-            <div className="sticky top-0 z-[10000]" style={{ marginBottom: '15px' }}>
-              <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />
+            <div className="sticky top-0 z-[10000] bg-white" style={{ paddingBottom: '10px' }}>
+              <Header 
+                onCollabClick={() => setIsCollabOpen(true)} 
+                onComingNextClick={() => setIsComingNextOpen(true)}
+                onFullscreenClick={handleFullscreenToggle}
+              />
             </div>
             
             {/* Hero Section */}
-            <div className="relative flex-1 rounded-xl shadow-2xl overflow-hidden" style={{ marginBottom: '30px', marginRight: '20px' }}>
+            <div className="relative flex-1 rounded-xl shadow-2xl overflow-hidden" style={{ marginRight: '20px' }}>
               <video
                 src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
                 poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
@@ -157,25 +173,25 @@ const App = () => {
               </div>
             </div>
             
-            {/* CTA Secondary Links */}
-            <div className="flex justify-center items-center gap-8 text-sm text-gray-600">
-              <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="cta-button hover:text-[#17d4ff] transition-colors">
-                Support
-              </a>
-              <button className="cta-button flex items-center gap-2 hover:text-[#17d4ff] transition-colors">
-                <span>Download app</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-              </button>
-              <a href="#" className="cta-button hover:text-[#17d4ff] transition-colors">
+            {/* Footer */}
+            <div className="flex justify-between items-center text-sm" style={{ paddingTop: '20px', marginRight: '20px' }}>
+              <a href="#" className="text-gray-600 hover:text-[#17d4ff] transition-colors">
                 Privacy Policy
               </a>
+              <p className="text-gray-600 text-center">
+                Love what we do? Then please support us <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
+              </p>
+              <button className="cta-button px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2">
+                <span>Watch</span>
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </button>
             </div>
           </div>
           
           {/* Right Column: Slider (Full Height) */}
-          <div className="h-screen flex flex-col" style={{ paddingTop: '40px', paddingBottom: '40px', marginRight: '0' }}>
+          <div className="h-screen flex flex-col" style={{ padding: '20px 20px 20px 0' }}>
             <VideoCarousel
               videos={videos}
               onVideoSelect={handleVideoSelect}
@@ -186,14 +202,18 @@ const App = () => {
         </div>
       ) : (
         /* VERTICAL LAYOUT (Portrait/Mobile) */
-        <div className="bg-white h-[100dvh] w-screen flex flex-col overflow-hidden">
-          {/* Header - 10dvh */}
-          <div className="h-[10dvh] flex items-center" style={{ margin: '5px 30px' }}>
-            <Header onFramesClick={() => setIsFramesOpen(true)} onComingNextClick={() => setIsComingNextOpen(true)} />
+        <div className="bg-white min-h-screen w-screen flex flex-col">
+          {/* Header */}
+          <div className="flex items-center" style={{ padding: '15px 20px' }}>
+            <Header 
+              onCollabClick={() => setIsCollabOpen(true)} 
+              onComingNextClick={() => setIsComingNextOpen(true)}
+              onFullscreenClick={handleFullscreenToggle}
+            />
           </div>
           
-          {/* Hero - 50dvh */}
-          <div className="h-[50dvh] relative rounded-xl shadow-2xl overflow-hidden" style={{ margin: '0 30px 15px 30px' }}>
+          {/* Hero */}
+          <div className="relative rounded-3xl shadow-2xl overflow-hidden" style={{ margin: '0 20px 20px 20px', minHeight: '580px' }}>
             <video
               src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
               poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
@@ -203,64 +223,61 @@ const App = () => {
               muted
               playsInline
             />
-            <div className="absolute inset-0 bg-black/50 rounded-xl pointer-events-none"></div>
+            <div className="absolute inset-0 bg-black/50 rounded-3xl pointer-events-none"></div>
             <div className="relative h-full flex items-center justify-center">
               <Hero isMobileLandscape={false} />
             </div>
           </div>
           
-          {/* Slider - 30dvh */}
-          <div className="h-[30dvh] w-full" style={{ paddingLeft: '30px', paddingRight: '30px' }}>
+          {/* Search Bar + Fullscreen */}
+          <div className="flex items-center gap-3" style={{ margin: '0 20px 20px 20px' }}>
+            <div className="flex-1 flex items-center gap-3 bg-gray-300 rounded-xl px-4 py-3">
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input 
+                type="text" 
+                placeholder="Search" 
+                className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-600"
+              />
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </div>
+            <button 
+              onClick={handleFullscreenToggle}
+              className="w-12 h-12 bg-gray-300 rounded-xl flex items-center justify-center"
+            >
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+              </svg>
+            </button>
+          </div>
+          
+          {/* Slider */}
+          <div className="w-full" style={{ marginBottom: '10px', paddingLeft: '20px', height: '200px' }}>
             <VideoCarousel
               videos={videos}
               onVideoSelect={handleVideoSelect}
               isExpanded={isExpanded}
               isMobileLandscape={false}
+              onSlideChange={(index) => setCurrentSliderIndex(index)}
             />
           </div>
           
-          {/* CTA Footer - 10dvh (Collapsible) */}
-          <div className="h-[10dvh] flex flex-col" style={{ margin: '0 30px' }}>
-            {/* Collapsed state - just the toggle button */}
-            {!isCtaExpanded && (
-              <button
-                onClick={() => setIsCtaExpanded(true)}
-                className="flex items-center justify-center gap-2 py-3 text-gray-600 hover:text-[#17d4ff] transition-colors"
-              >
-                <span className="text-sm font-medium">More options</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            )}
-            
-            {/* Expanded state - show links */}
-            {isCtaExpanded && (
-              <div className="flex flex-col gap-2 py-2">
-                <button
-                  onClick={() => setIsCtaExpanded(false)}
-                  className="self-center text-gray-600 hover:text-[#17d4ff] transition-colors"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                  </svg>
-                </button>
-                <div className="flex justify-center items-center gap-6 text-xs text-gray-600">
-                  <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="cta-button hover:text-[#17d4ff] transition-colors">
-                    Support
-                  </a>
-                  <button className="cta-button flex items-center gap-1 hover:text-[#17d4ff] transition-colors">
-                    <span>Download app</span>
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                  </button>
-                  <a href="#" className="cta-button hover:text-[#17d4ff] transition-colors">
-                    Privacy
-                  </a>
-                </div>
-              </div>
-            )}
+          {/* Progress Bar */}
+          <div style={{ margin: '0 20px 20px 20px' }}>
+            <SliderProgressBar currentIndex={currentSliderIndex} totalItems={videos.length} />
+          </div>
+          
+          {/* Footer */}
+          <div className="flex flex-col items-center gap-2 text-sm text-gray-600" style={{ padding: '20px', marginTop: 'auto' }}>
+            <a href="#" className="hover:text-[#17d4ff] transition-colors">
+              Privacy Policy
+            </a>
+            <p className="text-center">
+              Love what we do? Then please support us <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
+            </p>
           </div>
         </div>
       )}
@@ -275,7 +292,15 @@ const App = () => {
       
       {/* Modals rendered at root level to ensure proper z-index */}
       <ComingNextModal isOpen={isComingNextOpen} onClose={() => setIsComingNextOpen(false)} />
-      <FramesGallery isOpen={isFramesOpen} onClose={() => setIsFramesOpen(false)} />
+      {isCollabOpen && (
+        <div className="fixed inset-0 bg-black/50 z-[10001] flex items-center justify-center" onClick={() => setIsCollabOpen(false)}>
+          <div className="bg-white rounded-lg p-8 max-w-md" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-2xl font-bold mb-4">Collab</h2>
+            <p>Collaboration features coming soon!</p>
+            <button onClick={() => setIsCollabOpen(false)} className="mt-4 px-4 py-2 bg-[#17d4ff] text-black rounded-lg">Close</button>
+          </div>
+        </div>
+      )}
     </>
   );
 };

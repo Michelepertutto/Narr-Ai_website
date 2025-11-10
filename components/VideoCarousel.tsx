@@ -151,21 +151,11 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
     const isHovered = hoveredIndex === index;
     
     if (isMobileLandscape) {
-      // Vertical layout - mantiene larghezza piena, altezza aumenta in hover per 16:9
-      return isHovered 
-        ? 'w-full aspect-video' // 16:9 aspect ratio in hover
-        : 'w-full h-[calc((100%-2rem)/3)]';
+      // Vertical layout - full width cards
+      return 'w-full h-full';
     } else {
-      // Horizontal layout
-      if (isExpanded) {
-        return isHovered
-          ? 'w-96 h-[216px]' // 16:9 ratio (384px x 216px)
-          : 'w-64 h-44 sm:w-80 sm:h-56';
-      } else {
-        return isHovered
-          ? 'w-80 h-[180px]' // 16:9 ratio (320px x 180px)
-          : 'w-60 h-36 sm:w-80 sm:h-48';
-      }
+      // Horizontal layout - mobile/tablet
+      return 'w-[160px] h-[180px]';
     }
   };
   
@@ -188,76 +178,78 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
         <div
           key={video.id}
           onClick={() => {
-            handleInteraction(); // Stop scrolling on click as well
+            handleInteraction();
             onVideoSelect(index);
           }}
-          onMouseEnter={() => {
-            setHoveredIndex(index);
-            const videoEl = videoRefs.current[index];
-            if (videoEl) {
-              videoEl.play().catch(() => {});
-            }
+          onMouseEnter={() => setHoveredIndex(index)}
+          onMouseLeave={() => setHoveredIndex(null)}
+          className={`video-item flex-shrink-0 relative rounded-2xl overflow-hidden snap-start cursor-pointer transition-all duration-300 ease-in-out ${getItemClasses(index)}`}
+          style={{
+            backgroundImage: `url(${video.posterUrl || `https://picsum.photos/seed/${video.seed}/400/300`})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
           }}
-          onMouseLeave={() => {
-            setHoveredIndex(null);
-            const videoEl = videoRefs.current[index];
-            if (videoEl) {
-              videoEl.pause();
-              videoEl.currentTime = 0;
-            }
-          }}
-          className={`video-item flex-shrink-0 relative rounded-xl overflow-hidden group snap-start cursor-pointer transition-all duration-300 ease-in-out ${getItemClasses(index)}`}
         >
-          <video
-            ref={(el) => (videoRefs.current[index] = el)}
-            src={video.videoUrl}
-            poster={video.posterUrl || `https://picsum.photos/seed/${video.seed}/400/300`}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-            loop
-            playsInline
-            preload="metadata"
-            draggable={false}
-            muted
-            onError={() => {}}
-          />
-          <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="bg-cyan-500/80 rounded-full p-3">
-              <PlayIcon className="h-6 w-6 text-black" />
+          {/* Dark overlay */}
+          <div className="absolute inset-0 bg-black/40"></div>
+          
+          {/* Card Header */}
+          <div className="absolute top-0 left-0 right-0 p-3 flex justify-between items-start z-10">
+            <span className="text-white text-sm font-normal">{video.title}</span>
+            <div className="w-6 h-6 bg-yellow-500 rounded flex items-center justify-center flex-shrink-0">
+              <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2zm0 2v16h12V4H6zm2 2h8v2H8V6zm0 4h8v2H8v-2zm0 4h5v2H8v-2z"/>
+              </svg>
             </div>
           </div>
-          <p className="absolute bottom-2 left-3 text-white text-sm font-semibold">
-            {video.title}
-          </p>
-          {/* Download button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              const link = document.createElement('a');
-              link.href = video.videoUrl;
-              link.download = `${video.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.mp4`;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }}
-            className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm rounded-full p-2 hover:bg-black/90 transition-colors z-10"
-            title="Download video"
-          >
-            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-          </button>
-          {/* Series indicator - show episode count badge */}
-          {video.episodes && video.episodes.length > 1 && (
-            <div className="absolute bottom-2 right-2 bg-black/70 backdrop-blur-sm rounded-md px-2 py-1 flex items-center gap-1">
-              <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+
+          {/* Right Side Actions */}
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-10">
+            {/* Edit button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                // Edit action
+              }}
+              className="w-8 h-8 bg-gray-600/80 hover:bg-gray-500 rounded-lg flex items-center justify-center transition-colors"
+              title="Edit"
+            >
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
               </svg>
-              <span className="text-white text-xs font-bold">{video.episodes.length}</span>
-            </div>
-          )}
+            </button>
+            {/* Download button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const link = document.createElement('a');
+                link.href = video.videoUrl;
+                link.download = `${video.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.mp4`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+              className="w-8 h-8 bg-gray-600/80 hover:bg-gray-500 rounded-lg flex items-center justify-center transition-colors"
+              title="Download"
+            >
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Bottom Right Counter */}
+          <div className="absolute bottom-3 right-3 flex items-center gap-1 z-10">
+            <span className="text-white text-xs font-medium">2</span>
+            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+            </svg>
+          </div>
         </div>
       ))}
+      {isMobileLandscape && (
+        <SliderProgressBar currentIndex={hoveredIndex || 0} totalItems={videos.length} />
+      )}
       <style>{`
         /* Hide scrollbar but keep scrollability */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
@@ -265,6 +257,19 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
 
         .grabbing { cursor: grabbing; user-select: none; }
       `}</style>
+    </div>
+  );
+};
+
+// Progress bar component for mobile slider
+export const SliderProgressBar = ({ currentIndex, totalItems }: { currentIndex: number; totalItems: number }) => {
+  const progress = ((currentIndex + 1) / totalItems) * 100;
+  return (
+    <div className="w-full h-1 bg-gray-300 rounded-full overflow-hidden">
+      <div 
+        className="h-full bg-[#17d4ff] transition-all duration-300"
+        style={{ width: `${progress}%` }}
+      />
     </div>
   );
 };
