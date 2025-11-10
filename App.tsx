@@ -140,65 +140,94 @@ const App = () => {
   const useHorizontalLayout = !isPortrait;
   const isExpanded = selectedVideoIndex !== null;
   const isDesktopView = isDesktop && !isPortrait;
-  
-  // Debug
-  console.log('Desktop View:', { isDesktop, isPortrait, isDesktopView, width: window.innerWidth });
 
   return (
     <>
       {/* HORIZONTAL LAYOUT (Desktop/Tablet Landscape) */}
       {useHorizontalLayout ? (
-        <div className="bg-white h-screen w-screen flex flex-row overflow-hidden">
-          {/* Left Column: Header + Hero + Footer */}
-          <div className="flex flex-col" style={{ width: isDesktopView ? 'calc(100% - 280px)' : '65%', padding: '10px 0 20px 20px' }}>
-            {/* Sticky Header */}
-            <div className="sticky top-0 z-[10000] bg-white" style={{ paddingBottom: '10px' }}>
-              <Header 
-                onCollabClick={() => setIsCollabOpen(true)} 
-                onComingNextClick={() => setIsComingNextOpen(true)}
-                onFullscreenClick={handleFullscreenToggle}
-              />
-            </div>
-            
-            {/* Hero Section */}
-            <div className="relative flex-1 rounded-3xl shadow-2xl overflow-hidden" style={{ marginRight: '20px' }}>
-              <video
-                src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
-                poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
-                className="absolute top-0 left-0 w-full h-full object-cover"
-                autoPlay
-                loop
-                muted
-                playsInline
-              />
-              <div className="absolute inset-0 bg-black/50 rounded-3xl pointer-events-none"></div>
-              <div className="relative h-full flex items-center justify-center">
-                <Hero isMobileLandscape={false} />
+        <div className="bg-white h-screen w-screen flex flex-col overflow-hidden">
+          {/* Full-Width Header */}
+          <div className="relative z-[10000] bg-white" style={{ padding: '10px 20px' }}>
+            <div className="flex justify-between items-center">
+              {/* Logo Left */}
+              <div className="flex items-center gap-2">
+                <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
+                <h1 className="logo text-2xl tracking-tighter text-black">Narr-Ai</h1>
               </div>
-            </div>
-            
-            {/* Footer */}
-            <div className="flex items-center gap-8 text-sm" style={{ paddingTop: '20px', marginRight: '20px' }}>
-              <a href="#" className="text-gray-600 hover:text-[#17d4ff] transition-colors whitespace-nowrap">
-                Privacy Policy
-              </a>
-              <p className="text-gray-600">
-                Love what we do? Then please support us <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
-              </p>
+              
+              {/* Center: Collab + Coming Next (aligned to hero right edge) */}
+              <div className="flex gap-6" style={{ marginRight: isDesktopView ? '280px' : '0' }}>
+                <button onClick={() => setIsCollabOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
+                  Collab
+                </button>
+                <button onClick={() => setIsComingNextOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
+                  Coming Next
+                </button>
+              </div>
+              
+              {/* Right: Search + Fullscreen (above slider) */}
+              {isDesktopView && (
+                <div className="flex items-center gap-3" style={{ width: '280px' }}>
+                  <div className="flex-1 flex items-center gap-2 bg-gray-300 rounded-xl px-3 py-2">
+                    <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input type="text" placeholder="Search" className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-600" />
+                  </div>
+                  <button onClick={handleFullscreenToggle} className="w-10 h-10 bg-gray-300 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                    </svg>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
           
-          {/* Right Column: Slider (Full Height) - Only on Desktop */}
-          {isDesktopView && (
-            <div className="h-screen flex flex-col bg-white" style={{ width: '280px', padding: '80px 20px 20px 0', flexShrink: 0 }}>
-              <VideoCarousel
-                videos={videos}
-                onVideoSelect={handleVideoSelect}
-                isExpanded={isExpanded}
-                isMobileLandscape={true}
-              />
+          {/* Main Content: Hero + Slider */}
+          <div className="flex-1 flex flex-row overflow-hidden" style={{ padding: '0 20px 20px 20px' }}>
+            {/* Hero Section */}
+            <div className="flex-1 flex flex-col" style={{ marginRight: isDesktopView ? '20px' : '0' }}>
+              <div className="relative flex-1 rounded-3xl shadow-2xl overflow-hidden">
+                <video
+                  src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
+                  poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
+                  className="absolute top-0 left-0 w-full h-full object-cover"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+                <div className="absolute inset-0 bg-black/50 rounded-3xl pointer-events-none"></div>
+                <div className="relative h-full flex items-center justify-center">
+                  <Hero isMobileLandscape={false} />
+                </div>
+              </div>
+              
+              {/* Footer - Centered to Hero */}
+              <div className="flex justify-center items-center text-sm" style={{ paddingTop: '15px' }}>
+                <a href="#" className="text-gray-600 hover:text-[#17d4ff] transition-colors mr-2">
+                  Privacy Policy
+                </a>
+                <span className="text-gray-600">·</span>
+                <p className="text-gray-600 ml-2">
+                  Love what we do? Then please support us <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
+                </p>
+              </div>
             </div>
-          )}
+            
+            {/* Right: Slider - Extends below screen */}
+            {isDesktopView && (
+              <div className="flex flex-col" style={{ width: '280px', flexShrink: 0, height: 'calc(100% + 20px)' }}>
+                <VideoCarousel
+                  videos={videos}
+                  onVideoSelect={handleVideoSelect}
+                  isExpanded={isExpanded}
+                  isMobileLandscape={true}
+                />
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         /* VERTICAL LAYOUT (Portrait/Mobile) */
