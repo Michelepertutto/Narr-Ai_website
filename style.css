@@ -53,6 +53,14 @@ p, body {
   letter-spacing: 0;
 }
 
+/* Mobile landscape: reduce title size by half */
+@media (orientation: landscape) and (max-height: 500px) {
+  .hero-title {
+    font-size: clamp(16px, 4vw, 36px);
+    line-height: clamp(18px, 4.25vw, 40px);
+  }
+}
+
 .hero-subtitle {
   font-size: clamp(13px, 3.5vw, 18px);
   line-height: clamp(18px, 4.5vw, 28px);
@@ -170,6 +178,9 @@ p, body {
 .portrait-hero-container {
   margin: 0 20px 20px 20px;
   min-height: 580px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .portrait-search-margin {
@@ -189,4 +200,16 @@ p, body {
 .portrait-footer-padding {
   padding: 20px;
   margin-top: auto;
+  position: relative;
+}
+
+.portrait-footer-padding a[href="/privacy-policy.html"] {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+}
+
+.portrait-footer-padding p {
+  padding-left: 0;
+  padding-bottom: 40px;
 }

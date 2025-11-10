@@ -216,14 +216,14 @@ const App = () => {
               <div className="flex-1 flex flex-row overflow-hidden main-content-padding">
                 <div className="flex-1 flex flex-col hero-margin-right">
                   {/* Header sopra l'hero */}
-                  <div className="relative z-[10000] bg-white header-padding mb-4">
+                  <div className="relative z-[10000] bg-white header-padding mb-6">
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center gap-2">
                         <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
                         <h1 className="logo text-2xl tracking-tighter text-black">Narr-Ai</h1>
                       </div>
                       
-                      {isDesktop && (
+                      {isDesktop ? (
                         <div className="flex items-center gap-4">
                           <button onClick={() => setIsCollabOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
                             Collab
@@ -232,9 +232,7 @@ const App = () => {
                             Coming Next
                           </button>
                         </div>
-                      )}
-                      
-                      {!isDesktop && (
+                      ) : (
                         <button 
                           onClick={() => setIsHorizontalMenuOpen(!isHorizontalMenuOpen)}
                           className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex flex-col gap-1.5"
@@ -272,7 +270,7 @@ const App = () => {
                   </div>
                 </div>
                 
-                {useHorizontalLayout && (
+                {useHorizontalLayout && isDesktop && (
                   <div 
                     className="flex flex-col transition-all duration-300" 
                     style={{ 
@@ -289,7 +287,7 @@ const App = () => {
                   >
                     {/* Header sopra lo slider */}
                     {isDesktop && (
-                      <div className="flex items-center gap-3 mb-3">
+                      <div className="flex items-center gap-3 mb-4 header-padding">
                         <div className="flex-1 flex items-center gap-2 bg-gray-300 rounded-xl px-3 py-2">
                           <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -396,12 +394,14 @@ const App = () => {
               </div>
               
               <div className="flex flex-col items-center gap-2 text-sm text-gray-600 portrait-footer-padding">
-                <a href="/privacy-policy.html" className="hover:text-[#17d4ff] transition-colors">
-                  Privacy Policy
-                </a>
                 <p className="text-center">
                   If everyone reading this gave just $5, we'd be funded for the entire year. Be the one who helps. Chip in <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
                 </p>
+                <div className="flex justify-between w-full">
+                  <a href="/privacy-policy.html" className="hover:text-[#17d4ff] transition-colors">
+                    Privacy Policy
+                  </a>
+                </div>
               </div>
             </div>
           )}
