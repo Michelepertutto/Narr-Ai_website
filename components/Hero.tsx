@@ -31,7 +31,7 @@ const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
                 fontWeight: '600'
               }}
             >
-              AI videos,<br />for Audiobooks
+              AI Videos for Audiobooks
             </h1>
             
             {/* Subtitle */}

@@ -133,27 +133,42 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
         </h1>
       </div>
 
-      {/* Video Player */}
-      <div className="w-full h-full">
+      {/* Video Player with Book Cover */}
+      <div className="w-full h-full flex items-center justify-center gap-4 px-4">
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black">
+          <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
           </div>
         )}
-        <video
-          key={currentVideo.id}
-          src={currentVideo.videoUrl}
-          className={`w-full h-full object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-          autoPlay
-          controls
-          onCanPlay={() => setIsLoading(false)}
-          onLoadedData={() => setIsLoading(false)}
-          onWaiting={() => setIsLoading(true)}
-          onPlaying={() => setIsLoading(false)}
-          onEnded={goToNext}
-        >
-          Your browser does not support the video tag.
-        </video>
+        
+        {/* Book Cover - positioned to the left */}
+        {currentVideo.bookCoverUrl && (
+          <div className="flex-shrink-0 h-[80vh] max-h-[600px]">
+            <img 
+              src={currentVideo.bookCoverUrl} 
+              alt={`${currentVideo.title} cover`}
+              className="h-full w-auto object-contain rounded-lg shadow-2xl"
+            />
+          </div>
+        )}
+        
+        {/* Video */}
+        <div className="flex-1 h-full flex items-center justify-center">
+          <video
+            key={currentVideo.id}
+            src={currentVideo.videoUrl}
+            className={`max-w-full max-h-full object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+            autoPlay
+            controls
+            onCanPlay={() => setIsLoading(false)}
+            onLoadedData={() => setIsLoading(false)}
+            onWaiting={() => setIsLoading(true)}
+            onPlaying={() => setIsLoading(false)}
+            onEnded={goToNext}
+          >
+            Your browser does not support the video tag.
+          </video>
+        </div>
       </div>
     </div>
   );

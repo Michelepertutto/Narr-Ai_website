@@ -178,20 +178,18 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
   };
 
   const getItemClasses = (index: number) => {
-    const isHovered = hoveredIndex === index;
-    
     if (isMobileLandscape) {
       // Vertical layout - larger cards for horizontal tablet/mobile
-      return `w-full min-h-[240px] transition-transform duration-300 ${isHovered ? 'scale-105' : 'scale-100'}`;
+      return `w-full min-h-[240px]`;
     } else {
       // Horizontal layout - mobile portrait
-      return `w-[160px] h-[180px] transition-transform duration-300 ${isHovered ? 'scale-105' : 'scale-100'}`;
+      return `w-[160px] h-[180px]`;
     }
   };
   
   const containerClasses = isMobileLandscape
-    ? 'h-full flex flex-col overflow-y-auto scrollbar-hide snap-y snap-mandatory touch-pan-y'
-    : 'h-full flex overflow-x-auto scrollbar-hide snap-x snap-mandatory cursor-grab touch-pan-x';
+    ? 'h-full flex flex-col overflow-y-auto scrollbar-hide snap-y snap-mandatory touch-pan-y transition-transform duration-300 hover:scale-105'
+    : 'h-full flex overflow-x-auto scrollbar-hide snap-x snap-mandatory cursor-grab touch-pan-x transition-transform duration-300 hover:scale-105';
 
   const gapStyle = { gap: '15px' };
 
@@ -213,43 +211,59 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
           }}
           onMouseEnter={() => setHoveredIndex(index)}
           onMouseLeave={() => setHoveredIndex(null)}
-          className={`video-item flex-shrink-0 relative rounded-2xl overflow-hidden snap-start cursor-pointer transition-all duration-300 ease-in-out ${getItemClasses(index)}`}
-          style={{
-            backgroundImage: `url(${video.posterUrl || `https://picsum.photos/seed/${video.seed}/400/300`})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }}
+          className={`relative snap-center flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group ${getItemClasses(index)}`}
         >
-          {/* Dark overlay */}
-          <div className="absolute inset-0 bg-black/40"></div>
+          {/* Video Thumbnail */}
+          <video
+            ref={(el) => (videoRefs.current[index] = el)}
+            src={video.videoUrl}
+            className="w-full h-full object-cover"
+            muted
+            loop
+            playsInline
+            onMouseEnter={(e) => {
+              const videoEl = e.currentTarget;
+              videoEl.play().catch(() => {});
+            }}
+            onMouseLeave={(e) => {
+              const videoEl = e.currentTarget;
+              videoEl.pause();
+              videoEl.currentTime = 0;
+            }}
+          />
           
-          {/* Card Header */}
-          <div className="absolute top-0 left-0 right-0 p-3 flex justify-between items-start z-10">
-            <span className="text-white text-sm font-normal">{video.title}</span>
-            <div className="w-6 h-6 bg-yellow-500 rounded flex items-center justify-center flex-shrink-0">
-              <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2zm0 2v16h12V4H6zm2 2h8v2H8V6zm0 4h8v2H8v-2zm0 4h5v2H8v-2z"/>
-              </svg>
+          {/* Overlay gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          
+          {/* Play icon overlay */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+              <PlayIcon className="w-6 h-6 text-white" />
             </div>
           </div>
+          
+          {/* Video title */}
+          <div className="absolute bottom-0 left-0 right-0 p-3">
+            <h3 className="text-white text-sm font-medium line-clamp-2">{video.title}</h3>
+          </div>
 
-          {/* Right Side Actions */}
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-10">
-            {/* Link to audiobook button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                // Link to Audible with specific book URL or generic Audible.it
-                const audibleLink = video.audibleUrl || 'https://www.audible.it';
-                window.open(audibleLink, '_blank', 'noopener,noreferrer');
-              }}
-              className="w-8 h-8 bg-gray-600/80 hover:bg-gray-500 rounded-lg flex items-center justify-center transition-colors"
-              title="View on Audible"
-            >
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </button>
+          {/* Top Right Action Buttons */}
+          <div className="absolute top-3 right-3 flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+            {/* Audible link button */}
+            {video.audibleUrl && (
+              <a
+                href={video.audibleUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="w-8 h-8 bg-gray-600/80 hover:bg-gray-500 rounded-lg flex items-center justify-center transition-colors"
+                title="View on Audible"
+              >
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            )}
             {/* Download button */}
             <button
               onClick={(e) => {

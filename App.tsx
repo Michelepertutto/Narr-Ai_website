@@ -11,6 +11,7 @@ export interface Video {
   title: string;
   videoUrl: string;
   posterUrl?: string;
+  bookCoverUrl?: string; // Book cover image
   audibleUrl?: string; // Link to Audible audiobook
   views?: number; // View count
   likes?: number; // Like count
@@ -34,6 +35,7 @@ const videos: Video[] = [
     title: 'Dungeon Crawler Carl', 
     videoUrl: `${import.meta.env.BASE_URL}video/Dungeon-Crawler-Carl-Old-man-pee.mp4`,
     posterUrl: `${import.meta.env.BASE_URL}Imgs/preview-dungeon-crawler-carl-pee-scene.png`,
+    bookCoverUrl: `${import.meta.env.BASE_URL}Imgs/Book Covers/Dungeon-Crawler-Carl.png`,
     audibleUrl: 'https://www.audible.it/pd/Dungeon-Crawler-Carl-Audiolibri/B0FVXCDZGK',
     views: 2340,
     likes: 156
@@ -44,6 +46,7 @@ const videos: Video[] = [
     title: 'We are legion (We are Bob)', 
     videoUrl: `${import.meta.env.BASE_URL}video/Bobiverse_Bob-dies-and-wakes-up-as-AI.mp4`,
     posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_Bobiverse.png`,
+    bookCoverUrl: `${import.meta.env.BASE_URL}Imgs/Book Covers/We-Are-Legion-We-Are-Bob.png`,
     audibleUrl: 'https://www.audible.it/pd/We-Are-Legion-We-Are-Bob-Audiolibri/B079BBMXKX',
     views: 1890,
     likes: 142
@@ -54,6 +57,7 @@ const videos: Video[] = [
     title: 'La Sicaria', 
     videoUrl: `${import.meta.env.BASE_URL}video/La-Sicaria_Scena-1-Prince-karek.mp4`,
     posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-La-sicaria-Prince-Karek.png`,
+    bookCoverUrl: `${import.meta.env.BASE_URL}Imgs/Book Covers/La-Sicaria.png`,
     episodeNumber: 1,
     episodes: [
       {
@@ -62,6 +66,7 @@ const videos: Video[] = [
         title: 'La Sicaria - Episode 1',
         videoUrl: `${import.meta.env.BASE_URL}video/La-Sicaria_Scena-1-Prince-karek.mp4`,
         posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-La-sicaria-Prince-Karek.png`,
+        bookCoverUrl: `${import.meta.env.BASE_URL}Imgs/Book Covers/La-Sicaria.png`,
         episodeNumber: 1
       },
       {
@@ -70,6 +75,7 @@ const videos: Video[] = [
         title: 'La Sicaria - Episode 2',
         videoUrl: `${import.meta.env.BASE_URL}video/La_sicaria_The-arrival-of-the-assassin.mp4`,
         posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_La-sicaria.png`,
+        bookCoverUrl: `${import.meta.env.BASE_URL}Imgs/Book Covers/La-Sicaria.png`,
         episodeNumber: 2
       }
     ]
@@ -235,13 +241,13 @@ const App = () => {
                 </div>
               </div>
               {/* Footer - Privacy left, Love centered */}
-              <div className="flex flex-col items-center text-sm" style={{ paddingTop: '15px', gap: '8px' }}>
+              <div className="relative flex items-center justify-center text-sm" style={{ paddingTop: '15px' }}>
+                <a href="#" className="absolute left-0 text-gray-600 hover:text-[#17d4ff] transition-colors">
+                  Privacy Policy
+                </a>
                 <p className="text-gray-600 text-center">
                   Love what we do? Then please support us <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
                 </p>
-                <a href="#" className="text-gray-600 hover:text-[#17d4ff] transition-colors">
-                  Privacy Policy
-                </a>
               </div>
             </div>
             
