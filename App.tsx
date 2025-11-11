@@ -258,7 +258,7 @@ const App = () => {
                       Privacy Policy
                     </a>
                     <p className="text-gray-600 text-center">
-                      If everyone reading this gave just $5, we'd be funded for the entire year. Be the one who helps. Chip in <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
+                      If you appreciate our work, <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">make a donation</a>.
                     </p>
                   </div>
                 </div>
@@ -432,7 +432,7 @@ const App = () => {
               
               <div className="flex flex-col items-center gap-2 text-sm text-gray-600 portrait-footer-padding">
                 <p className="text-center">
-                  If everyone reading this gave just $5, we'd be funded for the entire year. Be the one who helps. Chip in <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">here</a>.
+                  If you appreciate our work, <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">make a donation</a>.
                 </p>
                 <div className="flex justify-between w-full">
                   <a href="/privacy-policy.html" className="hover:text-[#17d4ff] transition-colors">
