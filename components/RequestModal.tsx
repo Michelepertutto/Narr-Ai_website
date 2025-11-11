@@ -155,17 +155,15 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
         </button>
         
         <form 
-          action="https://formsubmit.co/m.caddeo@easytaskdesign.com" 
+          action="https://formspree.io/f/YOUR_FORM_ID" 
           method="POST"
           encType="multipart/form-data"
           onSubmit={handleSubmit}
           className="space-y-5"
         >
-          {/* FormSubmit Configuration */}
+          {/* Formspree Configuration */}
           <input type="hidden" name="_subject" value={isCollabForm ? "New Collaboration Request from Narr-AI" : "New Audiobook Request from Narr-AI"} />
-          <input type="hidden" name="_captcha" value="true" />
-          <input type="hidden" name="_template" value="table" />
-          <input type="hidden" name="_autoresponse" value={isCollabForm ? "Thank you! We received your collaboration request and will contact you soon." : "Thank you! We received your request and will process it within 1-3 days."} />
+          <input type="hidden" name="form_type" value={isCollabForm ? "collaboration" : "audiobook_request"} />
           {email && <input type="hidden" name="user_email" value={email} />}
           
           <div>
