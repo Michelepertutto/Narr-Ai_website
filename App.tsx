@@ -28,13 +28,6 @@ export interface Video {
 
 const videos: Video[] = [
   { 
-    id: 0, 
-    seed: 'hero-background', 
-    title: 'AI videos for Audiobooks', 
-    videoUrl: `${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`
-  },
-  { 
     id: 1, 
     seed: 'video1', 
     title: 'Dungeon Crawler Carl', 

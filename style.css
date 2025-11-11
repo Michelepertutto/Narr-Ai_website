@@ -70,7 +70,7 @@ p, body {
 }
 
 .hero-cta-container {
-  margin-top: clamp(20px, 4vh, 40px);
+  margin-top: clamp(15px, 3vh, 30px);
 }
 
 .hero-cta-primary {
