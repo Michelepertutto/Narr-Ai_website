@@ -272,7 +272,7 @@ const App = () => {
                   videos={filteredVideos}
                   onVideoSelect={handleVideoSelect}
                   isExpanded={isExpanded}
-                  isMobileLandscape={true}
+                  isMobileLandscape={false}
                 />
               </div>
             </div>
@@ -341,7 +341,35 @@ const App = () => {
               </div>
             </div>
             
-            <div className="mobile-slider-container">
+            <div 
+              className="mobile-slider-container"
+              style={{
+                position: isSliderFullscreen ? 'fixed' : 'relative',
+                top: isSliderFullscreen ? 0 : 'auto',
+                left: isSliderFullscreen ? 0 : 'auto',
+                right: isSliderFullscreen ? 0 : 'auto',
+                bottom: isSliderFullscreen ? 0 : 'auto',
+                zIndex: isSliderFullscreen ? 10000 : 'auto',
+                backgroundColor: isSliderFullscreen ? 'white' : 'transparent',
+                height: isSliderFullscreen ? '100vh' : '210px',
+                padding: isSliderFullscreen ? '20px' : '0 0 0 20px',
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+            >
+              {isSliderFullscreen && (
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold">Videos</h2>
+                  <button 
+                    onClick={handleFullscreenToggle}
+                    className="w-10 h-10 bg-gray-300 rounded-xl flex items-center justify-center"
+                  >
+                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              )}
               <VideoCarousel
                 videos={filteredVideos}
                 onVideoSelect={handleVideoSelect}
@@ -351,12 +379,12 @@ const App = () => {
             </div>
             
             <div className="mobile-footer">
-              <p className="text-gray-600 text-center text-sm">
-                If you appreciate our work, <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">make a donation</a>.
-              </p>
-              <a href="/privacy-policy.html" className="text-gray-600 hover:text-[#17d4ff] transition-colors text-sm text-center block mt-2">
+              <a href="/privacy-policy.html" className="text-gray-600 hover:text-[#17d4ff] transition-colors text-sm whitespace-nowrap">
                 Privacy Policy
               </a>
+              <p className="text-gray-600 text-sm">
+                If you appreciate our work, <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">make a donation</a>.
+              </p>
             </div>
           </div>
         )}
