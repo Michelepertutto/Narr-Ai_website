@@ -72,17 +72,17 @@ const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
             </button>
           </div>
         </div>
-        <div className="absolute bottom-0 right-0 hero-watch-container">
-          <button 
-            onClick={onWatchClick}
-            className="hero-watch-button"
-          >
-            <span>Watch</span>
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          </button>
-        </div>
+      </div>
+      <div className="absolute bottom-[15px] right-[15px] sm:right-[15px]">
+        <button 
+          onClick={onWatchClick}
+          className="hero-watch-button"
+        >
+          <span>Watch</span>
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </button>
       </div>
 
       <RequestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email="" />
