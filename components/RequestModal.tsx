@@ -11,13 +11,14 @@ interface RequestModalProps {
   isOpen: boolean;
   onClose: () => void;
   email?: string;
+  isCollabForm?: boolean;
 }
 
 const RATE_LIMIT_KEY = 'narr_ai_form_submissions';
 const MAX_SUBMISSIONS = 3;
 const RATE_LIMIT_WINDOW = 3600000;
 
-const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
+const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: RequestModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
@@ -161,56 +162,90 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
           className="space-y-5"
         >
           {/* FormSubmit Configuration */}
-          <input type="hidden" name="_subject" value="New Audiobook Request from Narr-AI" />
+          <input type="hidden" name="_subject" value={isCollabForm ? "New Collaboration Request from Narr-AI" : "New Audiobook Request from Narr-AI"} />
           <input type="hidden" name="_captcha" value="true" />
           <input type="hidden" name="_template" value="table" />
-          <input type="hidden" name="_autoresponse" value="Thank you! We received your request and will process it within 1-3 days." />
+          <input type="hidden" name="_autoresponse" value={isCollabForm ? "Thank you! We received your collaboration request and will contact you soon." : "Thank you! We received your request and will process it within 1-3 days."} />
           {email && <input type="hidden" name="user_email" value={email} />}
           
           <div>
-            <label htmlFor="audiobook-link" className="block text-sm font-medium text-gray-400 mb-2 text-left">
-              Audiobook Link
+            <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2 text-left">
+              Name *
             </label>
             <input 
-              type="url" 
-              id="audiobook-link"
-              name="link"
-              maxLength={500}
-              placeholder="https://example.com/audiobook" 
+              type="text" 
+              id="name"
+              name="name"
+              required
+              maxLength={100}
+              placeholder="Your name" 
               className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition"
             />
           </div>
           
-          <div className="relative py-1">
-            <div className="absolute inset-0 flex items-center" aria-hidden="true">
-              <div className="w-full border-t border-gray-700"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-3 bg-[#182131] text-gray-500">or</span>
-            </div>
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2 text-left">
+              Email *
+            </label>
+            <input 
+              type="email" 
+              id="email"
+              name="email"
+              required
+              maxLength={100}
+              placeholder="your.email@example.com" 
+              className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition"
+            />
           </div>
           
-          <div>
-            <label htmlFor="file" className="block text-sm font-medium text-gray-400 mb-2 text-left">
-              Upload Audiobook File (max 10MB)
-            </label>
-            <input
-              type="file"
-              id="file"
-              name="file"
-              onChange={handleFileChange}
-              className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-700 transition"
-            />
-            {selectedFile && (
-              <div className="mt-2 text-gray-500 text-sm">
-                Selected file: {selectedFile.name}
+          {!isCollabForm && (
+            <>
+              <div>
+                <label htmlFor="audiobook-link" className="block text-sm font-medium text-gray-400 mb-2 text-left">
+                  Audiobook Link
+                </label>
+                <input 
+                  type="url" 
+                  id="audiobook-link"
+                  name="link"
+                  maxLength={500}
+                  placeholder="https://example.com/audiobook" 
+                  className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition"
+                />
               </div>
-            )}
-          </div>
+              
+              <div className="relative py-1">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                  <div className="w-full border-t border-gray-700"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-3 bg-[#182131] text-gray-500">or</span>
+                </div>
+              </div>
+              
+              <div>
+                <label htmlFor="file" className="block text-sm font-medium text-gray-400 mb-2 text-left">
+                  Upload Audiobook File (max 10MB)
+                </label>
+                <input
+                  type="file"
+                  id="file"
+                  name="file"
+                  onChange={handleFileChange}
+                  className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-700 transition"
+                />
+                {selectedFile && (
+                  <div className="mt-2 text-gray-500 text-sm">
+                    Selected file: {selectedFile.name}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
           
           <div>
             <label htmlFor="story-part" className="block text-sm font-medium text-gray-400 mb-2 text-left">
-              Which part of the story for the video? *
+              {isCollabForm ? 'Tell us about your collaboration idea *' : 'Which part of the story for the video? *'}
             </label>
             <textarea 
               id="story-part"
@@ -218,7 +253,7 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
               rows={3}
               required
               maxLength={2000}
-              placeholder="e.g., Chapter 5, when the hero finds the sword..."
+              placeholder={isCollabForm ? 'Describe your collaboration proposal...' : 'e.g., Chapter 5, when the hero finds the sword...'}
               className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition resize-none"
             ></textarea>
           </div>
@@ -229,7 +264,7 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
               disabled={isSubmitting}
               className="w-full bg-[#17d5ff] hover:bg-[#15bde6] text-black font-semibold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-[#17d5ff]/50 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Submitting...' : 'Submit Request'}
+              {isSubmitting ? 'Submitting...' : (isCollabForm ? 'Send Collaboration Request' : 'Submit Request')}
             </button>
             
             <button 

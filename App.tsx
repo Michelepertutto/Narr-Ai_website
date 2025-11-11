@@ -94,8 +94,8 @@ const App = () => {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 900);
   const [isHorizontalMenuOpen, setIsHorizontalMenuOpen] = useState(false);
   const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
-  const [isMounted, setIsMounted] = useState(false);
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+  const [isCollabModalOpen, setIsCollabModalOpen] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstallable, setIsInstallable] = useState(false);
 
@@ -135,9 +135,6 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    // Set mounted state after initial render
-    setIsMounted(true);
-    
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 900);
       setIsLandscape(window.innerWidth > window.innerHeight);
@@ -234,14 +231,6 @@ const App = () => {
         video.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
-  // Prevent rendering until component is mounted and state is initialized
-  if (!isMounted) {
-    return (
-      <div className="bg-white min-h-screen w-screen flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -295,11 +284,11 @@ const App = () => {
               </div>
               
               <div 
-                className="flex flex-col self-start transition-all duration-300" 
+                className="flex flex-col transition-all duration-300" 
                 style={{ 
                   width: isSliderFullscreen ? '100vw' : '280px', 
                   flexShrink: 0, 
-                  height: 'calc(100% + 20px)',
+                  height: '100%',
                   position: isSliderFullscreen ? 'fixed' : 'relative',
                   top: isSliderFullscreen ? 0 : 'auto',
                   right: isSliderFullscreen ? 0 : 'auto',
@@ -308,14 +297,14 @@ const App = () => {
                   padding: isSliderFullscreen ? '20px' : '0'
                 }}
               >
-                <div className="flex items-center gap-3 header-padding">
+                <div className="flex items-center gap-3 px-5 pt-3">
                   <div className="flex-1 flex items-center gap-2 bg-gray-300 rounded-xl px-3 py-2">
                     <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                     <input 
                       type="text" 
-                      placeholder="Search" 
+                      placeholder="Type here the name of the book" 
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-600" 
@@ -353,7 +342,7 @@ const App = () => {
                 
                 <button 
                   onClick={() => setIsHorizontalMenuOpen(!isHorizontalMenuOpen)}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex flex-col gap-1.5"
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex flex-col gap-1.5 mr-5"
                   aria-label="Toggle menu"
                 >
                   <div className="w-6 h-0.5 bg-[#17d4ff] rounded"></div>
@@ -384,7 +373,7 @@ const App = () => {
                   </svg>
                   <input 
                     type="text" 
-                    placeholder="Search" 
+                    placeholder="Type here the name of the book" 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-600"
@@ -471,21 +460,22 @@ const App = () => {
             className="fixed inset-0 bg-black/50 z-[9998]"
             onClick={() => setIsHorizontalMenuOpen(false)}
           />
-          <div className="fixed top-[70px] left-4 right-4 bg-black rounded-3xl shadow-2xl overflow-hidden z-[9999]" style={{ padding: '40px 30px 30px 30px' }}>
+          <div className="fixed top-[70px] left-4 right-4 bg-white rounded-3xl shadow-2xl overflow-hidden z-[9999]" style={{ padding: '40px 30px 30px 30px' }}>
             <button
               onClick={() => setIsHorizontalMenuOpen(false)}
-              className="absolute top-6 right-6 p-0 hover:opacity-80 transition-opacity"
+              className="absolute p-5 hover:opacity-80 transition-opacity"
+              style={{ top: 0, right: 0 }}
               aria-label="Close menu"
             >
-              <svg className="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 
             <div className="flex flex-col gap-4 mb-10">
               <button
                 onClick={() => { setIsComingNextOpen(true); setIsHorizontalMenuOpen(false); }}
-                className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-3"
+                className="menu-item flex justify-between items-center text-left text-gray-900 hover:text-[#17d4ff] transition-colors py-3"
               >
                 <span className="text-2xl font-semibold">Coming Next</span>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -493,8 +483,8 @@ const App = () => {
                 </svg>
               </button>
               <button
-                onClick={() => { setIsCollabOpen(true); setIsHorizontalMenuOpen(false); }}
-                className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-3"
+                onClick={() => { setIsCollabModalOpen(true); setIsHorizontalMenuOpen(false); }}
+                className="menu-item flex justify-between items-center text-left text-gray-900 hover:text-[#17d4ff] transition-colors py-3"
               >
                 <span className="text-2xl font-semibold">Collab</span>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -503,7 +493,7 @@ const App = () => {
               </button>
               <button
                 onClick={() => window.open('https://buymeacoffee.com/narrai', '_blank')}
-                className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-3"
+                className="menu-item flex justify-between items-center text-left text-gray-900 hover:text-[#17d4ff] transition-colors py-3"
               >
                 <span className="text-2xl font-semibold">Donations</span>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -524,7 +514,7 @@ const App = () => {
               </button>
               <button
                 onClick={handleInstallClick}
-                className="flex-1 bg-transparent border-2 border-white text-white hover:bg-white/10 font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-2"
+                className="flex-1 bg-transparent border-2 border-gray-900 text-gray-900 hover:bg-gray-100 font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-2"
               >
                 <span>{isInstallable ? 'Download App' : 'Download App'}</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -537,6 +527,7 @@ const App = () => {
       )}
       
       <ComingNextModal isOpen={isComingNextOpen} onClose={() => setIsComingNextOpen(false)} />
+      <RequestModal isOpen={isCollabModalOpen} onClose={() => setIsCollabModalOpen(false)} email="" isCollabForm={true} />
       {isCollabOpen && (
         <div 
           className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[10001] p-4 sm:p-6" 

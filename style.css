@@ -224,8 +224,8 @@ p, body {
 /* Mobile Responsive Adjustments */
 @media (max-width: 899px) {
   .hero-title {
-    font-size: 30px;
-    line-height: 36px;
+    font-size: 48px;
+    line-height: 50px;
   }
   
   .mobile-hero-container {
