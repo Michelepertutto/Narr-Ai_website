@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import VideoCarousel, { SliderProgressBar } from './components/VideoCarousel';
+import VideoCarousel from './components/VideoCarousel';
 import FullscreenPlayer from './components/FullscreenPlayer';
 import ComingNextModal from './components/ComingNextModal';
 import CookieBanner from './components/CookieBanner';
@@ -85,15 +85,10 @@ const videos: Video[] = [
 
 const App = () => {
   const [selectedVideoIndex, setSelectedVideoIndex] = useState<number | null>(null);
-  const [isMobileLandscape, setIsMobileLandscape] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 900);
-  const [isPortrait, setIsPortrait] = useState(window.matchMedia("(orientation: portrait)").matches);
   const [isComingNextOpen, setIsComingNextOpen] = useState(false);
   const [isCollabOpen, setIsCollabOpen] = useState(false);
   const [isSliderFullscreen, setIsSliderFullscreen] = useState(false);
-  const [currentSliderIndex, setCurrentSliderIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isHorizontalMenuOpen, setIsHorizontalMenuOpen] = useState(false);
   const [videoStats, setVideoStats] = useState<Record<number, { views: number; likes: number }>>({});
 
   useEffect(() => {
@@ -131,30 +126,6 @@ const App = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const landscapeQuery = window.matchMedia("(orientation: landscape) and (max-height: 500px)");
-    const handleOrientationChange = (e: MediaQueryListEvent) => setIsMobileLandscape(e.matches);
-    landscapeQuery.addEventListener('change', handleOrientationChange);
-    setIsMobileLandscape(landscapeQuery.matches);
-
-    const portraitQuery = window.matchMedia("(orientation: portrait)");
-    const handlePortraitChange = (e: MediaQueryListEvent) => setIsPortrait(e.matches);
-    portraitQuery.addEventListener('change', handlePortraitChange);
-    setIsPortrait(portraitQuery.matches);
-
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 900);
-      setIsPortrait(window.matchMedia("(orientation: portrait)").matches);
-    };
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      landscapeQuery.removeEventListener('change', handleOrientationChange);
-      portraitQuery.removeEventListener('change', handlePortraitChange);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   const flattenedVideos = videos.flatMap(video => 
     video.episodes && video.episodes.length > 0 ? video.episodes : [video]
   );
@@ -175,18 +146,17 @@ const App = () => {
 
     await supabase.rpc('increment_views', { video_id_param: videoId });
   };
-  
+
   const handleClosePlayer = () => setSelectedVideoIndex(null);
-  
+
   const handleFullscreenToggle = () => {
     setIsSliderFullscreen(!isSliderFullscreen);
   };
-  
+
   const handleWatchClick = () => {
     setSelectedVideoIndex(0);
   };
-  
-  const useHorizontalLayout = !isPortrait;
+
   const isExpanded = selectedVideoIndex !== null;
 
   const filteredVideos = searchQuery.trim() === '' 
@@ -197,262 +167,109 @@ const App = () => {
 
   return (
     <>
-      {useHorizontalLayout ? (
-        <div className="bg-white h-screen w-screen flex flex-col overflow-hidden">
-              
-              <div className={`flex-1 flex ${isDesktop ? 'flex-row' : 'flex-col'} overflow-hidden main-content-padding`}>
-                <div className="flex-1 flex flex-col hero-margin-right">
-                  <div className="relative z-[10000] bg-white header-padding mb-[15px]">
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-2">
-                        <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
-                        <h1 className="logo text-2xl tracking-tighter text-black">Narr-Ai</h1>
-                      </div>
-                      
-                      {isDesktop ? (
-                        <div className="flex items-center gap-4">
-                          <button onClick={() => setIsCollabOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
-                            Collab
-                          </button>
-                          <button onClick={() => setIsComingNextOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
-                            Coming Next
-                          </button>
-                        </div>
-                      ) : (
-                        <button 
-                          onClick={() => setIsHorizontalMenuOpen(!isHorizontalMenuOpen)}
-                          className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex flex-col gap-1.5"
-                          aria-label="Toggle menu"
-                        >
-                          <div className="w-6 h-0.5 bg-[#17d4ff] rounded"></div>
-                          <div className="w-6 h-0.5 bg-[#17d4ff] rounded"></div>
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <div className={`relative flex-1 rounded-3xl shadow-2xl overflow-hidden ${!isDesktop ? 'hero-max-height' : ''}`}>
-                    <video
-                      src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
-                      poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
-                      className="absolute top-0 left-0 w-full h-full object-cover"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                    />
-                    <div className="absolute inset-0 bg-black/50 rounded-3xl pointer-events-none"></div>
-                    <div className="relative h-full flex items-center justify-center">
-                      <Hero isMobileLandscape={false} onWatchClick={handleWatchClick} />
-                    </div>
-                  </div>
-                  {isDesktop && (
-                    <div className="relative flex items-center justify-center text-sm footer-padding-top">
-                      <a href="/privacy-policy.html" className="absolute left-0 text-gray-600 hover:text-[#17d4ff] transition-colors">
-                        Privacy Policy
-                      </a>
-                      <p className="text-gray-600 text-center">
-                        If you appreciate our work, <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">make a donation</a>.
-                      </p>
-                    </div>
-                  )}
+      <div className="bg-white h-screen w-screen flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-row overflow-hidden main-content-padding">
+          <div className="flex-1 flex flex-col hero-margin-right">
+            <div className="relative z-[10000] bg-white header-padding mb-[15px]">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
+                  <h1 className="logo text-2xl tracking-tighter text-black">Narr-Ai</h1>
                 </div>
                 
-                {useHorizontalLayout && isDesktop && (
-                  <div 
-                    className="flex flex-col self-start -mt-[5px] transition-all duration-300" 
-                    style={{ 
-                      width: isSliderFullscreen ? '100vw' : '280px', 
-                      flexShrink: 0, 
-                      height: 'calc(100% + 20px)',
-                      position: isSliderFullscreen ? 'fixed' : 'relative',
-                      top: isSliderFullscreen ? 0 : 'auto',
-                      right: isSliderFullscreen ? 0 : 'auto',
-                      zIndex: isSliderFullscreen ? 10000 : 'auto',
-                      backgroundColor: isSliderFullscreen ? 'white' : 'transparent',
-                      padding: isSliderFullscreen ? '20px' : '0'
-                    }}
-                  >
-                    <div className="flex items-center gap-3 mb-[15px] header-padding">
-                      <div className="flex-1 flex items-center gap-2 bg-gray-300 rounded-xl px-3 py-2">
-                        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        <input 
-                          type="text" 
-                          placeholder="Search" 
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-600" 
-                        />
-                      </div>
-                      <button onClick={handleFullscreenToggle} className="w-10 h-10 bg-gray-300 rounded-xl flex items-center justify-center flex-shrink-0">
-                        {isSliderFullscreen ? (
-                          <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        ) : (
-                          <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                          </svg>
-                        )}
-                      </button>
-                    </div>
-                    <VideoCarousel
-                      videos={filteredVideos}
-                      onVideoSelect={handleVideoSelect}
-                      isExpanded={isExpanded}
-                      isMobileLandscape={true}
-                      onSlideChange={setCurrentSliderIndex}
-                    />
-                  </div>
-                )}
-                
-                {useHorizontalLayout && !isDesktop && (
-                  <div className="w-full px-5 pb-5">
-                    <div className="flex items-center gap-3 mb-[15px] mt-[10px]">
-                      <div className="flex-1 flex items-center gap-3 bg-gray-300 rounded-xl px-4 py-2">
-                        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        <input 
-                          type="text" 
-                          placeholder="Search" 
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-600"
-                        />
-                      </div>
-                      <button 
-                        onClick={handleFullscreenToggle}
-                        className="w-12 h-12 bg-gray-300 rounded-xl flex items-center justify-center"
-                      >
-                        {isSliderFullscreen ? (
-                          <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        ) : (
-                          <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                          </svg>
-                        )}
-                      </button>
-                    </div>
-                    <div style={{ height: '200px' }}>
-                      <VideoCarousel
-                        videos={filteredVideos}
-                        onVideoSelect={handleVideoSelect}
-                        isExpanded={isExpanded}
-                        isMobileLandscape={false}
-                        onSlideChange={setCurrentSliderIndex}
-                      />
-                    </div>
-                    <div className="mt-3">
-                      <SliderProgressBar currentIndex={currentSliderIndex} totalItems={filteredVideos.length} />
-                    </div>
-                    <div className="relative flex items-center justify-center text-sm mt-4">
-                      <a href="/privacy-policy.html" className="absolute left-0 text-gray-600 hover:text-[#17d4ff] transition-colors">
-                        Privacy Policy
-                      </a>
-                      <p className="text-gray-600 text-center">
-                        If you appreciate our work, <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">make a donation</a>.
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : (
-            <div className="bg-white min-h-screen w-screen flex flex-col">
-              <div className="flex items-center portrait-header-padding">
-                <Header 
-                  onCollabClick={() => setIsCollabOpen(true)} 
-                  onComingNextClick={() => setIsComingNextOpen(true)}
-                  onFullscreenClick={handleFullscreenToggle}
-                />
-              </div>
-              
-              <div className="relative rounded-3xl shadow-2xl overflow-hidden portrait-hero-container">
-                <video
-                  src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
-                  poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
-                  className="absolute top-0 left-0 w-full h-full object-cover"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                />
-                <div className="absolute inset-0 bg-black/50 rounded-3xl pointer-events-none"></div>
-                <div className="relative h-full flex items-center justify-center">
-                  <Hero isMobileLandscape={false} onWatchClick={handleWatchClick} />
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3 portrait-search-margin">
-                <div className="flex-1 flex items-center gap-3 bg-gray-300 rounded-xl px-4 py-3">
-                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                  <input 
-                    type="text" 
-                    placeholder="Search" 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-600"
-                  />
-                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </div>
-                <button 
-                  onClick={handleFullscreenToggle}
-                  className="w-12 h-12 bg-gray-300 rounded-xl flex items-center justify-center"
-                >
-                  {isSliderFullscreen ? (
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  ) : (
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                    </svg>
-                  )}
-                </button>
-              </div>
-              
-              <div className="w-full portrait-slider-container">
-                <VideoCarousel
-                  videos={filteredVideos}
-                  onVideoSelect={handleVideoSelect}
-                  isExpanded={isExpanded}
-                  isMobileLandscape={false}
-                  onSlideChange={setCurrentSliderIndex}
-                />
-              </div>
-              <div className="portrait-progress-margin">
-                <SliderProgressBar currentIndex={currentSliderIndex} totalItems={filteredVideos.length} />
-              </div>
-              
-              <div className="flex flex-col items-center gap-2 text-sm text-gray-600 portrait-footer-padding">
-                <p className="text-center">
-                  If you appreciate our work, <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">make a donation</a>.
-                </p>
-                <div className="flex justify-between w-full">
-                  <a href="/privacy-policy.html" className="hover:text-[#17d4ff] transition-colors">
-                    Privacy Policy
-                  </a>
+                <div className="flex items-center gap-4">
+                  <button onClick={() => setIsCollabOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
+                    Collab
+                  </button>
+                  <button onClick={() => setIsComingNextOpen(true)} className="menu-item text-black hover:text-[#17d4ff] transition-colors">
+                    Coming Next
+                  </button>
                 </div>
               </div>
             </div>
-          )}
-
-          {selectedVideoIndex !== null && (
-            <FullscreenPlayer
-              videos={flattenedVideos}
-              startIndex={selectedVideoIndex}
-              onClose={handleClosePlayer}
+            
+            <div className="relative flex-1 rounded-3xl shadow-2xl overflow-hidden">
+              <video
+                src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
+                poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
+                className="absolute top-0 left-0 w-full h-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+              <div className="absolute inset-0 bg-black/50 rounded-3xl pointer-events-none"></div>
+              <div className="relative h-full flex items-center justify-center">
+                <Hero isMobileLandscape={false} onWatchClick={handleWatchClick} />
+              </div>
+            </div>
+            
+            <div className="relative flex items-center justify-center text-sm footer-padding-top">
+              <a href="/privacy-policy.html" className="absolute left-0 text-gray-600 hover:text-[#17d4ff] transition-colors">
+                Privacy Policy
+              </a>
+              <p className="text-gray-600 text-center">
+                If you appreciate our work, <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">make a donation</a>.
+              </p>
+            </div>
+          </div>
+          
+          <div 
+            className="flex flex-col self-start -mt-[5px] transition-all duration-300" 
+            style={{ 
+              width: isSliderFullscreen ? '100vw' : '280px', 
+              flexShrink: 0, 
+              height: 'calc(100% + 20px)',
+              position: isSliderFullscreen ? 'fixed' : 'relative',
+              top: isSliderFullscreen ? 0 : 'auto',
+              right: isSliderFullscreen ? 0 : 'auto',
+              zIndex: isSliderFullscreen ? 10000 : 'auto',
+              backgroundColor: isSliderFullscreen ? 'white' : 'transparent',
+              padding: isSliderFullscreen ? '20px' : '0'
+            }}
+          >
+            <div className="flex items-center gap-3 mb-[15px] header-padding">
+              <div className="flex-1 flex items-center gap-2 bg-gray-300 rounded-xl px-3 py-2">
+                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input 
+                  type="text" 
+                  placeholder="Search" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-600" 
+                />
+              </div>
+              <button onClick={handleFullscreenToggle} className="w-10 h-10 bg-gray-300 rounded-xl flex items-center justify-center flex-shrink-0">
+                {isSliderFullscreen ? (
+                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                  </svg>
+                )}
+              </button>
+            </div>
+            <VideoCarousel
+              videos={filteredVideos}
+              onVideoSelect={handleVideoSelect}
+              isExpanded={isExpanded}
+              isMobileLandscape={true}
             />
-          )}
+          </div>
+        </div>
+      </div>
+
+      {selectedVideoIndex !== null && (
+        <FullscreenPlayer
+          videos={flattenedVideos}
+          startIndex={selectedVideoIndex}
+          onClose={handleClosePlayer}
+        />
+      )}
       
       <ComingNextModal isOpen={isComingNextOpen} onClose={() => setIsComingNextOpen(false)} />
       {isCollabOpen && (
@@ -516,47 +333,6 @@ const App = () => {
             </div>
           </div>
         </div>
-      )}
-      
-      {isHorizontalMenuOpen && (
-        <>
-          <div 
-            className="fixed inset-0 bg-black/50 z-[9998]"
-            onClick={() => setIsHorizontalMenuOpen(false)}
-          />
-          <div className="fixed top-[70px] left-4 right-4 bg-black rounded-3xl shadow-2xl overflow-hidden z-[9999]" style={{ padding: '30px' }}>
-            <button
-              onClick={() => setIsHorizontalMenuOpen(false)}
-              className="absolute top-4 right-4 p-2 hover:bg-gray-800 rounded-lg transition-colors"
-              aria-label="Close menu"
-            >
-              <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            <div className="flex flex-col gap-6 mb-8">
-              <button
-                onClick={() => { setIsComingNextOpen(true); setIsHorizontalMenuOpen(false); }}
-                className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-2"
-              >
-                <span className="text-xl">Coming Next</span>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-              <button
-                onClick={() => { setIsCollabOpen(true); setIsHorizontalMenuOpen(false); }}
-                className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-2"
-              >
-                <span className="text-xl">Collab</span>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </>
       )}
       
       <CookieBanner />

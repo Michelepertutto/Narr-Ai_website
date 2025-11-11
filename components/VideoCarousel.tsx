@@ -342,26 +342,11 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
           </div>
         </div>
       ))}
-      {isMobileLandscape && (
-        <SliderProgressBar currentIndex={hoveredIndex || 0} totalItems={videos.length} />
-      )}
       <style>{`
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         .grabbing { cursor: grabbing; user-select: none; }
       `}</style>
-    </div>
-  );
-};
-
-export const SliderProgressBar = ({ currentIndex, totalItems }: { currentIndex: number; totalItems: number }) => {
-  const progress = ((currentIndex + 1) / totalItems) * 100;
-  return (
-    <div className="w-full h-1 bg-gray-300 rounded-full overflow-hidden">
-      <div 
-        className="h-full bg-[#17d4ff] transition-all duration-300"
-        style={{ width: `${progress}%` }}
-      />
     </div>
   );
 };

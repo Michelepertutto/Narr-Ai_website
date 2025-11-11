@@ -158,57 +158,9 @@ p, body {
   top: 70px;
 }
 
-/* Vertical/Portrait Layout Styles */
-.portrait-header-padding {
-  padding: 15px 20px;
-}
-
-.portrait-hero-container {
-  margin: 15px 20px 15px 20px;
-  min-height: clamp(400px, 65vh, 580px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.portrait-search-margin {
-  margin: 0 20px 15px 20px;
-}
-
-.portrait-slider-container {
-  margin-bottom: 10px;
-  padding-left: 20px;
-  height: 200px;
-}
-
-.portrait-progress-margin {
-  margin: 0 20px 20px 20px;
-}
-
-.portrait-footer-padding {
-  padding: 20px;
-  margin-top: auto;
-  position: relative;
-}
-
-.portrait-footer-padding a[href="/privacy-policy.html"] {
-  position: absolute;
-  left: 20px;
-  bottom: 20px;
-}
-
-.portrait-footer-padding p {
-  padding-left: 0;
-  padding-bottom: 40px;
-}
-
 /* Carousel and Slider Styles */
 .carousel-gap {
   gap: 15px;
-}
-
-.slider-height-200 {
-  height: 200px;
 }
 
 .slider-fullscreen-container {
@@ -233,9 +185,4 @@ p, body {
 /* Menu Modal Styles */
 .menu-modal-container {
   padding: 30px;
-}
-
-/* Progress Bar Dynamic Width */
-.progress-bar-fill {
-  transition: width 0.3s ease;
 }
