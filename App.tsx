@@ -292,12 +292,11 @@ const App = () => {
                   aria-label="Toggle menu"
                 >
                   <div className="w-6 h-0.5 bg-[#17d4ff] rounded"></div>
-                  <div className="w-6 h-0.5 bg-[#17d4ff] rounded"></div>
                 </button>
               </div>
             </div>
             
-            <div className="relative rounded-3xl shadow-2xl overflow-hidden mobile-hero-container">
+            <div className="relative rounded-3xl shadow-2xl overflow-hidden">
               <video
                 src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
                 poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
@@ -308,9 +307,7 @@ const App = () => {
                 playsInline
               />
               <div className="absolute inset-0 bg-black/50 rounded-3xl pointer-events-none"></div>
-              <div className="relative h-full flex items-center justify-center">
-                <Hero isMobileLandscape={false} onWatchClick={handleWatchClick} />
-              </div>
+              <Hero isMobileLandscape={false} onWatchClick={handleWatchClick} />
             </div>
             
             <div className="mobile-search-container">
