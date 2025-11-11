@@ -262,6 +262,16 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
           
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
           
+          {video.bookCoverUrl && (
+            <div className="absolute top-2 left-2 w-12 h-16 rounded overflow-hidden shadow-lg z-10">
+              <img 
+                src={video.bookCoverUrl} 
+                alt={`${video.title} cover`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+          
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
               <PlayIcon className="w-6 h-6 text-white" />
