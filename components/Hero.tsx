@@ -45,14 +45,14 @@ const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
       <div className="absolute inset-0 flex flex-col p-[15px]">
         <div className="flex-1 flex flex-col justify-center items-center">
           <div className="w-full hero-container">
-            <h1 className="hero-title text-white w-full mx-auto text-center">
+            <h1 className="hero-title text-white text-center">
               AI Videos for Audiobooks
             </h1>
-            <div className="hero-subtitle text-white w-full mx-auto text-center">
+            <div className="hero-subtitle text-white text-center">
               <p>Have an audiobook you're dying to see? Send us a request!</p>
               <p>We'll add it to our queue and your video will be uploaded in 1 to 3 days.</p>
             </div>
-            <div className="hero-cta-container flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full mx-auto">
+            <div className="hero-cta-container flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="hero-cta-primary cta-button"
