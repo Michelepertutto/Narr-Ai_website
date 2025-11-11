@@ -176,7 +176,7 @@ p, body {
 }
 
 .portrait-hero-container {
-  margin: 0 20px 20px 20px;
+  margin: 15px 20px 15px 20px;
   min-height: 580px;
   display: flex;
   align-items: center;
@@ -184,7 +184,7 @@ p, body {
 }
 
 .portrait-search-margin {
-  margin: 0 20px 20px 20px;
+  margin: 0 20px 15px 20px;
 }
 
 .portrait-slider-container {
@@ -212,4 +212,42 @@ p, body {
 .portrait-footer-padding p {
   padding-left: 0;
   padding-bottom: 40px;
+}
+
+/* Carousel and Slider Styles */
+.carousel-gap {
+  gap: 15px;
+}
+
+.slider-height-200 {
+  height: 200px;
+}
+
+.slider-fullscreen-container {
+  width: 100vw;
+  flex-shrink: 0;
+  height: calc(100% + 20px);
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10000;
+  background-color: white;
+  padding: 20px;
+}
+
+.slider-normal-container {
+  width: 280px;
+  flex-shrink: 0;
+  height: calc(100% + 20px);
+  position: relative;
+}
+
+/* Menu Modal Styles */
+.menu-modal-container {
+  padding: 30px;
+}
+
+/* Progress Bar Dynamic Width */
+.progress-bar-fill {
+  transition: width 0.3s ease;
 }

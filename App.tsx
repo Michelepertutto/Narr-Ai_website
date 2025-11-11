@@ -216,7 +216,7 @@ const App = () => {
               <div className="flex-1 flex flex-row overflow-hidden main-content-padding">
                 <div className="flex-1 flex flex-col hero-margin-right">
                   {/* Header sopra l'hero */}
-                  <div className="relative z-[10000] bg-white header-padding mb-6">
+                  <div className="relative z-[10000] bg-white header-padding mb-[15px]">
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center gap-2">
                         <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
@@ -318,7 +318,54 @@ const App = () => {
                       onVideoSelect={handleVideoSelect}
                       isExpanded={isExpanded}
                       isMobileLandscape={true}
+                      onSlideChange={setCurrentSliderIndex}
                     />
+                  </div>
+                )}
+                
+                {/* Slider below hero for landscape non-desktop (767-900px) */}
+                {useHorizontalLayout && !isDesktop && (
+                  <div className="w-full px-5 pb-5">
+                    <div className="flex items-center gap-3 mb-[15px]">
+                      <div className="flex-1 flex items-center gap-3 bg-gray-300 rounded-xl px-4 py-3">
+                        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <input 
+                          type="text" 
+                          placeholder="Search" 
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-600"
+                        />
+                      </div>
+                      <button 
+                        onClick={handleFullscreenToggle}
+                        className="w-12 h-12 bg-gray-300 rounded-xl flex items-center justify-center"
+                      >
+                        {isSliderFullscreen ? (
+                          <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        ) : (
+                          <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
+                    <div style={{ height: '200px' }}>
+                      <VideoCarousel
+                        videos={filteredVideos}
+                        onVideoSelect={handleVideoSelect}
+                        isExpanded={isExpanded}
+                        isMobileLandscape={false}
+                        onSlideChange={setCurrentSliderIndex}
+                      />
+                    </div>
+                    <div className="mt-3">
+                      <SliderProgressBar currentIndex={currentSliderIndex} totalItems={filteredVideos.length} />
+                    </div>
                   </div>
                 )}
               </div>
@@ -387,6 +434,7 @@ const App = () => {
                   onVideoSelect={handleVideoSelect}
                   isExpanded={isExpanded}
                   isMobileLandscape={false}
+                  onSlideChange={setCurrentSliderIndex}
                 />
               </div>
               <div className="portrait-progress-margin">

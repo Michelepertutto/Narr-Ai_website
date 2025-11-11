@@ -7,9 +7,10 @@ interface VideoCarouselProps {
   onVideoSelect: (index: number) => void;
   isExpanded: boolean;
   isMobileLandscape: boolean;
+  onSlideChange?: (index: number) => void;
 }
 
-const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }: VideoCarouselProps) => {
+const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, onSlideChange }: VideoCarouselProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const autoScrollIntervalRef = useRef<number | null>(null);
   const hasInteractedRef = useRef(false);
@@ -59,6 +60,37 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
       return newLiked;
     });
   };
+
+  // Track scroll position and update current index using Intersection Observer
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer || !onSlideChange) return;
+
+    const options = {
+      root: scrollContainer,
+      rootMargin: '0px',
+      threshold: 0.5 // Trigger when 50% of item is visible
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+          const children = Array.from(scrollContainer.children) as HTMLElement[];
+          const index = children.indexOf(entry.target as HTMLElement);
+          if (index !== -1) {
+            onSlideChange(index);
+          }
+        }
+      });
+    }, options);
+
+    // Observe all video items
+    Array.from(scrollContainer.children).forEach((child) => {
+      observer.observe(child as Element);
+    });
+
+    return () => observer.disconnect();
+  }, [onSlideChange, videos.length]);
 
   // Auto-scroll logic - smooth continuous scrolling with direction reversal
   useEffect(() => {
@@ -186,18 +218,15 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape }:
       return `w-[160px] h-[180px]`;
     }
   };
-  
-  const containerClasses = isMobileLandscape
-    ? 'h-full flex flex-col overflow-y-auto scrollbar-hide snap-y snap-mandatory touch-pan-y'
-    : 'h-full flex overflow-x-auto scrollbar-hide snap-x snap-mandatory cursor-grab touch-pan-x';
 
-  const gapStyle = { gap: '15px' };
+  const containerClasses = isMobileLandscape
+    ? 'h-full flex flex-col overflow-y-auto scrollbar-hide snap-y snap-mandatory touch-pan-y carousel-gap'
+    : 'h-full flex overflow-x-auto scrollbar-hide snap-x snap-mandatory cursor-grab touch-pan-x carousel-gap';
 
   return (
     <div
       ref={scrollContainerRef}
       className={`carousel ${containerClasses}`}
-      style={gapStyle}
       onMouseDown={onMouseDown}
       onTouchStart={onTouchStart}
       onMouseEnter={handleInteraction}
