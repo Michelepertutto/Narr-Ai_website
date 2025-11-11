@@ -263,7 +263,7 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
           
           {video.bookCoverUrl && (
-            <div className="absolute top-2 left-2 w-12 h-16 rounded overflow-hidden shadow-lg z-10">
+            <div className="absolute top-4 left-4 w-12 h-16 rounded overflow-hidden shadow-lg z-10">
               <img 
                 src={video.bookCoverUrl} 
                 alt={`${video.title} cover`}

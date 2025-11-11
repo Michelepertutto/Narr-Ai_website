@@ -304,7 +304,7 @@ const App = () => {
                     </svg>
                     <input 
                       type="text" 
-                      placeholder="Type here the name of the book" 
+                      placeholder="Search for titles." 
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-600" 
@@ -373,7 +373,7 @@ const App = () => {
                   </svg>
                   <input 
                     type="text" 
-                    placeholder="Type here the name of the book" 
+                    placeholder="Search for titles." 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-600"

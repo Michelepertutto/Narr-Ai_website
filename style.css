@@ -166,7 +166,7 @@ p, body {
 .slider-fullscreen-container {
   width: 100vw;
   flex-shrink: 0;
-  height: calc(100% + 20px);
+  height: 100%;
   position: fixed;
   top: 0;
   right: 0;
@@ -178,7 +178,7 @@ p, body {
 .slider-normal-container {
   width: 280px;
   flex-shrink: 0;
-  height: calc(100% + 20px);
+  height: 100%;
   position: relative;
 }
 
