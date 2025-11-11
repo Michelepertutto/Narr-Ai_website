@@ -139,16 +139,16 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[10001] p-4"
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[10001] p-4 sm:p-6"
       onClick={onClose}
     >
       <div 
-        className="bg-[#182131] text-gray-300 rounded-2xl shadow-2xl p-8 max-w-2xl w-full relative"
+        className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10 w-full max-w-2xl relative animate-fadeIn"
         onClick={(e) => e.stopPropagation()}
       >
         <button 
           onClick={onClose} 
-          className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700/50"
+          className="absolute top-6 right-6 text-gray-400 hover:text-gray-700 transition-colors p-2 rounded-full hover:bg-gray-100"
           aria-label="Close modal"
         >
           <CloseIcon />
@@ -169,7 +169,7 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
           {email && <input type="hidden" name="user_email" value={email} />}
           
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2 text-left">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 text-left">
               Name *
             </label>
             <input 
@@ -179,12 +179,12 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
               required
               maxLength={100}
               placeholder="Your name" 
-              className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition"
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-[#17d4ff] focus:border-[#17d4ff] transition"
             />
           </div>
           
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2 text-left">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 text-left">
               Email *
             </label>
             <input 
@@ -194,14 +194,14 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
               required
               maxLength={100}
               placeholder="your.email@example.com" 
-              className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition"
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-[#17d4ff] focus:border-[#17d4ff] transition"
             />
           </div>
           
           {!isCollabForm && (
             <>
               <div>
-                <label htmlFor="audiobook-link" className="block text-sm font-medium text-gray-400 mb-2 text-left">
+                <label htmlFor="audiobook-link" className="block text-sm font-medium text-gray-700 mb-2 text-left">
                   Audiobook Link
                 </label>
                 <input 
@@ -210,21 +210,21 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
                   name="link"
                   maxLength={500}
                   placeholder="https://example.com/audiobook" 
-                  className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition"
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-[#17d4ff] focus:border-[#17d4ff] transition"
                 />
               </div>
               
               <div className="relative py-1">
                 <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                  <div className="w-full border-t border-gray-700"></div>
+                  <div className="w-full border-t border-gray-300"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-3 bg-[#182131] text-gray-500">or</span>
+                  <span className="px-3 bg-white text-gray-500">or</span>
                 </div>
               </div>
               
               <div>
-                <label htmlFor="file" className="block text-sm font-medium text-gray-400 mb-2 text-left">
+                <label htmlFor="file" className="block text-sm font-medium text-gray-700 mb-2 text-left">
                   Upload Audiobook File (max 10MB)
                 </label>
                 <input
@@ -232,10 +232,10 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
                   id="file"
                   name="file"
                   onChange={handleFileChange}
-                  className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-700 transition"
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#17d4ff] file:text-black hover:file:bg-[#15bde6] transition"
                 />
                 {selectedFile && (
-                  <div className="mt-2 text-gray-500 text-sm">
+                  <div className="mt-2 text-gray-600 text-sm">
                     Selected file: {selectedFile.name}
                   </div>
                 )}
@@ -244,7 +244,7 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
           )}
           
           <div>
-            <label htmlFor="story-part" className="block text-sm font-medium text-gray-400 mb-2 text-left">
+            <label htmlFor="story-part" className="block text-sm font-medium text-gray-700 mb-2 text-left">
               {isCollabForm ? 'Tell us about your collaboration idea *' : 'Which part of the story for the video? *'}
             </label>
             <textarea 
@@ -254,7 +254,7 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
               required
               maxLength={2000}
               placeholder={isCollabForm ? 'Describe your collaboration proposal...' : 'e.g., Chapter 5, when the hero finds the sword...'}
-              className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition resize-none"
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-[#17d4ff] focus:border-[#17d4ff] transition resize-none"
             ></textarea>
           </div>
           
@@ -270,7 +270,7 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
             <button 
               type="button"
               onClick={handleDonateClick}
-              className="w-full text-center text-sm text-gray-400 hover:text-white transition-colors"
+              className="w-full text-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
             >
               Please support us with a donation
             </button>
