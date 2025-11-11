@@ -236,3 +236,52 @@ p, body {
     padding: 8px 12px;
   }
 }
+
+/* Landscape mode adjustments for small screens */
+@media (max-height: 600px) and (orientation: landscape) {
+  .hero-title {
+    font-size: 28px !important;
+    line-height: 32px !important;
+  }
+  
+  .hero-subtitle {
+    font-size: 14px;
+    line-height: 20px;
+    margin-top: 12px;
+  }
+  
+  .hero-cta-container {
+    margin-top: 15px;
+  }
+  
+  .hero-cta-primary,
+  .hero-cta-secondary {
+    font-size: 14px;
+    padding: 0.5rem 1.25rem;
+  }
+}
+
+/* Extra small landscape screens */
+@media (max-height: 450px) and (orientation: landscape) {
+  .hero-title {
+    font-size: 22px !important;
+    line-height: 26px !important;
+  }
+  
+  .hero-subtitle {
+    font-size: 12px;
+    line-height: 18px;
+    margin-top: 8px;
+  }
+  
+  .hero-cta-container {
+    margin-top: 10px;
+    gap: 0.5rem !important;
+  }
+  
+  .hero-cta-primary,
+  .hero-cta-secondary {
+    font-size: 12px;
+    padding: 0.4rem 1rem;
+  }
+}

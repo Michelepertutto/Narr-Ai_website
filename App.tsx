@@ -92,6 +92,7 @@ const App = () => {
   const [videoStats, setVideoStats] = useState<Record<number, { views: number; likes: number }>>({});
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 900);
   const [isHorizontalMenuOpen, setIsHorizontalMenuOpen] = useState(false);
+  const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -131,11 +132,14 @@ const App = () => {
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 900);
+      setIsLandscape(window.innerWidth > window.innerHeight);
     };
     window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
     };
   }, []);
 
@@ -171,6 +175,10 @@ const App = () => {
   };
 
   const isExpanded = selectedVideoIndex !== null;
+  
+  // Determine if we should use vertical slider layout
+  // Desktop (>= 900px) OR landscape mode (width > height) for any device
+  const shouldUseVerticalSlider = isDesktop || isLandscape;
 
   const filteredVideos = searchQuery.trim() === '' 
     ? videos 
@@ -181,7 +189,7 @@ const App = () => {
   return (
     <>
       <div className="bg-white min-h-screen w-screen flex flex-col overflow-hidden">
-        {isDesktop ? (
+        {shouldUseVerticalSlider ? (
           <div className="h-screen flex flex-col overflow-hidden">
             <div className="flex-1 flex flex-row overflow-hidden main-content-padding">
               <div className="flex-1 flex flex-col hero-margin-right">
@@ -215,7 +223,7 @@ const App = () => {
                   />
                   <div className="absolute inset-0 bg-black/50 rounded-3xl pointer-events-none"></div>
                   <div className="relative h-full flex items-center justify-center">
-                    <Hero isMobileLandscape={false} onWatchClick={handleWatchClick} />
+                    <Hero isMobileLandscape={shouldUseVerticalSlider && !isDesktop} onWatchClick={handleWatchClick} />
                   </div>
                 </div>
                 
@@ -272,7 +280,7 @@ const App = () => {
                   videos={filteredVideos}
                   onVideoSelect={handleVideoSelect}
                   isExpanded={isExpanded}
-                  isMobileLandscape={false}
+                  isMobileLandscape={true}
                 />
               </div>
             </div>
