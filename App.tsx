@@ -207,7 +207,7 @@ const App = () => {
       {useHorizontalLayout ? (
         <div className="bg-white h-screen w-screen flex flex-col overflow-hidden">
               
-              <div className="flex-1 flex flex-row overflow-hidden main-content-padding">
+              <div className={`flex-1 flex ${isDesktop ? 'flex-row' : 'flex-col'} overflow-hidden main-content-padding`}>
                 <div className="flex-1 flex flex-col hero-margin-right">
                   <div className="relative z-[10000] bg-white header-padding mb-[15px]">
                     <div className="flex items-center justify-between gap-4">
