@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CloseIcon } from './icons/CloseIcon';
+
+declare global {
+  interface Window {
+    grecaptcha: any;
+  }
+}
 
 interface RequestModalProps {
   isOpen: boolean;
@@ -7,17 +13,116 @@ interface RequestModalProps {
   email?: string;
 }
 
+const RATE_LIMIT_KEY = 'narr_ai_form_submissions';
+const MAX_SUBMISSIONS = 3;
+const RATE_LIMIT_WINDOW = 3600000;
+
 const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && !recaptchaLoaded) {
+      const script = document.createElement('script');
+      script.src = 'https://www.google.com/recaptcha/api.js?render=6LfKsQgsAAAAAD4oABkCCGhU-_G8JCo385Pg_bQ9';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => setRecaptchaLoaded(true);
+      document.head.appendChild(script);
+    }
+  }, [isOpen, recaptchaLoaded]);
 
   const handleDonateClick = () => {
     window.open('https://buymeacoffee.com/narrai', '_blank', 'noopener,noreferrer');
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const checkRateLimit = (): boolean => {
+    try {
+      const stored = localStorage.getItem(RATE_LIMIT_KEY);
+      if (!stored) return true;
+      
+      const submissions: number[] = JSON.parse(stored);
+      const now = Date.now();
+      const recentSubmissions = submissions.filter(time => now - time < RATE_LIMIT_WINDOW);
+      
+      if (recentSubmissions.length >= MAX_SUBMISSIONS) {
+        const oldestSubmission = Math.min(...recentSubmissions);
+        const timeUntilReset = Math.ceil((RATE_LIMIT_WINDOW - (now - oldestSubmission)) / 60000);
+        alert(`Too many submissions. Please try again in ${timeUntilReset} minutes.`);
+        return false;
+      }
+      
+      recentSubmissions.push(now);
+      localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(recentSubmissions));
+      return true;
+    } catch (e) {
+      return true;
+    }
+  };
+
+  const sanitizeInput = (input: string): string => {
+    return input
+      .replace(/[<>"']/g, '')
+      .trim()
+      .slice(0, 1000);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    if (!checkRateLimit()) {
+      return;
+    }
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const link = formData.get('link') as string;
+    const message = formData.get('message') as string;
+
+    if (link && link.length > 500) {
+      alert('Link is too long');
+      return;
+    }
+
+    if (message && message.length > 2000) {
+      alert('Message is too long');
+      return;
+    }
+
+    if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
+      alert('File size must be less than 10MB');
+      return;
+    }
+
     setIsSubmitting(true);
+
+    try {
+      if (window.grecaptcha && recaptchaLoaded) {
+        await window.grecaptcha.ready(async () => {
+          const token = await window.grecaptcha.execute('6LfKsQgsAAAAAD4oABkCCGhU-_G8JCo385Pg_bQ9', { action: 'submit' });
+          const hiddenInput = document.createElement('input');
+          hiddenInput.type = 'hidden';
+          hiddenInput.name = 'g-recaptcha-response';
+          hiddenInput.value = token;
+          form.appendChild(hiddenInput);
+          form.submit();
+        });
+      } else {
+        form.submit();
+      }
+
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setSelectedFile(null);
+        alert('Request submitted successfully!');
+        onClose();
+      }, 1000);
+    } catch (error) {
+      console.error('Submission error:', error);
+      setIsSubmitting(false);
+      alert('Error submitting request. Please try again.');
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +130,8 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
       setSelectedFile(e.target.files[0]);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div 
@@ -55,8 +162,9 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
         >
           {/* FormSubmit Configuration */}
           <input type="hidden" name="_subject" value="New Audiobook Request from Narr-AI" />
-          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_captcha" value="true" />
           <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_autoresponse" value="Thank you! We received your request and will process it within 1-3 days." />
           {email && <input type="hidden" name="user_email" value={email} />}
           
           <div>
@@ -67,6 +175,7 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
               type="url" 
               id="audiobook-link"
               name="link"
+              maxLength={500}
               placeholder="https://example.com/audiobook" 
               className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition"
             />
@@ -108,6 +217,7 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
               name="message"
               rows={3}
               required
+              maxLength={2000}
               placeholder="e.g., Chapter 5, when the hero finds the sword..."
               className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition resize-none"
             ></textarea>

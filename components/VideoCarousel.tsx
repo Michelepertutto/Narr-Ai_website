@@ -242,7 +242,6 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
           onMouseLeave={() => setHoveredIndex(null)}
           className={`relative snap-center flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group ${getItemClasses(index)}`}
         >
-          {/* Video Thumbnail */}
           <video
             ref={(el) => (videoRefs.current[index] = el)}
             src={video.videoUrl}
@@ -261,24 +260,19 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
             }}
           />
           
-          {/* Overlay gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
           
-          {/* Play icon overlay */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
               <PlayIcon className="w-6 h-6 text-white" />
             </div>
           </div>
           
-          {/* Video title */}
           <div className="absolute bottom-0 left-0 right-0 p-3">
             <h3 className="text-white text-sm font-medium line-clamp-2">{video.title}</h3>
           </div>
 
-          {/* Top Right Action Buttons */}
           <div className="absolute top-3 right-3 flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-            {/* Audible link button */}
             {video.audibleUrl && (
               <a
                 href={video.audibleUrl}
@@ -293,7 +287,6 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
                 </svg>
               </a>
             )}
-            {/* Download button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -313,16 +306,13 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
             </button>
           </div>
 
-          {/* Bottom Right Counters: Views and Likes */}
           <div className="absolute bottom-3 right-3 flex flex-col items-end gap-1 z-10">
-            {/* Views */}
             <div className="flex items-center gap-1">
               <span className="text-white text-xs font-medium">{video.views || 0}</span>
               <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
               </svg>
             </div>
-            {/* Likes */}
             <button
               onClick={(e) => handleLike(video.id, e)}
               className="flex items-center gap-1 transition-transform hover:scale-110"
@@ -346,17 +336,14 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
         <SliderProgressBar currentIndex={hoveredIndex || 0} totalItems={videos.length} />
       )}
       <style>{`
-        /* Hide scrollbar but keep scrollability */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
         .grabbing { cursor: grabbing; user-select: none; }
       `}</style>
     </div>
   );
 };
 
-// Progress bar component for mobile slider
 export const SliderProgressBar = ({ currentIndex, totalItems }: { currentIndex: number; totalItems: number }) => {
   const progress = ((currentIndex + 1) / totalItems) * 100;
   return (
