@@ -186,3 +186,28 @@ p, body {
 .menu-modal-container {
   padding: 30px;
 }
+
+/* Mobile/Tablet Vertical Layout Styles */
+.mobile-header-padding {
+  padding: 15px 20px;
+}
+
+.mobile-hero-container {
+  margin: 15px 20px;
+  min-height: clamp(300px, 50vh, 500px);
+}
+
+.mobile-search-container {
+  margin: 15px 20px;
+}
+
+.mobile-slider-container {
+  height: 200px;
+  padding-left: 20px;
+  margin-bottom: 15px;
+}
+
+.mobile-footer {
+  padding: 20px;
+  margin-top: auto;
+}
