@@ -246,14 +246,16 @@ const App = () => {
                       <Hero isMobileLandscape={false} onWatchClick={handleWatchClick} />
                     </div>
                   </div>
-                  <div className="relative flex items-center justify-center text-sm footer-padding-top">
-                    <a href="/privacy-policy.html" className="absolute left-0 text-gray-600 hover:text-[#17d4ff] transition-colors">
-                      Privacy Policy
-                    </a>
-                    <p className="text-gray-600 text-center">
-                      If you appreciate our work, <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">make a donation</a>.
-                    </p>
-                  </div>
+                  {isDesktop && (
+                    <div className="relative flex items-center justify-center text-sm footer-padding-top">
+                      <a href="/privacy-policy.html" className="absolute left-0 text-gray-600 hover:text-[#17d4ff] transition-colors">
+                        Privacy Policy
+                      </a>
+                      <p className="text-gray-600 text-center">
+                        If you appreciate our work, <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">make a donation</a>.
+                      </p>
+                    </div>
+                  )}
                 </div>
                 
                 {useHorizontalLayout && isDesktop && (
@@ -309,7 +311,7 @@ const App = () => {
                 {useHorizontalLayout && !isDesktop && (
                   <div className="w-full px-5 pb-5">
                     <div className="flex items-center gap-3 mb-[15px]">
-                      <div className="flex-1 flex items-center gap-3 bg-gray-300 rounded-xl px-4 py-3">
+                      <div className="flex-1 flex items-center gap-3 bg-gray-300 rounded-xl px-4 py-2">
                         <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
@@ -347,6 +349,14 @@ const App = () => {
                     </div>
                     <div className="mt-3">
                       <SliderProgressBar currentIndex={currentSliderIndex} totalItems={filteredVideos.length} />
+                    </div>
+                    <div className="relative flex items-center justify-center text-sm mt-4">
+                      <a href="/privacy-policy.html" className="absolute left-0 text-gray-600 hover:text-[#17d4ff] transition-colors">
+                        Privacy Policy
+                      </a>
+                      <p className="text-gray-600 text-center">
+                        If you appreciate our work, <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">make a donation</a>.
+                      </p>
                     </div>
                   </div>
                 )}
@@ -508,7 +518,7 @@ const App = () => {
         </div>
       )}
       
-      {isHorizontalMenuOpen && useHorizontalLayout && (
+      {isHorizontalMenuOpen && (
         <>
           <div 
             className="fixed inset-0 bg-black/50 z-[9998]"
