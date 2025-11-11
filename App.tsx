@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import VideoCarousel from './components/VideoCarousel';
 import FullscreenPlayer from './components/FullscreenPlayer';
 import ComingNextModal from './components/ComingNextModal';
+import RequestModal from './components/RequestModal';
 import CookieBanner from './components/CookieBanner';
 import { createClient } from '@supabase/supabase-js';
 
@@ -93,6 +94,10 @@ const App = () => {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 900);
   const [isHorizontalMenuOpen, setIsHorizontalMenuOpen] = useState(false);
   const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
+  const [isMounted, setIsMounted] = useState(false);
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -130,10 +135,17 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    // Set mounted state after initial render
+    setIsMounted(true);
+    
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 900);
       setIsLandscape(window.innerWidth > window.innerHeight);
     };
+    
+    // Call once on mount to ensure correct initial state
+    handleResize();
+    
     window.addEventListener('resize', handleResize);
     window.addEventListener('orientationchange', handleResize);
 
@@ -142,6 +154,30 @@ const App = () => {
       window.removeEventListener('orientationchange', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) {
+      alert('App is already installed or installation is not available on this device.');
+      return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    }
+    setDeferredPrompt(null);
+    setIsInstallable(false);
+  };
 
   const flattenedVideos = videos.flatMap(video => 
     video.episodes && video.episodes.length > 0 ? video.episodes : [video]
@@ -180,11 +216,32 @@ const App = () => {
   // Desktop (>= 900px) OR landscape mode (width > height) for any device
   const shouldUseVerticalSlider = isDesktop || isLandscape;
 
+  // Merge videoStats into videos
+  const videosWithStats = videos.map(video => ({
+    ...video,
+    views: videoStats[video.id]?.views || video.views || 0,
+    likes: videoStats[video.id]?.likes || video.likes || 0,
+    episodes: video.episodes?.map(ep => ({
+      ...ep,
+      views: videoStats[ep.id]?.views || ep.views || 0,
+      likes: videoStats[ep.id]?.likes || ep.likes || 0
+    }))
+  }));
+
   const filteredVideos = searchQuery.trim() === '' 
-    ? videos 
-    : videos.filter(video => 
+    ? videosWithStats 
+    : videosWithStats.filter(video => 
         video.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
+
+  // Prevent rendering until component is mounted and state is initialized
+  if (!isMounted) {
+    return (
+      <div className="bg-white min-h-screen w-screen flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -238,7 +295,7 @@ const App = () => {
               </div>
               
               <div 
-                className="flex flex-col self-start -mt-[5px] transition-all duration-300" 
+                className="flex flex-col self-start transition-all duration-300" 
                 style={{ 
                   width: isSliderFullscreen ? '100vw' : '280px', 
                   flexShrink: 0, 
@@ -299,6 +356,7 @@ const App = () => {
                   className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex flex-col gap-1.5"
                   aria-label="Toggle menu"
                 >
+                  <div className="w-6 h-0.5 bg-[#17d4ff] rounded"></div>
                   <div className="w-6 h-0.5 bg-[#17d4ff] rounded"></div>
                 </button>
               </div>
@@ -371,6 +429,7 @@ const App = () => {
                   <button 
                     onClick={handleFullscreenToggle}
                     className="w-10 h-10 bg-gray-300 rounded-xl flex items-center justify-center"
+                    aria-label="Close fullscreen"
                   >
                     <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -412,34 +471,64 @@ const App = () => {
             className="fixed inset-0 bg-black/50 z-[9998]"
             onClick={() => setIsHorizontalMenuOpen(false)}
           />
-          <div className="fixed top-[70px] left-4 right-4 bg-black rounded-3xl shadow-2xl overflow-hidden z-[9999]" style={{ padding: '30px' }}>
+          <div className="fixed top-[70px] left-4 right-4 bg-black rounded-3xl shadow-2xl overflow-hidden z-[9999]" style={{ padding: '40px 30px 30px 30px' }}>
             <button
               onClick={() => setIsHorizontalMenuOpen(false)}
-              className="absolute top-4 right-4 p-2 hover:bg-gray-800 rounded-lg transition-colors"
+              className="absolute top-6 right-6 p-0 hover:opacity-80 transition-opacity"
               aria-label="Close menu"
             >
-              <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+              <svg className="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 
-            <div className="flex flex-col gap-6 mb-8">
+            <div className="flex flex-col gap-4 mb-10">
               <button
                 onClick={() => { setIsComingNextOpen(true); setIsHorizontalMenuOpen(false); }}
-                className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-2"
+                className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-3"
               >
-                <span className="text-xl">Coming Next</span>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span className="text-2xl font-semibold">Coming Next</span>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
               <button
                 onClick={() => { setIsCollabOpen(true); setIsHorizontalMenuOpen(false); }}
-                className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-2"
+                className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-3"
               >
-                <span className="text-xl">Collab</span>
+                <span className="text-2xl font-semibold">Collab</span>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+              <button
+                onClick={() => window.open('https://buymeacoffee.com/narrai', '_blank')}
+                className="menu-item flex justify-between items-center text-left text-white hover:text-[#17d4ff] transition-colors py-3"
+              >
+                <span className="text-2xl font-semibold">Donations</span>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch">
+              <button
+                onClick={() => { setIsRequestModalOpen(true); setIsHorizontalMenuOpen(false); }}
+                className="flex-1 bg-[#17d4ff] hover:bg-[#15bde6] text-black font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-2"
+              >
+                <span>Start for free</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+              <button
+                onClick={handleInstallClick}
+                className="flex-1 bg-transparent border-2 border-white text-white hover:bg-white/10 font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-2"
+              >
+                <span>{isInstallable ? 'Download App' : 'Download App'}</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
               </button>
             </div>
@@ -511,6 +600,7 @@ const App = () => {
         </div>
       )}
       
+      <RequestModal isOpen={isRequestModalOpen} onClose={() => setIsRequestModalOpen(false)} email="" />
       <CookieBanner />
     </>
   );
