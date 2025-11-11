@@ -265,7 +265,7 @@ const App = () => {
                 
                 {useHorizontalLayout && isDesktop && (
                   <div 
-                    className="flex flex-col transition-all duration-300" 
+                    className="flex flex-col self-start -mt-[5px] transition-all duration-300" 
                     style={{ 
                       width: isSliderFullscreen ? '100vw' : '280px', 
                       flexShrink: 0, 
