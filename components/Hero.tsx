@@ -42,7 +42,7 @@ const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
 
   return (
     <>
-      <div className="absolute inset-0 flex flex-col p-4 sm:p-6 md:p-8">
+      <div className="absolute inset-0 flex flex-col p-[15px]">
         <div className="flex-1 flex flex-col justify-center items-center">
           <div className="w-full max-w-4xl hero-container">
             <h1 className="hero-title text-white w-full mx-auto text-center">
