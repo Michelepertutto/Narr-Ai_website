@@ -44,7 +44,9 @@ p, body {
 
 /* Hero Component Styles */
 .hero-container {
+  width: 100%;
   max-width: min(900px, 90%);
+  margin: 0 auto;
 }
 
 .hero-title {
