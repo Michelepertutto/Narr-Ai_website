@@ -213,7 +213,7 @@ const App = () => {
       {useHorizontalLayout ? (
         <div className="bg-white h-screen w-screen flex flex-col overflow-hidden">
               
-              <div className="flex-1 flex flex-row overflow-hidden main-content-padding">
+              <div className="flex-1 flex flex-row items-start overflow-hidden main-content-padding">
                 <div className="flex-1 flex flex-col hero-margin-right">
                   {/* Header sopra l'hero */}
                   <div className="relative z-[10000] bg-white header-padding mb-[15px]">

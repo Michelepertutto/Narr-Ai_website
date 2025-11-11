@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
 import { CloseIcon } from './icons/CloseIcon';
-import { createClient } from '@supabase/supabase-js';
-
-const SUPABASE_URL = 'https://mufyetrgczbtfxlnjmnv.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11ZnlldHJnY3pidGZ4bG5qbW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MDg2NzMsImV4cCI6MjA3ODM4NDY3M30.msrxDqgRA16nr6pgmouTf4qP5ei7iXeoTP3TUvaoxKM';
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 interface RequestModalProps {
   isOpen: boolean;
@@ -14,89 +8,21 @@ interface RequestModalProps {
 }
 
 const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [uploadProgress, setUploadProgress] = useState(0);
-
-  if (!isOpen) {
-    return null;
-  }
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleDonateClick = () => {
     window.open('https://buymeacoffee.com/narrai', '_blank', 'noopener,noreferrer');
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus('submitting');
-    setUploadProgress(0);
+    setIsSubmitting(true);
+  };
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    
-    const link = formData.get('link') as string;
-    const message = formData.get('message') as string;
-    const file = formData.get('file') as File;
-
-    try {
-      let fileUrl = null;
-      
-      if (file && file.size > 0) {
-        if (file.size > 10 * 1024 * 1024) {
-          alert('File size must be less than 10MB');
-          setStatus('error');
-          return;
-        }
-        
-        setUploadProgress(30);
-        const fileName = `${Date.now()}_${file.name}`;
-        
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('audiobook-requests')
-          .upload(fileName, file);
-
-        if (uploadError) {
-          console.error('Upload error:', uploadError);
-          setStatus('error');
-          return;
-        }
-        
-        setUploadProgress(60);
-        
-        const { data: urlData } = supabase.storage
-          .from('audiobook-requests')
-          .getPublicUrl(fileName);
-        
-        fileUrl = urlData.publicUrl;
-      }
-      
-      setUploadProgress(80);
-      
-      const { error: dbError } = await supabase
-        .from('requests')
-        .insert({
-          audiobook_link: link || null,
-          file_url: fileUrl,
-          story_part: message,
-          email: email || null,
-          created_at: new Date().toISOString()
-        });
-
-      if (dbError) {
-        console.error('Database error:', dbError);
-        setStatus('error');
-        return;
-      }
-      
-      setUploadProgress(100);
-      setStatus('success');
-      setTimeout(() => {
-        setStatus('idle');
-        setUploadProgress(0);
-        onClose();
-      }, 3000);
-    } catch (error) {
-      console.error('Error:', error);
-      setStatus('error');
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setSelectedFile(e.target.files[0]);
     }
   };
 
@@ -120,9 +46,18 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
           <CloseIcon />
         </button>
         
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Hidden email field */}
-          <input type="hidden" name="email" value={email} />
+        <form 
+          action="https://formsubmit.co/m.caddeo@easytaskdesign.com" 
+          method="POST"
+          encType="multipart/form-data"
+          onSubmit={handleSubmit}
+          className="space-y-5"
+        >
+          {/* FormSubmit Configuration */}
+          <input type="hidden" name="_subject" value="New Audiobook Request from Narr-AI" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+          {email && <input type="hidden" name="user_email" value={email} />}
           
           <div>
             <label htmlFor="audiobook-link" className="block text-sm font-medium text-gray-400 mb-2 text-left">
@@ -154,8 +89,14 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
               type="file"
               id="file"
               name="file"
+              onChange={handleFileChange}
               className="w-full px-4 py-2.5 bg-[#374151] border border-gray-600 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-700 transition"
             />
+            {selectedFile && (
+              <div className="mt-2 text-gray-500 text-sm">
+                Selected file: {selectedFile.name}
+              </div>
+            )}
           </div>
           
           <div>
@@ -173,34 +114,13 @@ const RequestModal = ({ isOpen, onClose, email = '' }: RequestModalProps) => {
           </div>
           
           <div className="pt-4 space-y-4">
-            {status === 'submitting' && uploadProgress > 0 && (
-              <div className="w-full bg-gray-700 rounded-full h-2 mb-4">
-                <div 
-                  className="bg-[#17d5ff] h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${uploadProgress}%` }}
-                ></div>
-              </div>
-            )}
-            
             <button 
               type="submit"
-              disabled={status === 'submitting'}
+              disabled={isSubmitting}
               className="w-full bg-[#17d5ff] hover:bg-[#15bde6] text-black font-semibold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-[#17d5ff]/50 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {status === 'submitting' ? `Uploading... ${uploadProgress}%` : 'Submit Request'}
+              {isSubmitting ? 'Submitting...' : 'Submit Request'}
             </button>
-            
-            {status === 'success' && (
-              <div className="p-3 bg-green-500/20 border border-green-500 rounded-lg text-green-300 text-center text-sm">
-                ✅ Request sent successfully! We'll contact you soon.
-              </div>
-            )}
-            
-            {status === 'error' && (
-              <div className="p-3 bg-red-500/20 border border-red-500 rounded-lg text-red-300 text-center text-sm">
-                ❌ Error sending request. Please try again.
-              </div>
-            )}
             
             <button 
               type="button"
