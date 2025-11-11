@@ -42,39 +42,37 @@ const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
 
   return (
     <>
-      <div className="absolute inset-0 flex flex-col p-[15px]">
-        <div className="flex-1 flex flex-col justify-center items-center">
-          <div className="w-full hero-container">
-            <h1 className="hero-title text-white text-center">
-              AI Videos for Audiobooks
-            </h1>
-            <div className="hero-subtitle text-white text-center">
-              <p>Have an audiobook you're dying to see? Send us a request!</p>
-              <p>We'll add it to our queue and your video will be uploaded in 1 to 3 days.</p>
-            </div>
-            <div className="hero-cta-container flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="hero-cta-primary cta-button"
-              >
-                <span>Start for free</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-              <button
-                onClick={handleInstallClick}
-                className="hero-cta-secondary cta-button"
-              >
-                <span>{isInstallable ? 'Install App' : 'Download App'}</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                </svg>
-              </button>
-            </div>
+      <div className="absolute inset-0 flex items-center justify-center p-[15px]">
+        <div className="w-full hero-container">
+          <h1 className="hero-title text-white text-center">
+            AI Videos for Audiobooks
+          </h1>
+          <div className="hero-subtitle text-white text-center">
+            <p>Have an audiobook you're dying to see? Send us a request!</p>
+            <p>We'll add it to our queue and your video will be uploaded in 1 to 3 days.</p>
+          </div>
+          <div className="hero-cta-container flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="hero-cta-primary cta-button"
+            >
+              <span>Start for free</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+            <button
+              onClick={handleInstallClick}
+              className="hero-cta-secondary cta-button"
+            >
+              <span>{isInstallable ? 'Install App' : 'Download App'}</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+            </button>
           </div>
         </div>
-        <div className="hero-watch-container w-full flex justify-center sm:justify-end items-end">
+        <div className="absolute bottom-0 right-0 hero-watch-container">
           <button 
             onClick={onWatchClick}
             className="hero-watch-button"
