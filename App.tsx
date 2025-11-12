@@ -360,7 +360,8 @@ const App = () => {
                 style={{ 
                   width: '280px', 
                   flexShrink: 0, 
-                  height: '100%'
+                  height: '100%',
+                  paddingTop: '5px'
                 }}
               >
                 <div className="flex items-center gap-3 px-5 pt-3">

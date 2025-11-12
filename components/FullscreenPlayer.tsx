@@ -13,6 +13,16 @@ interface FullscreenPlayerProps {
 const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps) => {
   const [currentIndex, setCurrentIndex] = useState(startIndex);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const goToNext = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % videos.length);
@@ -57,8 +67,12 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
       role="dialog"
       aria-modal="true"
     >
-      {/* Left Sidebar */}
-      <div className="w-80 bg-gray-900 flex flex-col p-6 overflow-y-auto">
+      {/* Left Sidebar - collapsible on mobile */}
+      <div className={`
+        ${isMobile ? 'fixed inset-y-0 left-0 z-30 transform transition-transform duration-300' : 'relative'}
+        ${isMobile && !isSidebarOpen ? '-translate-x-full' : 'translate-x-0'}
+        w-80 bg-gray-900 flex flex-col p-6 overflow-y-auto
+      `}>
         {/* Book Cover */}
         {currentVideo.bookCoverUrl && (
           <img 
@@ -110,6 +124,29 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
 
       {/* Right: Video Player */}
       <div className="flex-1 relative flex items-center justify-center">
+        {/* Logo - Top Left */}
+        <div className="absolute top-4 left-4 z-20">
+          <div className="flex items-center gap-2 bg-black/50 px-3 py-2 rounded-lg">
+            <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-6 h-6" />
+            <h1 className="logo text-lg tracking-tighter text-white">
+              Narr-Ai
+            </h1>
+          </div>
+        </div>
+
+        {/* Info Button - Mobile Only */}
+        {isMobile && (
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="absolute top-4 left-1/2 -translate-x-1/2 z-20 text-white/70 hover:text-white transition-colors bg-black/50 rounded-full p-3"
+            aria-label="Toggle info"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </button>
+        )}
+
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -161,16 +198,15 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
           Your browser does not support the video tag.
         </video>
 
-        {/* Logo Watermark */}
-        <div className="absolute bottom-4 left-4 z-20">
-          <div className="flex items-center gap-2 bg-black/50 px-3 py-2 rounded-lg">
-            <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-6 h-6" />
-            <h1 className="logo text-lg tracking-tighter text-white">
-              Narr-Ai
-            </h1>
-          </div>
-        </div>
       </div>
+
+      {/* Backdrop for mobile sidebar */}
+      {isMobile && isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-20"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
     </div>
   );
 };

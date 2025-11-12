@@ -204,12 +204,12 @@ p, body {
 }
 
 .mobile-hero-container {
-  margin: 5px 25px 0px 20px;
+  margin: 5px 20px 0px 20px;
   min-height: clamp(300px, 60vh, 700px);
 }
 
 .mobile-search-container {
-  margin: 5px 40px;
+  margin: 15px 40px 5px 40px;
 }
 
 .mobile-slider-container {
@@ -225,11 +225,15 @@ p, body {
 .mobile-footer {
   padding: 20px;
   margin-top: auto;
+  margin-bottom: 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
+  position: relative;
+  z-index: 10;
+  background: white;
 }
 
 /* Mobile Responsive Adjustments */
