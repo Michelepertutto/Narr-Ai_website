@@ -128,9 +128,12 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
       </div>
 
       <div className="absolute bottom-4 left-4 z-20">
-        <h1 className="text-2xl font-bold text-white tracking-tighter [text-shadow:1px_1px_3px_rgba(0,0,0,0.5)]">
-          Narr-Ai
-        </h1>
+        <div className="flex items-center gap-2">
+          <img src={`${import.meta.env.BASE_URL}Imgs/Narrai-Pictogram.png`} alt="Narr-Ai Logo" className="w-8 h-8" />
+          <h1 className="logo text-2xl tracking-tighter text-white [text-shadow:1px_1px_3px_rgba(0,0,0,0.5)]">
+            Narr-Ai
+          </h1>
+        </div>
       </div>
 
       {/* Video Player with Book Cover */}
