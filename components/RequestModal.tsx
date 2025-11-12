@@ -3,7 +3,6 @@ import { CloseIcon } from './icons/CloseIcon';
 
 declare global {
   interface Window {
-    grecaptcha: any;
   }
 }
 
@@ -21,18 +20,11 @@ const RATE_LIMIT_WINDOW = 3600000;
 const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: RequestModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
-    if (isOpen && !recaptchaLoaded) {
-      const script = document.createElement('script');
-      script.src = 'https://www.google.com/recaptcha/api.js?render=6LfKsQgsAAAAAD4oABkCCGhU-_G8JCo385Pg_bQ9';
-      script.async = true;
-      script.defer = true;
-      script.onload = () => setRecaptchaLoaded(true);
-      document.head.appendChild(script);
-    }
-  }, [isOpen, recaptchaLoaded]);
+  }, []);
 
   const handleDonateClick = () => {
     window.open('https://buymeacoffee.com/narrai', '_blank', 'noopener,noreferrer');
@@ -50,7 +42,7 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
       if (recentSubmissions.length >= MAX_SUBMISSIONS) {
         const oldestSubmission = Math.min(...recentSubmissions);
         const timeUntilReset = Math.ceil((RATE_LIMIT_WINDOW - (now - oldestSubmission)) / 60000);
-        alert(`Too many submissions. Please try again in ${timeUntilReset} minutes.`);
+        setSubmitError(`Too many submissions. Please try again in ${timeUntilReset} minutes.`);
         return false;
       }
       
@@ -72,6 +64,9 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
+    setSubmitSuccess(false);
+    setSubmitError('');
+    
     if (!checkRateLimit()) {
       return;
     }
@@ -82,47 +77,48 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
     const message = formData.get('message') as string;
 
     if (link && link.length > 500) {
-      alert('Link is too long');
+      setSubmitError('Link is too long');
       return;
     }
 
     if (message && message.length > 2000) {
-      alert('Message is too long');
+      setSubmitError('Message is too long');
       return;
     }
 
     if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
-      alert('File size must be less than 10MB');
+      setSubmitError('File size must be less than 10MB');
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      if (window.grecaptcha && recaptchaLoaded) {
-        await window.grecaptcha.ready(async () => {
-          const token = await window.grecaptcha.execute('6LfKsQgsAAAAAD4oABkCCGhU-_G8JCo385Pg_bQ9', { action: 'submit' });
-          const hiddenInput = document.createElement('input');
-          hiddenInput.type = 'hidden';
-          hiddenInput.name = 'g-recaptcha-response';
-          hiddenInput.value = token;
-          form.appendChild(hiddenInput);
-          form.submit();
-        });
-      } else {
-        form.submit();
-      }
+      const response = await fetch('https://formspree.io/f/xqagrgnr', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
 
-      setTimeout(() => {
+      if (response.ok) {
+        setSubmitSuccess(true);
         setIsSubmitting(false);
         setSelectedFile(null);
-        alert('Request submitted successfully!');
-        onClose();
-      }, 1000);
+        form.reset();
+        
+        setTimeout(() => {
+          setSubmitSuccess(false);
+          onClose();
+        }, 3000);
+      } else {
+        throw new Error('Submission failed');
+      }
     } catch (error) {
       console.error('Submission error:', error);
       setIsSubmitting(false);
-      alert('Error submitting request. Please try again.');
+      setSubmitError('Error submitting request. Please try again.');
     }
   };
 
@@ -155,9 +151,6 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
         </button>
         
         <form 
-          action="https://formspree.io/f/xqagrgnr" 
-          method="POST"
-          encType="multipart/form-data"
           onSubmit={handleSubmit}
           className="space-y-5"
         >
@@ -246,6 +239,19 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
             >
               {isSubmitting ? 'Submitting...' : (isCollabForm ? 'Send Collaboration Request' : 'Submit Request')}
             </button>
+            
+            {submitSuccess && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                <p className="text-green-700 font-medium">✓ Request submitted successfully!</p>
+                <p className="text-green-600 text-sm mt-1">We'll get back to you soon.</p>
+              </div>
+            )}
+            
+            {submitError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+                <p className="text-red-700 font-medium">{submitError}</p>
+              </div>
+            )}
             
             <button 
               type="button"

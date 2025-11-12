@@ -657,12 +657,15 @@ const App = () => {
               <p className="text-sm text-gray-700 text-center leading-relaxed mb-4">
                 Interested in collaborating? Get in touch!
               </p>
-              <a 
-                href="mailto:contact@narr-ai.online" 
+              <button 
+                onClick={() => {
+                  setIsCollabOpen(false);
+                  setIsCollabModalOpen(true);
+                }}
                 className="block w-full text-center px-6 py-3 bg-[#17d4ff] hover:bg-[#15bde6] text-black font-semibold rounded-xl transition-colors"
               >
-                Contact Us
-              </a>
+                Request Video
+              </button>
             </div>
           </div>
         </div>

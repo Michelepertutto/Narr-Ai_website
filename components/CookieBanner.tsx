@@ -14,6 +14,8 @@ const CookieBanner: React.FC = () => {
     if (!consent) {
       setTimeout(() => setIsVisible(true), 1000);
     }
+    // DEBUG: To reset cookie consent and see the banner again, run in console:
+    // localStorage.removeItem('cookieConsent'); location.reload();
   }, []);
 
   const handleAcceptAll = () => {

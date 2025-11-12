@@ -48,8 +48,8 @@ const Hero = ({ isMobileLandscape = false, onWatchClick }: HeroProps) => {
             AI Videos for Audiobooks
           </h1>
           <div className="hero-subtitle text-white text-center">
-            <p className="md:whitespace-normal whitespace-nowrap">Have an audiobook you're dying to see come to life? Send us a request!</p>
-            <p className="md:whitespace-normal whitespace-nowrap">We'll add it to our queue and your AI video will be uploaded in 1 to 3 days.</p>
+            <p>Have an audiobook you're dying to see come to life? Send us a request!</p>
+            <p>We'll add it to our queue and your AI video will be uploaded in 1 to 3 days.</p>
           </div>
           <div className="hero-cta-container flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
             <button
