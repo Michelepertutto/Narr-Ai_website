@@ -88,7 +88,6 @@ const App = () => {
   const [selectedVideoIndex, setSelectedVideoIndex] = useState<number | null>(null);
   const [isComingNextOpen, setIsComingNextOpen] = useState(false);
   const [isCollabOpen, setIsCollabOpen] = useState(false);
-  const [isSliderFullscreen, setIsSliderFullscreen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [videoStats, setVideoStats] = useState<Record<number, { views: number; likes: number }>>({});
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 900);
@@ -266,10 +265,6 @@ const App = () => {
 
   const handleClosePlayer = () => setSelectedVideoIndex(null);
 
-  const handleFullscreenToggle = () => {
-    setIsSliderFullscreen(!isSliderFullscreen);
-  };
-
   const handleWatchClick = () => {
     setSelectedVideoIndex(0);
   };
@@ -363,15 +358,9 @@ const App = () => {
               <div 
                 className="flex flex-col transition-all duration-300" 
                 style={{ 
-                  width: isSliderFullscreen ? '100vw' : '280px', 
+                  width: '280px', 
                   flexShrink: 0, 
-                  height: '100%',
-                  position: isSliderFullscreen ? 'fixed' : 'relative',
-                  top: isSliderFullscreen ? 0 : 'auto',
-                  right: isSliderFullscreen ? 0 : 'auto',
-                  zIndex: isSliderFullscreen ? 10000 : 'auto',
-                  backgroundColor: isSliderFullscreen ? 'white' : 'transparent',
-                  padding: isSliderFullscreen ? '20px' : '0'
+                  height: '100%'
                 }}
               >
                 <div className="flex items-center gap-3 px-5 pt-3">
@@ -387,17 +376,6 @@ const App = () => {
                       className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-600" 
                     />
                   </div>
-                  <button onClick={handleFullscreenToggle} className="w-10 h-10 bg-gray-300 rounded-xl flex items-center justify-center flex-shrink-0">
-                    {isSliderFullscreen ? (
-                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    ) : (
-                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                      </svg>
-                    )}
-                  </button>
                 </div>
                 <VideoCarousel
                   videos={filteredVideos}
@@ -456,53 +434,18 @@ const App = () => {
                     className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-600"
                   />
                 </div>
-                <button 
-                  onClick={handleFullscreenToggle}
-                  className="w-12 h-12 bg-gray-300 rounded-xl flex items-center justify-center flex-shrink-0"
-                >
-                  {isSliderFullscreen ? (
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  ) : (
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                    </svg>
-                  )}
-                </button>
               </div>
             </div>
             
             <div 
               className="mobile-slider-container"
               style={{
-                position: isSliderFullscreen ? 'fixed' : 'relative',
-                top: isSliderFullscreen ? 0 : 'auto',
-                left: isSliderFullscreen ? 0 : 'auto',
-                right: isSliderFullscreen ? 0 : 'auto',
-                bottom: isSliderFullscreen ? 0 : 'auto',
-                zIndex: isSliderFullscreen ? 10000 : 'auto',
-                backgroundColor: isSliderFullscreen ? 'white' : 'transparent',
-                height: isSliderFullscreen ? '100vh' : '210px',
-                padding: isSliderFullscreen ? '20px' : '0 0 0 20px',
+                height: '210px',
+                padding: '0 0 0 20px',
                 display: 'flex',
                 flexDirection: 'column'
               }}
             >
-              {isSliderFullscreen && (
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold">Videos</h2>
-                  <button 
-                    onClick={handleFullscreenToggle}
-                    className="w-10 h-10 bg-gray-300 rounded-xl flex items-center justify-center"
-                    aria-label="Close fullscreen"
-                  >
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-              )}
               <VideoCarousel
                 videos={filteredVideos}
                 onVideoSelect={handleVideoSelect}
