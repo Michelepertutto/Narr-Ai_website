@@ -273,7 +273,7 @@ const App = () => {
                   </div>
                 </div>
                 
-                <div className="relative flex items-center justify-center text-sm footer-padding-top">
+                <div className="relative flex items-center justify-center text-sm footer-padding-top mb-[5px]">
                   <a href="/privacy-policy.html" className="absolute left-0 text-gray-600 hover:text-[#17d4ff] transition-colors">
                     Privacy Policy
                   </a>

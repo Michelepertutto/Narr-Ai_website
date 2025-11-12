@@ -155,7 +155,7 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
         </button>
         
         <form 
-          action="https://formspree.io/f/YOUR_FORM_ID" 
+          action="https://formspree.io/f/xqagrgnr" 
           method="POST"
           encType="multipart/form-data"
           onSubmit={handleSubmit}
