@@ -249,6 +249,7 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
           <video
             ref={(el) => (videoRefs.current[index] = el)}
             src={video.videoUrl}
+            poster={video.posterUrl}
             className="w-full h-full object-cover"
             muted
             loop
@@ -278,6 +279,16 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
                 className="w-full h-full object-cover"
               />
             </div>
+          )}
+          
+          {/* Episodes Badge */}
+          {video.episodes && video.episodes.length > 1 && (
+          <div className="absolute top-2 right-2 bg-[#17d4ff] text-black px-2 py-1 rounded-md flex items-center gap-1 z-20 shadow-lg">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
+            </svg>
+            <span className="text-xs font-bold">{video.episodes.length}</span>
+          </div>
           )}
           
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">

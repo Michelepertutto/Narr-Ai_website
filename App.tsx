@@ -409,13 +409,14 @@ const App = () => {
             
             <div className="mobile-hero-container relative rounded-3xl shadow-2xl overflow-hidden">
               <video
-                src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
+                src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri-mobile.webm`}
                 poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
                 className="absolute top-0 left-0 w-full h-full object-cover"
                 autoPlay
                 loop
                 muted
                 playsInline
+                preload="metadata"
               />
               <div className="absolute inset-0 bg-black/50 rounded-3xl pointer-events-none"></div>
               <Hero isMobileLandscape={false} onWatchClick={handleWatchClick} />
@@ -547,7 +548,14 @@ const App = () => {
         </>
       )}
       
-      <ComingNextModal isOpen={isComingNextOpen} onClose={() => setIsComingNextOpen(false)} />
+      <ComingNextModal 
+        isOpen={isComingNextOpen} 
+        onClose={() => setIsComingNextOpen(false)} 
+        onRequestVideo={() => {
+          setIsComingNextOpen(false);
+          setIsRequestModalOpen(true);
+        }}
+      />
       <RequestModal isOpen={isCollabModalOpen} onClose={() => setIsCollabModalOpen(false)} email="" isCollabForm={true} />
       {isCollabOpen && (
         <div 

@@ -183,6 +183,7 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
         <video
           key={currentVideo.id}
           src={currentVideo.videoUrl}
+          poster={currentVideo.posterUrl}
           className={`w-full h-full object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           autoPlay
           playsInline
