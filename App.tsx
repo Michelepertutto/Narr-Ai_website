@@ -100,6 +100,9 @@ const App = () => {
   const [isInstallable, setIsInstallable] = useState(false);
   const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
   const [isIOS, setIsIOS] = useState(false);
+  
+  // App version for cache busting
+  const APP_VERSION = '1.0.0';
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -141,6 +144,56 @@ const App = () => {
     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     setIsIOS(isIOSDevice);
+  }, []);
+
+  // Auto-reload on new version (cache busting)
+  useEffect(() => {
+    // Check for new version every 30 seconds
+    const checkVersion = async () => {
+      try {
+        const response = await fetch('/index.html', {
+          cache: 'no-cache',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache'
+          }
+        });
+        
+        if (response.ok) {
+          const html = await response.text();
+          // Check if the HTML contains a different version or build hash
+          const currentVersion = localStorage.getItem('app-version');
+          const buildHash = html.match(/<!-- BUILD_HASH: (\w+) -->/)?.[1] || APP_VERSION;
+          
+          if (currentVersion && currentVersion !== buildHash) {
+            console.log('[App] New version detected, reloading...');
+            // Clear all caches before reload
+            if ('caches' in window) {
+              const cacheNames = await caches.keys();
+              await Promise.all(cacheNames.map(name => caches.delete(name)));
+            }
+            localStorage.setItem('app-version', buildHash);
+            // Force hard reload
+            window.location.reload();
+          } else if (!currentVersion) {
+            localStorage.setItem('app-version', buildHash);
+          }
+        }
+      } catch (error) {
+        console.error('[App] Version check failed:', error);
+      }
+    };
+
+    // Initial check after 5 seconds
+    const initialTimeout = setTimeout(checkVersion, 5000);
+    
+    // Then check every 30 seconds
+    const interval = setInterval(checkVersion, 30000);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+    };
   }, []);
 
   useEffect(() => {

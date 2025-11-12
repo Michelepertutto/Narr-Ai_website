@@ -22,7 +22,20 @@ export default defineConfig(({ mode }) => {
       }
     },
     build: {
-      outDir: 'docs'
+      outDir: 'docs',
+      // Enable cache busting with content hash in filenames
+      rollupOptions: {
+        output: {
+          // Add hash to JS files
+          entryFileNames: 'assets/[name].[hash].js',
+          chunkFileNames: 'assets/[name].[hash].js',
+          assetFileNames: 'assets/[name].[hash].[ext]'
+        }
+      },
+      // Generate manifest for asset mapping
+      manifest: true,
+      // Clear output directory before build
+      emptyOutDir: true
     }
   };
 });
