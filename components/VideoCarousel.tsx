@@ -214,8 +214,8 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
       // Vertical layout - larger cards for horizontal tablet/mobile
       return `w-full min-h-[240px]`;
     } else {
-      // Horizontal layout - mobile portrait
-      return `w-[160px] h-[180px]`;
+      // Horizontal layout - mobile portrait with 16:9 aspect ratio
+      return `w-[240px] h-[135px]`;
     }
   };
 

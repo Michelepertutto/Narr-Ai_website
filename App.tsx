@@ -274,7 +274,7 @@ const App = () => {
                 </div>
                 
                 <div className="relative flex items-center justify-center text-sm footer-padding-top mb-[5px]">
-                  <a href="/privacy-policy.html" className="absolute left-0 text-gray-600 hover:text-[#17d4ff] transition-colors">
+                  <a href="/privacy-policy.html" className="absolute left-0 text-gray-400 hover:text-gray-600 transition-colors text-xs">
                     Privacy Policy
                   </a>
                   <p className="text-gray-600 text-center">

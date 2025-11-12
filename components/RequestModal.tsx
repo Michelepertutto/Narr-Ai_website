@@ -212,31 +212,13 @@ const RequestModal = ({ isOpen, onClose, email = '', isCollabForm = false }: Req
                 />
               </div>
               
-              <div className="relative py-1">
-                <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-3 bg-white text-gray-500">or</span>
-                </div>
-              </div>
-              
-              <div>
-                <label htmlFor="file" className="block text-sm font-medium text-gray-700 mb-2 text-left">
-                  Upload Audiobook File (max 10MB)
-                </label>
-                <input
-                  type="file"
-                  id="file"
-                  name="file"
-                  onChange={handleFileChange}
-                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#17d4ff] file:text-black hover:file:bg-[#15bde6] transition"
-                />
-                {selectedFile && (
-                  <div className="mt-2 text-gray-600 text-sm">
-                    Selected file: {selectedFile.name}
-                  </div>
-                )}
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <p className="text-sm text-gray-700 mb-2">
+                  <strong>For large audiobook files:</strong>
+                </p>
+                <p className="text-xs text-gray-600 mb-2">
+                  Upload your file to <a href="https://wetransfer.com" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">WeTransfer</a>, <a href="https://drive.google.com" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">Google Drive</a>, or <a href="https://www.dropbox.com" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">Dropbox</a>, then paste the sharing link in the "Audiobook Link" field above.
+                </p>
               </div>
             </>
           )}

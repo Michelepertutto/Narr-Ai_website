@@ -32,13 +32,8 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
       const enterFullscreen = async () => {
         try {
           await element.requestFullscreen();
-          // This is a best-effort attempt and may not work on all browsers/devices (e.g., iOS Safari)
-          // FIX: Cast screen.orientation to any to access experimental 'lock' property
-          if (screen.orientation && (screen.orientation as any).lock) {
-            await (screen.orientation as any).lock('landscape');
-          }
         } catch (error) {
-          console.error('Could not enter fullscreen or lock orientation:', error);
+          console.error('Could not enter fullscreen:', error);
         }
       };
       enterFullscreen();
@@ -55,13 +50,9 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
 
     return () => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
-      // Ensure we exit fullscreen and unlock orientation when the component unmounts
+      // Ensure we exit fullscreen when the component unmounts
       if (document.fullscreenElement) {
         document.exitFullscreen();
-      }
-      // FIX: Cast screen.orientation to any to access experimental 'unlock' property
-      if (screen.orientation && (screen.orientation as any).unlock) {
-        (screen.orientation as any).unlock();
       }
     };
   }, [onClose]);

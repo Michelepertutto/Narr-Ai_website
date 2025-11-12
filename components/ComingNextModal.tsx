@@ -4,9 +4,10 @@ import { CloseIcon } from './icons/CloseIcon';
 interface ComingNextModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onRequestVideo?: () => void;
 }
 
-const ComingNextModal = ({ isOpen, onClose }: ComingNextModalProps) => {
+const ComingNextModal = ({ isOpen, onClose, onRequestVideo }: ComingNextModalProps) => {
   if (!isOpen) {
     return null;
   }
@@ -71,9 +72,18 @@ const ComingNextModal = ({ isOpen, onClose }: ComingNextModalProps) => {
           </div>
 
           <div className="mt-8 p-5 bg-[#17d4ff]/10 border border-[#17d4ff]/30 rounded-xl">
-            <p className="text-sm text-gray-700 text-center leading-relaxed">
+            <p className="text-sm text-gray-700 text-center leading-relaxed mb-4">
               Want to see a specific scene? Submit a request and support us with a donation!
             </p>
+            <button
+              onClick={() => {
+                onClose();
+                onRequestVideo?.();
+              }}
+              className="w-full bg-[#17d4ff] hover:bg-[#15c0eb] text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200"
+            >
+              Request a Video
+            </button>
           </div>
         </div>
       </div>
