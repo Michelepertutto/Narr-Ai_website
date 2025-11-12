@@ -33,7 +33,7 @@ const videos: Video[] = [
     seed: 'video1', 
     title: 'Dungeon Crawler Carl', 
     videoUrl: `${import.meta.env.BASE_URL}video/Dungeon-Crawler-Carl-Old-man-pee.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/preview-dungeon-crawler-carl-pee-scene.png`,
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/preview-dungeon-crawler-carl-pee-scene.jpeg`,
     bookCoverUrl: `${import.meta.env.BASE_URL}Imgs/Book Covers/Dungeon-Crawler-Carl.png`,
     audibleUrl: 'https://www.audible.it/pd/Dungeon-Crawler-Carl-Audiolibri/B0FVXCDZGK'
   },
@@ -42,7 +42,7 @@ const videos: Video[] = [
     seed: 'video2', 
     title: 'We are legion (We are Bob)', 
     videoUrl: `${import.meta.env.BASE_URL}video/Bobiverse_Bob-dies-and-wakes-up-as-AI.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_Bobiverse.png`,
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_Bobiverse.jpeg`,
     bookCoverUrl: `${import.meta.env.BASE_URL}Imgs/Book Covers/We-Are-Legion-We-Are-Bob.png`,
     audibleUrl: 'https://www.audible.it/pd/We-Are-Legion-We-Are-Bob-Audiolibri/B079BBMXKX'
   },
@@ -60,7 +60,7 @@ const videos: Video[] = [
         seed: 'video3',
         title: 'La Sicaria - Episode 1',
         videoUrl: `${import.meta.env.BASE_URL}video/La-Sicaria_Scena-1-Prince-karek.mp4`,
-        posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-La-sicaria-Prince-Karek.png`,
+        posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-La-sicaria-Prince-Karek.jpg`,
         bookCoverUrl: `${import.meta.env.BASE_URL}Imgs/Book Covers/La-Sicaria.png`,
         episodeNumber: 1
       },
@@ -69,7 +69,7 @@ const videos: Video[] = [
         seed: 'video4',
         title: 'La Sicaria - Episode 2',
         videoUrl: `${import.meta.env.BASE_URL}video/La_sicaria_The-arrival-of-the-assassin.mp4`,
-        posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_La-sicaria.png`,
+        posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_La-sicaria.jpeg`,
         bookCoverUrl: `${import.meta.env.BASE_URL}Imgs/Book Covers/La-Sicaria.png`,
         episodeNumber: 2
       }
@@ -80,7 +80,7 @@ const videos: Video[] = [
     seed: 'video5', 
     title: 'Warrior', 
     videoUrl: `${import.meta.env.BASE_URL}video/Warrior.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_Warrior.png`
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_Warrior.jpg`
   },
 ];
 
@@ -332,7 +332,7 @@ const App = () => {
                 <div className="relative flex-1 max-h-[calc(100vh-50px)] rounded-3xl shadow-2xl overflow-hidden">
                   <video
                     src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
-                    poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
+                    poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.jpg`}
                     className="absolute top-0 left-0 w-full h-full object-cover"
                     autoPlay
                     loop
@@ -410,7 +410,7 @@ const App = () => {
             <div className="mobile-hero-container relative rounded-3xl shadow-2xl overflow-hidden">
               <video
                 src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri-mobile.webm`}
-                poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.png`}
+                poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.jpg`}
                 className="absolute top-0 left-0 w-full h-full object-cover"
                 autoPlay
                 loop
