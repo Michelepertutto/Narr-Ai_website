@@ -205,6 +205,10 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
   const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     handleInteraction();
     if (e.touches[0]) {
+      // Prevent iOS Safari from interfering with touch events
+      if (!isMobileLandscape) {
+        e.preventDefault();
+      }
       handleDragStart(e.touches[0].pageX);
     }
   };
@@ -249,6 +253,7 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
             muted
             loop
             playsInline
+            preload="metadata"
             onMouseEnter={(e) => {
               const videoEl = e.currentTarget;
               videoEl.play().catch(() => {});
@@ -257,6 +262,9 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
               const videoEl = e.currentTarget;
               videoEl.pause();
               videoEl.currentTime = 0;
+            }}
+            style={{
+              transform: 'translateZ(0)'
             }}
           />
           

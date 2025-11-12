@@ -98,6 +98,8 @@ const App = () => {
   const [isCollabModalOpen, setIsCollabModalOpen] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
+  const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -134,17 +136,29 @@ const App = () => {
     };
   }, []);
 
+  // Detect iOS device
+  useEffect(() => {
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    setIsIOS(isIOSDevice);
+  }, []);
+
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 900);
       setIsLandscape(window.innerWidth > window.innerHeight);
+      // Fix for iOS Safari viewport height issues
+      setViewportHeight(window.innerHeight);
     };
     
     // Call once on mount to ensure correct initial state
     handleResize();
     
     window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
+    window.addEventListener('orientationchange', () => {
+      // Delay to ensure correct height after orientation change
+      setTimeout(handleResize, 100);
+    });
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -234,9 +248,19 @@ const App = () => {
 
   return (
     <>
-      <div className="bg-white min-h-screen w-screen flex flex-col overflow-hidden">
+      <div 
+        className="bg-white flex flex-col overflow-hidden"
+        style={{ 
+          minHeight: isIOS ? `${viewportHeight}px` : '100vh',
+          width: '100vw',
+          height: isIOS ? `${viewportHeight}px` : '100vh'
+        }}
+      >
         {shouldUseVerticalSlider ? (
-          <div className="h-screen flex flex-col overflow-hidden">
+          <div 
+            className="flex flex-col overflow-hidden"
+            style={{ height: isIOS ? `${viewportHeight}px` : '100vh' }}
+          >
             <div className="flex-1 flex flex-row overflow-hidden main-content-padding">
               <div className="flex-1 flex flex-col hero-margin-right">
                 <div className="relative z-[10000] bg-white header-padding">

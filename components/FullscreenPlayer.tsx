@@ -14,6 +14,8 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
   const [currentIndex, setCurrentIndex] = useState(startIndex);
   const [isLoading, setIsLoading] = useState(true);
   const playerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isIOS, setIsIOS] = useState(false);
 
   const goToNext = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % videos.length);
@@ -25,13 +27,28 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
     setIsLoading(true);
   }, [videos.length]);
 
+  // Detect iOS
+  useEffect(() => {
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    setIsIOS(isIOSDevice);
+  }, []);
+
   // Handle Fullscreen and Orientation
   useEffect(() => {
     const element = playerRef.current;
+    const video = videoRef.current;
+    
     if (element) {
       const enterFullscreen = async () => {
         try {
-          await element.requestFullscreen();
+          // iOS Safari doesn't support requestFullscreen on div elements
+          // Instead, we use webkitEnterFullscreen on the video element
+          if (isIOS && video && 'webkitEnterFullscreen' in video) {
+            (video as any).webkitEnterFullscreen();
+          } else if (element.requestFullscreen) {
+            await element.requestFullscreen();
+          }
         } catch (error) {
           console.error('Could not enter fullscreen:', error);
         }
@@ -41,21 +58,27 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
 
     const handleFullscreenChange = () => {
       // If user exits fullscreen mode (e.g., via ESC key), we should close the player component.
-      if (!document.fullscreenElement) {
+      const doc = document as any;
+      if (!document.fullscreenElement && !doc.webkitFullscreenElement) {
         onClose();
       }
     };
 
     document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
 
     return () => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
       // Ensure we exit fullscreen when the component unmounts
+      const doc = document as any;
       if (document.fullscreenElement) {
         document.exitFullscreen();
+      } else if (doc.webkitFullscreenElement && video && 'webkitExitFullscreen' in video) {
+        (video as any).webkitExitFullscreen();
       }
     };
-  }, [onClose]);
+  }, [onClose, isIOS]);
 
   // Handle keyboard events for navigation
   useEffect(() => {
@@ -76,8 +99,13 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
 
   const handleClose = () => {
     // Trigger the 'fullscreenchange' event by exiting fullscreen, which in turn calls onClose.
+    const video = videoRef.current;
+    const doc = document as any;
+    
     if (document.fullscreenElement) {
       document.exitFullscreen();
+    } else if (doc.webkitFullscreenElement && video && 'webkitExitFullscreen' in video) {
+      (video as any).webkitExitFullscreen();
     } else {
       // Fallback if fullscreen API wasn't successful
       onClose();
@@ -149,16 +177,24 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
         {/* Video */}
         <div className="flex-1 h-full flex items-center justify-center">
           <video
+            ref={videoRef}
             key={currentVideo.id}
             src={currentVideo.videoUrl}
             className={`max-w-full max-h-full object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
             autoPlay
+            playsInline
             controls
+            controlsList="nodownload"
+            preload="metadata"
             onCanPlay={() => setIsLoading(false)}
             onLoadedData={() => setIsLoading(false)}
             onWaiting={() => setIsLoading(true)}
             onPlaying={() => setIsLoading(false)}
             onEnded={goToNext}
+            style={{
+              WebkitTransform: 'translateZ(0)',
+              transform: 'translateZ(0)'
+            }}
           >
             Your browser does not support the video tag.
           </video>

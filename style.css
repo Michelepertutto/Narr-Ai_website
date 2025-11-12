@@ -2,6 +2,13 @@
 body {
   font-family: 'Georama', sans-serif;
   font-weight: 400;
+  /* iOS Safari fixes */
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent bounce scrolling on iOS */
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Font Weight Classes */
@@ -119,6 +126,9 @@ p, body {
   backdrop-filter: blur(4px);
   font-size: 0.875rem;
   font-weight: 500;
+  /* iOS Safari touch optimization */
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 }
 
 .hero-watch-button:hover {
@@ -284,4 +294,53 @@ p, body {
     font-size: 12px;
     padding: 0.4rem 1rem;
   }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Fix for iOS Safari viewport height issues */
+  .mobile-hero-container {
+    min-height: -webkit-fill-available;
+  }
+  
+  /* Ensure proper scrolling on iOS */
+  .carousel {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  /* Fix for iOS safe area */
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Remove tap highlight on iOS */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Ensure buttons and interactive elements work on iOS */
+button, a, input {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Fix video rendering on iOS */
+video {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
