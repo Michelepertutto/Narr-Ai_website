@@ -16,6 +16,8 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
   const playerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isIOS, setIsIOS] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const hasAttemptedFullscreen = useRef(false);
 
   const goToNext = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % videos.length);
@@ -39,27 +41,41 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
     const element = playerRef.current;
     const video = videoRef.current;
     
-    if (element) {
+    // Try to enter fullscreen only once
+    if (element && !hasAttemptedFullscreen.current) {
+      hasAttemptedFullscreen.current = true;
+      
       const enterFullscreen = async () => {
         try {
           // iOS Safari doesn't support requestFullscreen on div elements
           // Instead, we use webkitEnterFullscreen on the video element
           if (isIOS && video && 'webkitEnterFullscreen' in video) {
             (video as any).webkitEnterFullscreen();
+            setIsFullscreen(true);
           } else if (element.requestFullscreen) {
             await element.requestFullscreen();
+            setIsFullscreen(true);
           }
         } catch (error) {
-          console.error('Could not enter fullscreen:', error);
+          console.log('[Player] Fullscreen not available, using normal mode');
+          // Don't close the player if fullscreen fails
+          setIsFullscreen(false);
         }
       };
-      enterFullscreen();
+      
+      // Small delay to ensure video is ready
+      setTimeout(enterFullscreen, 100);
     }
 
     const handleFullscreenChange = () => {
-      // If user exits fullscreen mode (e.g., via ESC key), we should close the player component.
       const doc = document as any;
-      if (!document.fullscreenElement && !doc.webkitFullscreenElement) {
+      const isCurrentlyFullscreen = !!(document.fullscreenElement || doc.webkitFullscreenElement);
+      
+      setIsFullscreen(isCurrentlyFullscreen);
+      
+      // Only close if user exits fullscreen AND we were in fullscreen mode
+      // Don't close if fullscreen was never achieved
+      if (!isCurrentlyFullscreen && isFullscreen && hasAttemptedFullscreen.current) {
         onClose();
       }
     };
@@ -78,7 +94,7 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
         (video as any).webkitExitFullscreen();
       }
     };
-  }, [onClose, isIOS]);
+  }, [onClose, isIOS, isFullscreen]);
 
   // Handle keyboard events for navigation
   useEffect(() => {
@@ -98,16 +114,16 @@ const FullscreenPlayer = ({ videos, startIndex, onClose }: FullscreenPlayerProps
   }, [goToNext, goToPrev]);
 
   const handleClose = () => {
-    // Trigger the 'fullscreenchange' event by exiting fullscreen, which in turn calls onClose.
     const video = videoRef.current;
     const doc = document as any;
     
+    // If in fullscreen, exit it (which will trigger onClose via event)
     if (document.fullscreenElement) {
       document.exitFullscreen();
     } else if (doc.webkitFullscreenElement && video && 'webkitExitFullscreen' in video) {
       (video as any).webkitExitFullscreen();
     } else {
-      // Fallback if fullscreen API wasn't successful
+      // If not in fullscreen, close directly
       onClose();
     }
   };
