@@ -236,8 +236,8 @@ const App = () => {
     <>
       <div className="bg-white min-h-screen w-screen flex flex-col overflow-hidden">
         {shouldUseVerticalSlider ? (
-          <div className="h-screen flex flex-col">
-            <div className="flex-1 flex flex-row main-content-padding">
+          <div className="h-screen flex flex-col overflow-hidden">
+            <div className="flex-1 flex flex-row overflow-hidden main-content-padding">
               <div className="flex-1 flex flex-col hero-margin-right">
                 <div className="relative z-[10000] bg-white header-padding">
                   <div className="flex items-center justify-between gap-4">
