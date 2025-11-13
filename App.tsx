@@ -325,7 +325,7 @@ const App = () => {
                 <div className="relative flex-1 max-h-[calc(100vh-50px)] rounded-3xl shadow-2xl overflow-hidden">
                   <video
                     src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri.mp4`}
-                    poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.jpg`}
+                    poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.webp`}
                     className="absolute top-0 left-0 w-full h-full object-cover"
                     autoPlay
                     loop
@@ -403,7 +403,7 @@ const App = () => {
             <div className="mobile-hero-container relative rounded-3xl shadow-2xl overflow-hidden">
               <video
                 src={`${import.meta.env.BASE_URL}video/video-ai-per-audiolibri-mobile.webm`}
-                poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.jpg`}
+                poster={`${import.meta.env.BASE_URL}Imgs/Poster-video-background.webp`}
                 className="absolute top-0 left-0 w-full h-full object-cover"
                 autoPlay
                 loop
