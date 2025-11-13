@@ -51,7 +51,7 @@ const videos: Video[] = [
     seed: 'video3', 
     title: 'La Sicaria', 
     videoUrl: `${import.meta.env.BASE_URL}video/La-Sicaria_Scena-1-Prince-karek.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster-La-sicaria-Prince-Karek.png`,
+    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_La-sicaria.jpeg`,
     bookCoverUrl: `${import.meta.env.BASE_URL}Imgs/Book Covers/La-Sicaria.png`,
     episodeNumber: 1,
     episodes: [

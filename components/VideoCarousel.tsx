@@ -287,7 +287,7 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
           
           {/* Episodes Badge */}
           {video.episodes && video.episodes.length > 1 && (
-          <div className="absolute top-2 right-2 bg-[#17d4ff] text-black px-2 py-1 rounded-md flex items-center gap-1 z-20 shadow-lg">
+          <div className="absolute top-2 left-2 bg-[#17d4ff] text-black px-2 py-1 rounded-md flex items-center gap-1 z-20 shadow-lg">
             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
               <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
             </svg>
