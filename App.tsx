@@ -75,13 +75,6 @@ const videos: Video[] = [
       }
     ]
   },
-  { 
-    id: 5, 
-    seed: 'video5', 
-    title: 'Warrior', 
-    videoUrl: `${import.meta.env.BASE_URL}video/Warrior.mp4`,
-    posterUrl: `${import.meta.env.BASE_URL}Imgs/Poster_Warrior.jpg`
-  },
 ];
 
 const App = () => {

@@ -224,8 +224,8 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
   };
 
   const containerClasses = isMobileLandscape
-    ? 'h-full flex flex-col overflow-y-auto scrollbar-hide snap-y snap-mandatory touch-pan-y carousel-gap'
-    : 'h-full flex overflow-x-auto scrollbar-hide snap-x snap-mandatory cursor-grab touch-pan-x carousel-gap';
+    ? 'h-full flex flex-col overflow-y-auto scrollbar-hide touch-pan-y carousel-gap'
+    : 'h-full flex overflow-x-auto scrollbar-hide cursor-grab touch-pan-x carousel-gap';
 
   return (
     <div
@@ -244,7 +244,11 @@ const VideoCarousel = ({ videos, onVideoSelect, isExpanded, isMobileLandscape, o
           }}
           onMouseEnter={() => setHoveredIndex(index)}
           onMouseLeave={() => setHoveredIndex(null)}
-          className={`relative snap-center flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group ${getItemClasses(index)}`}
+          className={`relative flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group ${getItemClasses(index)}`}
+          style={{
+            marginBottom: isMobileLandscape && index === videos.length - 1 ? '20px' : undefined,
+            marginRight: !isMobileLandscape && index === videos.length - 1 ? '20px' : undefined
+          }}
         >
           <video
             ref={(el) => (videoRefs.current[index] = el)}

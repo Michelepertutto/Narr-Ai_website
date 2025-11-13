@@ -170,6 +170,10 @@ p, body {
 }
 
 /* Carousel and Slider Styles */
+.carousel {
+  scroll-behavior: smooth;
+}
+
 .carousel-gap {
   gap: 15px;
 }
@@ -311,7 +315,6 @@ p, body {
   /* Ensure proper scrolling on iOS */
   .carousel {
     -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
   }
   
   /* Fix for iOS safe area */
