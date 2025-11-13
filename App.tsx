@@ -381,7 +381,7 @@ const App = () => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col">
+          <div className="flex flex-col" style={{ minHeight: isIOS ? `${viewportHeight}px` : '100vh' }}>
             <div className="relative z-[10000] bg-white mobile-header-padding">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
