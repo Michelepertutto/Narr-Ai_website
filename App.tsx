@@ -450,12 +450,13 @@ const App = () => {
             </div>
             
             <div className="mobile-footer">
-              <a href="/privacy-policy.html" className="text-gray-600 hover:text-[#17d4ff] transition-colors text-sm whitespace-nowrap">
+              <a href="/privacy-policy.html" className="text-gray-600 hover:text-[#17d4ff] transition-colors text-xs whitespace-nowrap">
                 Privacy Policy
               </a>
-              <p className="text-gray-600 text-sm">
-                If you appreciate our work, <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline">make a donation</a>.
-              </p>
+              <span className="text-gray-400 text-xs">|</span>
+              <a href="https://buymeacoffee.com/narrai" target="_blank" rel="noopener noreferrer" className="text-[#17d4ff] hover:underline text-xs whitespace-nowrap">
+                Donate
+              </a>
             </div>
           </div>
         )}
